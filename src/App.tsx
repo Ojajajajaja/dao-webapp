@@ -5,6 +5,7 @@ import { DaoProvider } from './context/DaoContext';
 import { Layout } from './components/layout/Layout';
 import { Explore } from './pages/Explore';
 import { Dashboard } from './pages/Dashboard';
+import { CreateDao } from './pages/CreateDao';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Explore />} />
             <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
+            <Route path="/create-dao" element={<CreateDao />} />
             {/* Add more routes as needed */}
           </Routes>
         </DaoProvider>

@@ -8,6 +8,8 @@ interface DaoContextType {
   followedDaos: string[];
   followDao: (daoId: string) => void;
   unfollowDao: (daoId: string) => void;
+  daos: DAO[];
+  addDao: (dao: DAO) => void;
 }
 
 const DaoContext = createContext<DaoContextType | undefined>(undefined);
@@ -15,6 +17,7 @@ const DaoContext = createContext<DaoContextType | undefined>(undefined);
 export const DaoProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentDao, setCurrentDao] = useLocalStorage<DAO | null>('currentDao', null);
   const [followedDaos, setFollowedDaos] = useLocalStorage<string[]>('followedDaos', []);
+  const [daos, setDaos] = useLocalStorage<DAO[]>('daos', []);
 
   const followDao = (daoId: string) => {
     if (!followedDaos.includes(daoId)) {
@@ -26,6 +29,10 @@ export const DaoProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setFollowedDaos(followedDaos.filter(id => id !== daoId));
   };
 
+  const addDao = (dao: DAO) => {
+    setDaos([...daos, dao]);
+  };
+
   return (
     <DaoContext.Provider
       value={{
@@ -34,6 +41,8 @@ export const DaoProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         followedDaos,
         followDao,
         unfollowDao,
+        daos,
+        addDao,
       }}
     >
       {children}
