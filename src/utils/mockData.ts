@@ -124,6 +124,28 @@ export const mockProposals: Proposal[] = [
         }
       }
     ]
+  },
+  {
+    id: 'prop-4',
+    title: 'Macron in Congo',
+    description: 'This proposal discusses the diplomatic relations and economic partnerships between France and Congo.',
+    creator: '8xrt67Dj9q2rjvVwVVN2Nqeis1mGFHpwXamRYcSVsRXB',
+    status: 'active',
+    startDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+    endDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+    votes: {
+      yes: 450000,
+      no: 220000,
+      abstain: 10000
+    },
+    actions: [
+      {
+        type: 'authorizeWallet',
+        data: {
+          wallets: ['CongoEconomicPartnershipWallet']
+        }
+      }
+    ]
   }
 ];
 
