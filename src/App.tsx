@@ -6,6 +6,7 @@ import { Layout } from './components/layout/Layout';
 import { Explore } from './pages/Explore';
 import { Dashboard } from './pages/Dashboard';
 import { CreateDao } from './pages/CreateDao';
+import { CreateProposal } from './pages/CreateProposal';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/" element={<Explore />} />
             <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
             <Route path="/create-dao" element={<CreateDao />} />
+            <Route path="/governance/new-proposal" element={<Layout><CreateProposal /></Layout>} />
             {/* Add more routes as needed */}
           </Routes>
         </DaoProvider>
