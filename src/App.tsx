@@ -7,6 +7,7 @@ import { Explore } from './pages/Explore';
 import { Dashboard } from './pages/Dashboard';
 import { CreateDao } from './pages/CreateDao';
 import { CreateProposal } from './pages/CreateProposal';
+import { Governance } from './pages/Governance';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/" element={<Explore />} />
             <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
             <Route path="/create-dao" element={<CreateDao />} />
+            <Route path="/governance" element={<Layout><Governance /></Layout>} />
             <Route path="/governance/new-proposal" element={<Layout><CreateProposal /></Layout>} />
             {/* Add more routes as needed */}
           </Routes>
