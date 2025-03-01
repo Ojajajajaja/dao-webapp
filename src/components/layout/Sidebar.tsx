@@ -7,7 +7,8 @@ import {
   Wallet, 
   Users, 
   Settings,
-  ChevronRight
+  ChevronRight,
+  Layers
 } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
@@ -23,6 +24,7 @@ export const Sidebar: React.FC = () => {
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Governance', href: '/governance', icon: Vote },
     { name: 'Finance', href: '/finance', icon: Wallet },
+    { name: 'PODs', href: '/pods', icon: Layers },
     { name: 'Community', href: '/community', icon: Users },
     { name: 'Settings', href: '/settings', icon: Settings },
   ];

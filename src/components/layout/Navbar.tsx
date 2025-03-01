@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { useDao } from '../../context/DaoContext';
-import { Globe, Menu, X } from 'lucide-react';
+import { Globe, Menu, X, Layers } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { connected } = useWallet();
@@ -47,6 +47,12 @@ export const Navbar: React.FC = () => {
                     className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                   >
                     Finance
+                  </Link>
+                  <Link
+                    to="/pods"
+                    className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                  >
+                    PODs
                   </Link>
                   <Link
                     to="/community"
@@ -111,6 +117,13 @@ export const Navbar: React.FC = () => {
                   className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
                 >
                   Finance
+                </Link>
+                <Link
+                  to="/pods"
+                  className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium flex items-center"
+                >
+                  <Layers className="mr-2 h-4 w-4" />
+                  PODs
                 </Link>
                 <Link
                   to="/community"

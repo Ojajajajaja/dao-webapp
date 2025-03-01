@@ -57,3 +57,18 @@ export interface Transfer {
   to: string;
   transactionHash: string;
 }
+
+export interface Pod {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+  members: number;
+  membersList: string[];
+  createdAt: Date;
+  budget?: {
+    amount: number;
+    symbol: string;
+  };
+}

@@ -8,6 +8,7 @@ import { Dashboard } from './pages/Dashboard';
 import { CreateDao } from './pages/CreateDao';
 import { CreateProposal } from './pages/CreateProposal';
 import { Governance } from './pages/Governance';
+import { Pods } from './pages/Pods';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/create-dao" element={<CreateDao />} />
             <Route path="/governance" element={<Layout><Governance /></Layout>} />
             <Route path="/governance/new-proposal" element={<Layout><CreateProposal /></Layout>} />
+            <Route path="/pods" element={<Layout><Pods /></Layout>} />
             {/* Add more routes as needed */}
           </Routes>
         </DaoProvider>
