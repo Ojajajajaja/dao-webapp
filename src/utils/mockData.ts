@@ -1,4 +1,4 @@
-import { DAO, Proposal, Member, Token, Transfer } from '../types';
+import { DAO, Proposal, Member, Token, Transfer, Pod } from '../types';
 
 export const mockDaos: DAO[] = [
   {
@@ -124,6 +124,28 @@ export const mockProposals: Proposal[] = [
         }
       }
     ]
+  },
+  {
+    id: 'prop-4',
+    title: 'Macron in Congo',
+    description: 'This proposal discusses the diplomatic relations and economic partnerships between France and Congo.',
+    creator: '8xrt67Dj9q2rjvVwVVN2Nqeis1mGFHpwXamRYcSVsRXB',
+    status: 'active',
+    startDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+    endDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+    votes: {
+      yes: 450000,
+      no: 220000,
+      abstain: 10000
+    },
+    actions: [
+      {
+        type: 'authorizeWallet',
+        data: {
+          wallets: ['CongoEconomicPartnershipWallet']
+        }
+      }
+    ]
   }
 ];
 
@@ -210,5 +232,78 @@ export const mockTransfers: Transfer[] = [
     from: '2xPv3CnUAcxpWJJtpYQCxKrfZMjSPEsG2MxZ9P3FbfU1',
     to: 'dao-treasury',
     transactionHash: '3sCJGzRiDGBqrEVuLuPQXyGNvE8SBbrXCSQHXYf5qB5B9jU8GvVXrJEMxQrPAMwkHEh9KXhg'
+  }
+];
+
+export const mockPods: Pod[] = [
+  {
+    id: 'pod-1',
+    name: 'Development',
+    description: 'Core development team responsible for protocol improvements and maintenance',
+    icon: 'Code',
+    color: 'blue',
+    members: 12,
+    membersList: [
+      '8xrt67Dj9q2rjvVwVVN2Nqeis1mGFHpwXamRYcSVsRXB',
+      '6Kcm7sSmKSsuDCPaAFTYo7aMvX9CzfPVcbCHDQrZ89QA'
+    ],
+    createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000),
+    budget: {
+      amount: 250000,
+      symbol: 'USDC'
+    }
+  },
+  {
+    id: 'pod-2',
+    name: 'Marketing',
+    description: 'Handles all marketing, social media, and community engagement activities',
+    icon: 'Megaphone',
+    color: 'purple',
+    members: 8,
+    membersList: [
+      '2xPv3CnUAcxpWJJtpYQCxKrfZMjSPEsG2MxZ9P3FbfU1'
+    ],
+    createdAt: new Date(Date.now() - 75 * 24 * 60 * 60 * 1000),
+    budget: {
+      amount: 120000,
+      symbol: 'USDC'
+    }
+  },
+  {
+    id: 'pod-3',
+    name: 'Treasury Management',
+    description: 'Responsible for managing DAO treasury assets and financial planning',
+    icon: 'Wallet',
+    color: 'green',
+    members: 5,
+    membersList: [
+      '9xPv3CnUAcxpWJJtpYQCxKrfZMjSPEsG2MxZ9P3FbfU1',
+      '7Kcm7sSmKSsuDCPaAFTYo7aMvX9CzfPVcbCHDQrZ89QA'
+    ],
+    createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000),
+    budget: {
+      amount: 50000,
+      symbol: 'USDC'
+    }
+  },
+  {
+    id: 'pod-4',
+    name: 'Content Creation',
+    description: 'Creates educational content, documentation, and tutorials for the community',
+    icon: 'FileText',
+    color: 'orange',
+    members: 7,
+    membersList: [],
+    createdAt: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000)
+  },
+  {
+    id: 'pod-5',
+    name: 'Governance',
+    description: 'Oversees governance processes and proposal improvements',
+    icon: 'Vote',
+    color: 'red',
+    members: 6,
+    membersList: [],
+    createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
   }
 ];
