@@ -33,7 +33,7 @@ const NotificationsSidebar = () => {
   ];
 
   return (
-    <div className="w-80 bg-[#252525] border-l border-[#555555] overflow-y-auto">
+    <div className="w-80 bg-[#252525] border-l border-[#555555] overflow-y-auto z-10">
       <div className="p-4 border-b border-[#555555] flex justify-between items-center sticky top-0 bg-[#252525] z-10">
         <div className="flex items-center">
           <Bell size={18} className="text-white mr-2" />

@@ -3,6 +3,8 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Home from './components/Home';
 import Governance from './components/Governance';
+import Pods from './components/Pods';
+import Members from './components/Members';
 import NotificationsSidebar from './components/NotificationsSidebar';
 
 function App() {
@@ -20,6 +22,12 @@ function App() {
       switch (activeSection) {
         case 'governance':
           setCurrentComponent(<Governance />);
+          break;
+        case 'pods':
+          setCurrentComponent(<Pods />);
+          break;
+        case 'members':
+          setCurrentComponent(<Members />);
           break;
         case 'home':
           setCurrentComponent(<Home />);
