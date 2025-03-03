@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, Filter } from 'lucide-react';
+import { ChevronDown, Filter, ExternalLink } from 'lucide-react';
 
 const Members = () => {
   const [sortOrder, setSortOrder] = useState('A-Z');
@@ -7,23 +7,175 @@ const Members = () => {
   const [socialFilter, setSocialFilter] = useState('All');
   const [activityFilter, setActivityFilter] = useState('All');
 
-  // Mock member data
+  // Mock member data with expanded attributes
   const members = [
-    { id: 1, name: 'Alex Johnson', avatar: 'https://randomuser.me/api/portraits/men/1.jpg', pod: 'Design', joinDate: '2023-05-15', lastActive: '2 hours ago', social: 'Twitter' },
-    { id: 2, name: 'Sarah Williams', avatar: 'https://randomuser.me/api/portraits/women/2.jpg', pod: 'Communication', joinDate: '2023-06-22', lastActive: '1 day ago', social: 'Discord' },
-    { id: 3, name: 'Michael Brown', avatar: 'https://randomuser.me/api/portraits/men/3.jpg', pod: 'Trading', joinDate: '2023-04-10', lastActive: '3 days ago', social: 'Telegram' },
-    { id: 4, name: 'Emily Davis', avatar: 'https://randomuser.me/api/portraits/women/4.jpg', pod: 'Merch', joinDate: '2023-07-05', lastActive: '5 hours ago', social: 'Discord' },
-    { id: 5, name: 'David Wilson', avatar: 'https://randomuser.me/api/portraits/men/5.jpg', pod: 'Chilling', joinDate: '2023-03-18', lastActive: '1 week ago', social: 'Twitter' },
-    { id: 6, name: 'Jessica Taylor', avatar: 'https://randomuser.me/api/portraits/women/6.jpg', pod: 'Design', joinDate: '2023-08-01', lastActive: 'Just now', social: 'Telegram' },
-    { id: 7, name: 'Ryan Martinez', avatar: 'https://randomuser.me/api/portraits/men/7.jpg', pod: 'Communication', joinDate: '2023-02-14', lastActive: '3 hours ago', social: 'Discord' },
-    { id: 8, name: 'Olivia Anderson', avatar: 'https://randomuser.me/api/portraits/women/8.jpg', pod: 'Trading', joinDate: '2023-09-20', lastActive: '2 days ago', social: 'Twitter' },
-    { id: 9, name: 'Daniel Thomas', avatar: 'https://randomuser.me/api/portraits/men/9.jpg', pod: 'Cuddling', joinDate: '2023-01-30', lastActive: '4 days ago', social: 'Telegram' },
-    { id: 10, name: 'Sophia Jackson', avatar: 'https://randomuser.me/api/portraits/women/10.jpg', pod: 'Merch', joinDate: '2023-10-12', lastActive: '6 hours ago', social: 'Discord' },
+    { 
+      id: 1, 
+      name: 'Alex Johnson', 
+      wallet: '8xrt67Dj9q2rjvVwVVN2Nqeis1mGFHpwXamRYcSVsRXB', 
+      username: 'alexj', 
+      avatar: 'https://randomuser.me/api/portraits/men/1.jpg', 
+      pods: ['Design', 'Marketing'], 
+      discordId: 'alexj#1234', 
+      twitter: '@alexjohnson', 
+      telegram: '@alex_j', 
+      lastLogin: '2023-10-15T14:30:00Z', 
+      lastInteraction: '2023-10-15T16:45:00Z' 
+    },
+    { 
+      id: 2, 
+      name: 'Sarah Williams', 
+      wallet: '6Kcm7sSmKSsuDCPaAFTYo7aMvX9CzfPVcbCHDQrZ89QA', 
+      username: 'sarahw', 
+      avatar: 'https://randomuser.me/api/portraits/women/2.jpg', 
+      pods: ['Communication'], 
+      discordId: 'sarahw#5678', 
+      twitter: '@sarahwilliams', 
+      telegram: '@sarah_w', 
+      lastLogin: '2023-10-14T09:15:00Z', 
+      lastInteraction: '2023-10-14T11:20:00Z' 
+    },
+    { 
+      id: 3, 
+      name: 'Michael Brown', 
+      wallet: '2xPv3CnUAcxpWJJtpYQCxKrfZMjSPEsG2MxZ9P3FbfU1', 
+      username: 'mikeb', 
+      avatar: 'https://randomuser.me/api/portraits/men/3.jpg', 
+      pods: ['Trading'], 
+      discordId: 'mikeb#9012', 
+      twitter: '@michaelbrown', 
+      telegram: '@mike_b', 
+      lastLogin: '2023-10-13T18:45:00Z', 
+      lastInteraction: '2023-10-13T20:30:00Z' 
+    },
+    { 
+      id: 4, 
+      name: 'Emily Davis', 
+      wallet: '9xPv3CnUAcxpWJJtpYQCxKrfZMjSPEsG2MxZ9P3FbfU1', 
+      username: 'emilyd', 
+      avatar: 'https://randomuser.me/api/portraits/women/4.jpg', 
+      pods: ['Merch'], 
+      discordId: 'emilyd#3456', 
+      twitter: '@emilydavis', 
+      telegram: '@emily_d', 
+      lastLogin: '2023-10-12T11:30:00Z', 
+      lastInteraction: '2023-10-12T14:15:00Z' 
+    },
+    { 
+      id: 5, 
+      name: 'David Wilson', 
+      wallet: '7Kcm7sSmKSsuDCPaAFTYo7aMvX9CzfPVcbCHDQrZ89QA', 
+      username: 'davidw', 
+      avatar: 'https://randomuser.me/api/portraits/men/5.jpg', 
+      pods: ['Chilling'], 
+      discordId: 'davidw#7890', 
+      twitter: '@davidwilson', 
+      telegram: '@david_w', 
+      lastLogin: '2023-10-11T15:20:00Z', 
+      lastInteraction: '2023-10-11T17:45:00Z' 
+    },
+    { 
+      id: 6, 
+      name: 'Jessica Taylor', 
+      wallet: '5xrt67Dj9q2rjvVwVVN2Nqeis1mGFHpwXamRYcSVsRXB', 
+      username: 'jessicat', 
+      avatar: 'https://randomuser.me/api/portraits/women/6.jpg', 
+      pods: ['Design'], 
+      discordId: 'jessicat#2345', 
+      twitter: '@jessicataylor', 
+      telegram: '@jessica_t', 
+      lastLogin: '2023-10-10T08:45:00Z', 
+      lastInteraction: '2023-10-10T10:30:00Z' 
+    },
+    { 
+      id: 7, 
+      name: 'Ryan Martinez', 
+      wallet: '4xPv3CnUAcxpWJJtpYQCxKrfZMjSPEsG2MxZ9P3FbfU1', 
+      username: 'ryanm', 
+      avatar: 'https://randomuser.me/api/portraits/men/7.jpg', 
+      pods: ['Communication'], 
+      discordId: 'ryanm#6789', 
+      twitter: '@ryanmartinez', 
+      telegram: '@ryan_m', 
+      lastLogin: '2023-10-09T13:15:00Z', 
+      lastInteraction: '2023-10-09T15:45:00Z' 
+    },
+    { 
+      id: 8, 
+      name: 'Olivia Anderson', 
+      wallet: '3Kcm7sSmKSsuDCPaAFTYo7aMvX9CzfPVcbCHDQrZ89QA', 
+      username: 'oliviaa', 
+      avatar: 'https://randomuser.me/api/portraits/women/8.jpg', 
+      pods: ['Trading'], 
+      discordId: 'oliviaa#0123', 
+      twitter: '@oliviaanderson', 
+      telegram: '@olivia_a', 
+      lastLogin: '2023-10-08T16:30:00Z', 
+      lastInteraction: '2023-10-08T18:15:00Z' 
+    },
+    { 
+      id: 9, 
+      name: 'Daniel Thomas', 
+      wallet: '1xrt67Dj9q2rjvVwVVN2Nqeis1mGFHpwXamRYcSVsRXB', 
+      username: 'danielt', 
+      avatar: 'https://randomuser.me/api/portraits/men/9.jpg', 
+      pods: ['Cuddling'], 
+      discordId: 'danielt#4567', 
+      twitter: '@danielthomas', 
+      telegram: '@daniel_t', 
+      lastLogin: '2023-10-07T10:45:00Z', 
+      lastInteraction: '2023-10-07T12:30:00Z' 
+    },
+    { 
+      id: 10, 
+      name: 'Sophia Jackson', 
+      wallet: '0Kcm7sSmKSsuDCPaAFTYo7aMvX9CzfPVcbCHDQrZ89QA', 
+      username: 'sophiaj', 
+      avatar: 'https://randomuser.me/api/portraits/women/10.jpg', 
+      pods: ['Merch'], 
+      discordId: 'sophiaj#8901', 
+      twitter: '@sophiajackson', 
+      telegram: '@sophia_j', 
+      lastLogin: '2023-10-06T14:15:00Z', 
+      lastInteraction: '2023-10-06T16:45:00Z' 
+    },
   ];
+
+  // Format date for display
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
+  // Format time ago for display
+  const getTimeAgo = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+
+    if (diffDay > 0) {
+      return `${diffDay} day${diffDay > 1 ? 's' : ''} ago`;
+    } else if (diffHour > 0) {
+      return `${diffHour} hour${diffHour > 1 ? 's' : ''} ago`;
+    } else if (diffMin > 0) {
+      return `${diffMin} minute${diffMin > 1 ? 's' : ''} ago`;
+    } else {
+      return 'Just now';
+    }
+  };
+
+  // Truncate wallet address for display
+  const truncateWallet = (wallet) => {
+    return wallet.substring(0, 6) + '...' + wallet.substring(wallet.length - 4);
+  };
 
   // Get the most recently joined member
   const lastJoinedMember = [...members].sort((a, b) => 
-    new Date(b.joinDate).getTime() - new Date(a.joinDate).getTime()
+    new Date(b.lastLogin).getTime() - new Date(a.lastLogin).getTime()
   )[0];
 
   return (
@@ -35,12 +187,13 @@ const Members = () => {
       <div className="grid grid-cols-2 gap-6 mb-6">
         <div className="bg-[#3b4da8] rounded-lg p-4 text-white">
           <h3 className="text-sm font-medium mb-2">Total Members</h3>
-          <p className="text-3xl font-bold">54</p>
+          <p className="text-3xl font-bold">{members.length}</p>
         </div>
         
         <div className="bg-[#3b4da8] rounded-lg p-4 text-white">
           <h3 className="text-sm font-medium mb-2">Last Joined</h3>
           <p className="text-lg">{lastJoinedMember.name}</p>
+          <p className="text-sm">{getTimeAgo(lastJoinedMember.lastLogin)}</p>
         </div>
       </div>
       
@@ -81,41 +234,77 @@ const Members = () => {
       </div>
       
       <div className="bg-[#252525] rounded-lg overflow-hidden">
-        <table className="w-full text-white">
-          <thead>
-            <tr className="border-b border-[#333333]">
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Member</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Pod</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Join Date</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Last Active</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Social</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[#333333]">
-            {members.map((member) => (
-              <tr key={member.id} className="hover:bg-[#2A2A2A]">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <div className="h-10 w-10 rounded-full overflow-hidden mr-3">
-                      <img src={member.avatar} alt={member.name} className="h-full w-full object-cover" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium">{member.name}</div>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">{member.pod}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">{new Date(member.joinDate).toLocaleDateString()}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">{member.lastActive}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">{member.social}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  <button className="text-blue-400 hover:text-blue-300">View</button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-white">
+            <thead>
+              <tr className="border-b border-[#333333]">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Member</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Wallet</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Username</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Pods</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Discord ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Twitter</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Telegram</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Last Login</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Last Interaction</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-[#333333]">
+              {members.map((member) => (
+                <tr key={member.id} className="hover:bg-[#2A2A2A]">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="h-10 w-10 rounded-full overflow-hidden mr-3">
+                        <img src={member.avatar} alt={member.name} className="h-full w-full object-cover" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium">{member.name}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <span className="font-mono">{truncateWallet(member.wallet)}</span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">{member.username}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <div className="flex flex-wrap gap-1">
+                      {member.pods.map((pod, index) => (
+                        <span key={index} className="px-2 py-1 bg-[#3b4da8] rounded-full text-xs">
+                          {pod}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">{member.discordId}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <a href={`https://twitter.com/${member.twitter.replace('@', '')}`} 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       className="text-blue-400 hover:text-blue-300 flex items-center">
+                      {member.twitter}
+                      <ExternalLink size={12} className="ml-1" />
+                    </a>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">{member.telegram}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <span title={formatDate(member.lastLogin)}>
+                      {getTimeAgo(member.lastLogin)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <span title={formatDate(member.lastInteraction)}>
+                      {getTimeAgo(member.lastInteraction)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <button className="text-blue-400 hover:text-blue-300">View</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
