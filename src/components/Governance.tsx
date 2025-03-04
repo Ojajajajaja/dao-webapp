@@ -1,22 +1,68 @@
 import React, { useState } from 'react';
-import { PieChart, Vote, Plus, X, Clock, Calendar, Wallet, UserMinus, ArrowUpRight } from 'lucide-react';
+import { PieChart, Vote, Plus, X, Clock, Calendar, Wallet, UserMinus, ArrowUpRight, Check } from 'lucide-react';
+import PopupProposal from './PopupProposal';
+
+interface Action {
+  type: string;
+  walletAddress?: string;
+  tokenAmount?: string;
+  tokenSymbol?: string;
+}
+
+interface ProposalForm {
+  title: string;
+  description: string;
+  startTime: string;
+  customStartDate: string;
+  customStartTime: string;
+  expirationDays: string;
+  expirationHours: string;
+  expirationMinutes: string;
+  actions: Action[];
+}
+
+interface ProposalDetails {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  creator: string;
+  createdAt: string;
+  startDate: string;
+  endDate: string;
+  votes: {
+    for: number;
+    against: number;
+    abstain: number;
+  };
+  actions: {
+    type: string;
+    description: string;
+    walletAddress?: string;
+    amount?: string;
+    token?: string;
+  }[];
+  quorum: number;
+  minApproval: number;
+}
 
 const Governance = () => {
   const [showProposalForm, setShowProposalForm] = useState(false);
   const [proposalStep, setProposalStep] = useState(1);
-  const [proposal, setProposal] = useState({
+  const [proposal, setProposal] = useState<ProposalForm>({
     title: '',
-    summary: '',
+    description: '',
     startTime: 'now',
-    customStartDate: new Date().toISOString().split('T')[0],
-    customStartTime: '12:00',
-    expirationDays: 7,
-    expirationHours: 0,
-    expirationMinutes: 0,
+    customStartDate: '',
+    customStartTime: '',
+    expirationDays: '3',
+    expirationHours: '0',
+    expirationMinutes: '0',
     actions: []
   });
+  const [selectedProposal, setSelectedProposal] = useState<ProposalDetails | null>(null);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setProposal({ ...proposal, [name]: value });
   };
@@ -34,18 +80,18 @@ const Governance = () => {
     setShowProposalForm(false);
     setProposal({
       title: '',
-      summary: '',
+      description: '',
       startTime: 'now',
-      customStartDate: new Date().toISOString().split('T')[0],
-      customStartTime: '12:00',
-      expirationDays: 7,
-      expirationHours: 0,
-      expirationMinutes: 0,
+      customStartDate: '',
+      customStartTime: '',
+      expirationDays: '3',
+      expirationHours: '0',
+      expirationMinutes: '0',
       actions: []
     });
   };
 
-  const toggleAction = (actionType) => {
+  const toggleAction = (actionType: string) => {
     // Find if this action type already exists in the actions array
     const existingActionIndex = proposal.actions.findIndex(action => action.type === actionType);
     
@@ -55,8 +101,8 @@ const Governance = () => {
       updatedActions.splice(existingActionIndex, 1);
       setProposal({ ...proposal, actions: updatedActions });
     } else {
-      // If it doesn't exist, add it with default values
-      const newAction = {
+      // If it doesn't exist, add it
+      const newAction: Action = {
         type: actionType,
         walletAddress: '',
         tokenAmount: '',
@@ -66,7 +112,7 @@ const Governance = () => {
     }
   };
 
-  const updateActionField = (actionType, fieldName, value) => {
+  const updateActionField = (actionType: string, fieldName: string, value: string) => {
     const updatedActions = proposal.actions.map(action => {
       if (action.type === actionType) {
         return { ...action, [fieldName]: value };
@@ -90,7 +136,7 @@ const Governance = () => {
     return totalTime.trim() || 'No expiration set';
   };
 
-  const getActionDescription = (action) => {
+  const getActionDescription = (action: Action) => {
     switch (action.type) {
       case 'authorize':
         return `Authorize wallet ${action.walletAddress} to multisig`;
@@ -98,18 +144,16 @@ const Governance = () => {
         return `Remove wallet ${action.walletAddress} from multisig`;
       case 'withdraw':
         return `Withdraw ${action.tokenAmount} ${action.tokenSymbol} to ${action.walletAddress}`;
-      case 'smartcontract':
-        return 'Execute smart contract (disabled)';
       default:
         return 'Unknown action';
     }
   };
 
-  const isActionSelected = (actionType) => {
+  const isActionSelected = (actionType: string) => {
     return proposal.actions.some(action => action.type === actionType);
   };
 
-  const getActionByType = (actionType) => {
+  const getActionByType = (actionType: string) => {
     return proposal.actions.find(action => action.type === actionType);
   };
 
@@ -118,28 +162,28 @@ const Governance = () => {
       case 1:
         return (
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Basic Information</h3>
+            <h3 className="text-lg font-medium text-white">Basic Information</h3>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+              <label className="block text-sm font-medium text-gray-300 mb-1">Title</label>
               <input
                 type="text"
                 name="title"
                 value={proposal.title}
                 onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-600 rounded-md bg-[#252525] text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter proposal title"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Summary</label>
+              <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
               <textarea
-                name="summary"
-                value={proposal.summary}
+                name="description"
+                value={proposal.description}
                 onChange={handleInputChange}
                 rows={4}
-                className="w-full p-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-600 rounded-md bg-[#252525] text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Describe your proposal"
               ></textarea>
             </div>
@@ -147,8 +191,7 @@ const Governance = () => {
             <div className="flex justify-end">
               <button
                 onClick={nextStep}
-                disabled={!proposal.title || !proposal.summary}
-                className={`px-4 py-2 rounded-md text-white ${!proposal.title || !proposal.summary ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
+                className="px-4 py-2 rounded-md text-white bg-blue-500 hover:bg-blue-600"
               >
                 Next
               </button>
@@ -159,10 +202,10 @@ const Governance = () => {
       case 2:
         return (
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Timing</h3>
+            <h3 className="text-lg font-medium text-white">Timing</h3>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Start Time</label>
+              <label className="block text-sm font-medium text-gray-300 mb-1">Start Time</label>
               <div className="space-y-2">
                 <div className="flex items-center">
                   <input
@@ -172,9 +215,9 @@ const Governance = () => {
                     value="now"
                     checked={proposal.startTime === 'now'}
                     onChange={handleInputChange}
-                    className="mr-2"
+                    className="mr-2 text-blue-500 focus:ring-blue-500 bg-[#252525] border-gray-600"
                   />
-                  <label htmlFor="startNow" className="text-sm">Start immediately</label>
+                  <label htmlFor="startNow" className="text-white">Start immediately</label>
                 </div>
                 
                 <div className="flex items-center">
@@ -185,48 +228,54 @@ const Governance = () => {
                     value="custom"
                     checked={proposal.startTime === 'custom'}
                     onChange={handleInputChange}
-                    className="mr-2"
+                    className="mr-2 text-blue-500 focus:ring-blue-500 bg-[#252525] border-gray-600"
                   />
-                  <label htmlFor="startCustom" className="text-sm">Schedule start time</label>
+                  <label htmlFor="startCustom" className="text-white">Schedule for later</label>
                 </div>
                 
                 {proposal.startTime === 'custom' && (
-                  <div className="flex space-x-2 mt-2">
-                    <input
-                      type="date"
-                      name="customStartDate"
-                      value={proposal.customStartDate}
-                      onChange={handleInputChange}
-                      className="p-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <input
-                      type="time"
-                      name="customStartTime"
-                      value={proposal.customStartTime}
-                      onChange={handleInputChange}
-                      className="p-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                  <div className="grid grid-cols-2 gap-2 mt-2">
+                    <div>
+                      <label className="block text-xs text-gray-400 mb-1">Date</label>
+                      <input
+                        type="date"
+                        name="customStartDate"
+                        value={proposal.customStartDate}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border border-gray-600 rounded-md bg-[#252525] text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs text-gray-400 mb-1">Time</label>
+                      <input
+                        type="time"
+                        name="customStartTime"
+                        value={proposal.customStartTime}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border border-gray-600 rounded-md bg-[#252525] text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
                   </div>
                 )}
               </div>
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Expiration Time</label>
+              <label className="block text-sm font-medium text-gray-300 mb-1">Expiration Time</label>
               <div className="grid grid-cols-3 gap-2">
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">Days</label>
+                  <label className="block text-xs text-gray-400 mb-1">Days</label>
                   <input
                     type="number"
                     name="expirationDays"
                     value={proposal.expirationDays}
                     onChange={handleInputChange}
                     min="0"
-                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border border-gray-600 rounded-md bg-[#252525] text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">Hours</label>
+                  <label className="block text-xs text-gray-400 mb-1">Hours</label>
                   <input
                     type="number"
                     name="expirationHours"
@@ -234,11 +283,11 @@ const Governance = () => {
                     onChange={handleInputChange}
                     min="0"
                     max="23"
-                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border border-gray-600 rounded-md bg-[#252525] text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">Minutes</label>
+                  <label className="block text-xs text-gray-400 mb-1">Minutes</label>
                   <input
                     type="number"
                     name="expirationMinutes"
@@ -246,23 +295,26 @@ const Governance = () => {
                     onChange={handleInputChange}
                     min="0"
                     max="59"
-                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border border-gray-600 rounded-md bg-[#252525] text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
+              <p className="text-sm text-gray-400 mt-2">
+                Proposal will expire after: {calculateExpirationTime()}
+              </p>
             </div>
             
             <div className="flex justify-between">
               <button
                 onClick={prevStep}
-                className="px-4 py-2 rounded-md text-gray-700 bg-gray-200 hover:bg-gray-300"
+                className="px-4 py-2 rounded-md text-white bg-[#333333] hover:bg-[#444444]"
               >
                 Back
               </button>
               <button
                 onClick={nextStep}
                 disabled={proposal.startTime === 'custom' && (!proposal.customStartDate || !proposal.customStartTime)}
-                className={`px-4 py-2 rounded-md text-white ${proposal.startTime === 'custom' && (!proposal.customStartDate || !proposal.customStartTime) ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
+                className={`px-4 py-2 rounded-md text-white ${proposal.startTime === 'custom' && (!proposal.customStartDate || !proposal.customStartTime) ? 'bg-gray-600 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
               >
                 Next
               </button>
@@ -273,160 +325,154 @@ const Governance = () => {
       case 3:
         return (
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Actions (Optional)</h3>
-            <p className="text-sm text-gray-500 mb-2">Select one or more actions for this proposal</p>
+            <h3 className="text-lg font-medium text-white">Actions (Optional)</h3>
+            <p className="text-sm text-gray-400 mb-2">Select one or more actions for this proposal</p>
             
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-3 gap-2 mb-4">
               <button
                 onClick={() => toggleAction('authorize')}
-                className={`p-3 border rounded-md flex items-center ${isActionSelected('authorize') ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:bg-gray-50'}`}
+                className={`p-2 rounded-md text-sm ${isActionSelected('authorize') ? 'bg-blue-500 text-white' : 'bg-[#333333] text-white hover:bg-[#444444]'}`}
               >
-                <Wallet size={18} className={`mr-2 ${isActionSelected('authorize') ? 'text-blue-500' : 'text-gray-500'}`} />
-                <span>Authorize Wallet</span>
+                Authorize Wallet
               </button>
-              
               <button
                 onClick={() => toggleAction('remove')}
-                className={`p-3 border rounded-md flex items-center ${isActionSelected('remove') ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:bg-gray-50'}`}
+                className={`p-2 rounded-md text-sm ${isActionSelected('remove') ? 'bg-blue-500 text-white' : 'bg-[#333333] text-white hover:bg-[#444444]'}`}
               >
-                <UserMinus size={18} className={`mr-2 ${isActionSelected('remove') ? 'text-blue-500' : 'text-gray-500'}`} />
-                <span>Remove Wallet</span>
+                Remove Wallet
               </button>
-              
               <button
                 onClick={() => toggleAction('withdraw')}
-                className={`p-3 border rounded-md flex items-center ${isActionSelected('withdraw') ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:bg-gray-50'}`}
+                className={`p-2 rounded-md text-sm ${isActionSelected('withdraw') ? 'bg-blue-500 text-white' : 'bg-[#333333] text-white hover:bg-[#444444]'}`}
               >
-                <ArrowUpRight size={18} className={`mr-2 ${isActionSelected('withdraw') ? 'text-blue-500' : 'text-gray-500'}`} />
-                <span>Withdraw Tokens</span>
-              </button>
-              
-              <button
-                className="p-3 border border-gray-300 rounded-md flex items-center opacity-50 cursor-not-allowed"
-              >
-                <div className="mr-2 text-gray-400">⚙️</div>
-                <span>Smart Contract (Disabled)</span>
+                Withdraw Tokens
               </button>
             </div>
             
-            {proposal.actions.length > 0 && (
-              <div className="mt-4 space-y-4">
-                <h4 className="text-md font-medium">Configure Actions</h4>
-                
-                {isActionSelected('authorize') && (
-                  <div className="p-4 bg-gray-50 rounded-md border border-blue-100">
-                    <div className="flex justify-between items-center mb-2">
-                      <h5 className="font-medium text-blue-600">Authorize Wallet</h5>
-                      <button 
-                        onClick={() => toggleAction('authorize')}
-                        className="text-gray-400 hover:text-gray-600"
-                      >
-                        <X size={16} />
-                      </button>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Wallet Address to Authorize</label>
-                      <input
-                        type="text"
-                        value={getActionByType('authorize')?.walletAddress || ''}
-                        onChange={(e) => updateActionField('authorize', 'walletAddress', e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Enter wallet address"
-                      />
-                    </div>
-                  </div>
-                )}
-                
-                {isActionSelected('remove') && (
-                  <div className="p-4 bg-gray-50 rounded-md border border-blue-100">
-                    <div className="flex justify-between items-center mb-2">
-                      <h5 className="font-medium text-blue-600">Remove Wallet</h5>
-                      <button 
-                        onClick={() => toggleAction('remove')}
-                        className="text-gray-400 hover:text-gray-600"
-                      >
-                        <X size={16} />
-                      </button>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Wallet Address to Remove</label>
-                      <input
-                        type="text"
-                        value={getActionByType('remove')?.walletAddress || ''}
-                        onChange={(e) => updateActionField('remove', 'walletAddress', e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Enter wallet address"
-                      />
-                    </div>
-                  </div>
-                )}
-                
-                {isActionSelected('withdraw') && (
-                  <div className="p-4 bg-gray-50 rounded-md border border-blue-100">
-                    <div className="flex justify-between items-center mb-2">
-                      <h5 className="font-medium text-blue-600">Withdraw Tokens</h5>
-                      <button 
-                        onClick={() => toggleAction('withdraw')}
-                        className="text-gray-400 hover:text-gray-600"
-                      >
-                        <X size={16} />
-                      </button>
-                    </div>
-                    <div className="space-y-3">
+            <div className="space-y-4">
+              {proposal.actions.length > 0 ? (
+                <>
+                  {isActionSelected('authorize') && (
+                    <div className="p-4 bg-[#2A2A2A] rounded-md border border-gray-600">
+                      <div className="flex justify-between items-center mb-2">
+                        <h5 className="font-medium text-blue-400">Authorize Wallet</h5>
+                        <button 
+                          onClick={() => toggleAction('authorize')}
+                          className="text-gray-400 hover:text-gray-200"
+                        >
+                          <X size={16} />
+                        </button>
+                      </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Recipient Wallet Address</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Wallet Address to Authorize</label>
                         <input
                           type="text"
-                          value={getActionByType('withdraw')?.walletAddress || ''}
-                          onChange={(e) => updateActionField('withdraw', 'walletAddress', e.target.value)}
-                          className="w-full p-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="Enter recipient wallet address"
+                          value={getActionByType('authorize')?.walletAddress || ''}
+                          onChange={(e) => updateActionField('authorize', 'walletAddress', e.target.value)}
+                          className="w-full p-2 border border-gray-600 rounded-md bg-[#252525] text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="Enter wallet address"
                         />
                       </div>
-                      
-                      <div className="flex space-x-2">
-                        <div className="flex-1">
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+                    </div>
+                  )}
+                  
+                  {isActionSelected('remove') && (
+                    <div className="p-4 bg-[#2A2A2A] rounded-md border border-gray-600">
+                      <div className="flex justify-between items-center mb-2">
+                        <h5 className="font-medium text-blue-400">Remove Wallet</h5>
+                        <button 
+                          onClick={() => toggleAction('remove')}
+                          className="text-gray-400 hover:text-gray-200"
+                        >
+                          <X size={16} />
+                        </button>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Wallet Address to Remove</label>
+                        <input
+                          type="text"
+                          value={getActionByType('remove')?.walletAddress || ''}
+                          onChange={(e) => updateActionField('remove', 'walletAddress', e.target.value)}
+                          className="w-full p-2 border border-gray-600 rounded-md bg-[#252525] text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="Enter wallet address"
+                        />
+                      </div>
+                    </div>
+                  )}
+                  
+                  {isActionSelected('withdraw') && (
+                    <div className="p-4 bg-[#2A2A2A] rounded-md border border-gray-600">
+                      <div className="flex justify-between items-center mb-2">
+                        <h5 className="font-medium text-blue-400">Withdraw Tokens</h5>
+                        <button 
+                          onClick={() => toggleAction('withdraw')}
+                          className="text-gray-400 hover:text-gray-200"
+                        >
+                          <X size={16} />
+                        </button>
+                      </div>
+                      <div className="space-y-3">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-300 mb-1">Recipient Wallet</label>
                           <input
-                            type="number"
-                            value={getActionByType('withdraw')?.tokenAmount || ''}
-                            onChange={(e) => updateActionField('withdraw', 'tokenAmount', e.target.value)}
-                            className="w-full p-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter amount"
+                            type="text"
+                            value={getActionByType('withdraw')?.walletAddress || ''}
+                            onChange={(e) => updateActionField('withdraw', 'walletAddress', e.target.value)}
+                            className="w-full p-2 border border-gray-600 rounded-md bg-[#252525] text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter recipient wallet address"
                           />
                         </div>
                         
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Token</label>
-                          <select
-                            value={getActionByType('withdraw')?.tokenSymbol || 'SOL'}
-                            onChange={(e) => updateActionField('withdraw', 'tokenSymbol', e.target.value)}
-                            className="w-full p-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          >
-                            <option value="SOL">SOL</option>
-                            <option value="USDC">USDC</option>
-                            <option value="USDT">USDT</option>
-                          </select>
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-1">Amount</label>
+                            <input
+                              type="number"
+                              value={getActionByType('withdraw')?.tokenAmount || ''}
+                              onChange={(e) => updateActionField('withdraw', 'tokenAmount', e.target.value)}
+                              className="w-full p-2 border border-gray-600 rounded-md bg-[#252525] text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              placeholder="Enter amount"
+                            />
+                          </div>
+                          
+                          <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-1">Token</label>
+                            <select
+                              value={getActionByType('withdraw')?.tokenSymbol || 'SOL'}
+                              onChange={(e) => updateActionField('withdraw', 'tokenSymbol', e.target.value)}
+                              className="w-full p-2 border border-gray-600 rounded-md bg-[#252525] text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                              <option value="SOL">SOL</option>
+                              <option value="USDC">USDC</option>
+                              <option value="USDT">USDT</option>
+                              <option value="BTC">BTC</option>
+                              <option value="ETH">ETH</option>
+                            </select>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            )}
+                  )}
+                </>
+              ) : (
+                <div className="p-4 bg-[#2A2A2A] rounded-md text-center text-gray-400">
+                  No actions selected. You can continue without actions or select one above.
+                </div>
+              )}
+            </div>
             
             <div className="flex justify-between">
               <button
                 onClick={prevStep}
-                className="px-4 py-2 rounded-md text-gray-700 bg-gray-200 hover:bg-gray-300"
+                className="px-4 py-2 rounded-md text-white bg-[#333333] hover:bg-[#444444]"
               >
                 Back
               </button>
               <button
                 onClick={nextStep}
-                className="px-4 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                className="px-4 py-2 rounded-md text-white bg-blue-500 hover:bg-blue-600"
               >
-                {proposal.actions.length > 0 ? 'Review' : 'Skip & Review'}
+                Next
               </button>
             </div>
           </div>
@@ -435,39 +481,36 @@ const Governance = () => {
       case 4:
         return (
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Review Proposal</h3>
+            <h3 className="text-lg font-medium text-white">Review & Submit</h3>
             
-            <div className="bg-gray-50 p-4 rounded-md space-y-3">
-              <div>
-                <h4 className="text-sm font-medium text-gray-500">Title</h4>
-                <p className="text-gray-900">{proposal.title}</p>
-              </div>
+            <div className="bg-[#2A2A2A] p-4 rounded-md">
+              <h4 className="font-medium text-white mb-2">{proposal.title}</h4>
+              <p className="text-gray-300 text-sm mb-4">{proposal.description}</p>
               
-              <div>
-                <h4 className="text-sm font-medium text-gray-500">Summary</h4>
-                <p className="text-gray-900">{proposal.summary}</p>
-              </div>
-              
-              <div>
-                <h4 className="text-sm font-medium text-gray-500">Start Time</h4>
-                <p className="text-gray-900">
-                  {proposal.startTime === 'now' 
-                    ? 'Immediately after creation' 
-                    : `${proposal.customStartDate} at ${proposal.customStartTime}`}
-                </p>
-              </div>
-              
-              <div>
-                <h4 className="text-sm font-medium text-gray-500">Expiration</h4>
-                <p className="text-gray-900">{calculateExpirationTime()}</p>
+              <div className="space-y-2 mb-4">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-400">Start Time:</span>
+                  <span className="text-white">
+                    {proposal.startTime === 'now' 
+                      ? 'Immediately after creation' 
+                      : `${proposal.customStartDate} at ${proposal.customStartTime}`}
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-400">Expiration:</span>
+                  <span className="text-white">{calculateExpirationTime()}</span>
+                </div>
               </div>
               
               {proposal.actions.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-medium text-gray-500">Actions</h4>
-                  <ul className="list-disc pl-5 mt-1 space-y-1">
+                  <h5 className="text-sm font-medium text-gray-300 mb-2">Actions:</h5>
+                  <ul className="space-y-1">
                     {proposal.actions.map((action, index) => (
-                      <li key={index} className="text-gray-900">{getActionDescription(action)}</li>
+                      <li key={index} className="flex items-start text-sm">
+                        <Check size={16} className="text-blue-400 mr-2 mt-0.5" />
+                        <span className="text-white">{getActionDescription(action)}</span>
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -477,13 +520,13 @@ const Governance = () => {
             <div className="flex justify-between">
               <button
                 onClick={prevStep}
-                className="px-4 py-2 rounded-md text-gray-700 bg-gray-200 hover:bg-gray-300"
+                className="px-4 py-2 rounded-md text-white bg-[#333333] hover:bg-[#444444]"
               >
                 Back
               </button>
               <button
                 onClick={resetForm}
-                className="px-4 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                className="px-4 py-2 rounded-md text-white bg-blue-500 hover:bg-blue-600"
               >
                 Create Proposal
               </button>
@@ -496,45 +539,128 @@ const Governance = () => {
     }
   };
 
+  const proposalDetails: ProposalDetails[] = [
+    {
+      id: 'PROP-1234',
+      title: 'Increase Treasury Allocation for Marketing',
+      description: 'This proposal aims to increase the treasury allocation for marketing efforts from 10% to 15% of the total treasury. The additional funds will be used to expand our presence on social media platforms and sponsor relevant events in the crypto space.\n\nRationale:\n- Increased competition requires more marketing efforts\n- Recent community survey showed strong support for more marketing\n- Previous marketing campaigns have shown positive ROI',
+      status: 'Active',
+      creator: 'dao.member.eth',
+      createdAt: '2023-10-15',
+      startDate: '2023-10-16',
+      endDate: '2023-10-23',
+      votes: {
+        for: 650,
+        against: 350,
+        abstain: 120
+      },
+      actions: [
+        {
+          type: 'withdraw',
+          description: 'Withdraw 50,000 USDC from treasury to marketing multisig',
+          walletAddress: '0x1234...5678',
+          amount: '50,000',
+          token: 'USDC'
+        }
+      ],
+      quorum: 1000,
+      minApproval: 60
+    },
+    {
+      id: 'PROP-1233',
+      title: 'New Community Guidelines',
+      description: 'This proposal introduces updated community guidelines for all official communication channels. The new guidelines focus on promoting respectful discourse, preventing spam, and establishing clear moderation procedures.\n\nKey changes:\n- More specific rules about promotional content\n- Clearer escalation path for rule violations\n- New roles for community moderators',
+      status: 'Active',
+      creator: 'community.lead.eth',
+      createdAt: '2023-10-14',
+      startDate: '2023-10-15',
+      endDate: '2023-10-22',
+      votes: {
+        for: 820,
+        against: 180,
+        abstain: 50
+      },
+      actions: [
+        {
+          type: 'document',
+          description: 'Ratify new community guidelines document (IPFS: QmX...)',
+        }
+      ],
+      quorum: 800,
+      minApproval: 50
+    },
+    {
+      id: 'PROP-1232',
+      title: 'Reduce Quorum Requirements',
+      description: 'This proposal suggests reducing the quorum requirements for standard proposals from 20% to 15% of total voting power. The change aims to address the challenge of reaching quorum for routine proposals, while maintaining a high enough threshold to ensure proper governance.\n\nThe proposal does NOT change the quorum requirements for critical proposals (such as treasury changes above 100k USDC or protocol parameter changes).',
+      status: 'Active',
+      creator: 'governance.eth',
+      createdAt: '2023-10-13',
+      startDate: '2023-10-14',
+      endDate: '2023-10-28',
+      votes: {
+        for: 490,
+        against: 510,
+        abstain: 200
+      },
+      actions: [
+        {
+          type: 'parameter',
+          description: 'Update governance parameter: STANDARD_PROPOSAL_QUORUM from 20% to 15%',
+        }
+      ],
+      quorum: 1200,
+      minApproval: 66
+    }
+  ];
+  
+  const openProposalDetails = (proposalId: string) => {
+    const proposal = proposalDetails.find(p => p.id === proposalId);
+    if (proposal) {
+      setSelectedProposal(proposal);
+    }
+  };
+  
+  const closeProposalDetails = () => {
+    setSelectedProposal(null);
+  };
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Governance</h1>
         <button 
           onClick={() => setShowProposalForm(true)}
-          className="flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+          className="flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
         >
           <Plus size={16} className="mr-2" />
           New Proposal
         </button>
       </div>
       
-      {/* Modal for new proposal */}
       {showProposalForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
-            <div className="flex justify-between items-center p-4 border-b">
-              <h2 className="text-xl font-semibold">Create New Proposal</h2>
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-[#252525] rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div className="flex justify-between items-center p-4 border-b border-gray-600">
+              <h2 className="text-xl font-semibold text-white">Create New Proposal</h2>
               <button 
                 onClick={resetForm}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-400 hover:text-white"
               >
                 <X size={20} />
               </button>
             </div>
             
             <div className="p-4">
-              {/* Progress indicator */}
               <div className="flex mb-6">
                 {[1, 2, 3, 4].map((step) => (
                   <div key={step} className="flex-1 flex items-center">
                     <div 
                       className={`w-6 h-6 rounded-full flex items-center justify-center ${
                         step === proposalStep 
-                          ? 'bg-blue-600 text-white' 
+                          ? 'bg-blue-500 text-white' 
                           : step < proposalStep 
-                            ? 'bg-blue-100 text-blue-600' 
-                            : 'bg-gray-200 text-gray-500'
+                            ? 'bg-blue-900 text-blue-300' 
+                            : 'bg-[#333333] text-gray-500'
                       }`}
                     >
                       {step}
@@ -542,7 +668,7 @@ const Governance = () => {
                     {step < 4 && (
                       <div 
                         className={`flex-1 h-1 ${
-                          step < proposalStep ? 'bg-blue-600' : 'bg-gray-200'
+                          step < proposalStep ? 'bg-blue-500' : 'bg-[#333333]'
                         }`}
                       ></div>
                     )}
@@ -556,35 +682,58 @@ const Governance = () => {
         </div>
       )}
       
-      <div className="bg-white rounded-lg shadow mb-6">
-        <div className="p-4 border-b">
-          <h2 className="text-lg font-medium">Active Proposals</h2>
+      {selectedProposal && (
+        <PopupProposal 
+          proposal={selectedProposal} 
+          onClose={closeProposalDetails} 
+        />
+      )}
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="bg-[#3b4da8] rounded-lg p-4 text-white">
+          <h3 className="text-sm font-medium mb-2">Active Proposals</h3>
+          <p className="text-3xl font-bold">3</p>
         </div>
-        <div className="p-0">
+        
+        <div className="bg-[#3b4da8] rounded-lg p-4 text-white">
+          <h3 className="text-sm font-medium mb-2">Voting Power</h3>
+          <p className="text-3xl font-bold">1,250 SOL</p>
+        </div>
+      </div>
+      
+      <div className="bg-[#252525] rounded-lg overflow-hidden mb-6">
+        <div className="p-4 border-b border-[#333333]">
+          <h2 className="text-lg font-medium text-white">Active Proposals</h2>
+        </div>
+        <div>
           {[
             { id: 'PROP-1234', title: 'Increase Treasury Allocation for Marketing', status: 'Active', votes: { for: 65, against: 35 } },
             { id: 'PROP-1233', title: 'New Community Guidelines', status: 'Active', votes: { for: 82, against: 18 } },
             { id: 'PROP-1232', title: 'Reduce Quorum Requirements', status: 'Active', votes: { for: 49, against: 51 } },
-          ].map((proposal) => (
-            <div key={proposal.id} className="border-b p-4 hover:bg-gray-50">
+          ].map((proposal, index) => (
+            <div 
+              key={proposal.id} 
+              className={`p-4 ${index !== 2 ? 'border-b border-[#333333]' : ''} hover:bg-[#2A2A2A] cursor-pointer`}
+              onClick={() => openProposalDetails(proposal.id)}
+            >
               <div className="flex justify-between items-center mb-2">
                 <div>
-                  <h3 className="font-medium">{proposal.title}</h3>
-                  <p className="text-sm text-gray-500">{proposal.id}</p>
+                  <h3 className="font-medium text-white">{proposal.title}</h3>
+                  <p className="text-sm text-gray-400">{proposal.id}</p>
                 </div>
-                <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
+                <span className="px-2 py-1 bg-green-900 text-green-300 rounded-full text-xs">
                   {proposal.status}
                 </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div className="w-full bg-[#333333] rounded-full h-2.5">
                 <div 
-                  className="bg-blue-600 h-2.5 rounded-full" 
+                  className="bg-blue-500 h-2.5 rounded-full" 
                   style={{ width: `${proposal.votes.for}%` }}
                 ></div>
               </div>
               <div className="flex justify-between text-xs mt-1">
-                <span>{proposal.votes.for}% For</span>
-                <span>{proposal.votes.against}% Against</span>
+                <span className="text-blue-400">{proposal.votes.for}% For</span>
+                <span className="text-gray-400">{proposal.votes.against}% Against</span>
               </div>
             </div>
           ))}
@@ -592,32 +741,32 @@ const Governance = () => {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-4 border-b">
-            <h2 className="text-lg font-medium">Voting Power Distribution</h2>
+        <div className="bg-[#252525] rounded-lg overflow-hidden">
+          <div className="p-4 border-b border-[#333333]">
+            <h2 className="text-lg font-medium text-white">Voting Power Distribution</h2>
           </div>
           <div className="p-4">
             <div className="h-64 flex items-center justify-center">
-              <PieChart className="text-gray-300" size={100} />
+              <PieChart className="text-gray-600" size={100} />
             </div>
           </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-4 border-b">
-            <h2 className="text-lg font-medium">Recent Governance Activity</h2>
+        <div className="bg-[#252525] rounded-lg overflow-hidden">
+          <div className="p-4 border-b border-[#333333]">
+            <h2 className="text-lg font-medium text-white">Recent Governance Activity</h2>
           </div>
-          <div className="p-0">
+          <div>
             {[
               { event: 'Proposal #1221 accepted', time: '12 hours ago' },
               { event: 'New voting period started', time: '1 day ago' },
               { event: 'Quorum reached on Proposal #1220', time: '2 days ago' },
               { event: 'Proposal #1219 rejected', time: '3 days ago' },
             ].map((activity, index) => (
-              <div key={index} className={`p-4 ${index !== 3 ? 'border-b' : ''} hover:bg-gray-50`}>
+              <div key={index} className={`p-4 ${index !== 3 ? 'border-b border-[#333333]' : ''} hover:bg-[#2A2A2A]`}>
                 <div className="flex justify-between">
-                  <span>{activity.event}</span>
-                  <span className="text-sm text-gray-500">{activity.time}</span>
+                  <span className="text-white">{activity.event}</span>
+                  <span className="text-sm text-gray-400">{activity.time}</span>
                 </div>
               </div>
             ))}

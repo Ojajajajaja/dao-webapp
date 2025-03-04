@@ -75,7 +75,18 @@ const Header = ({ activeSection, showNotifications, setShowNotifications }: Head
         <div className="flex items-center">
           <span className="text-[#555555] select-none">DAO</span>
           <span className="mx-2 text-[#555555]">/</span>
-          <span className="text-white select-none">{getSectionDisplayName()}</span>
+          <span className="text-white select-none min-w-[100px]">{getSectionDisplayName()}</span>
+        </div>
+        
+        <div className="flex-1 flex justify-center mx-4">
+          <div className="relative w-64">
+            <input
+              type="text"
+              placeholder="Search"
+              className="bg-[#555555] rounded-full py-2 pl-10 pr-4 text-sm w-full focus:outline-none text-white"
+            />
+            <Search size={16} className="absolute left-3 top-2.5 text-gray-400" />
+          </div>
         </div>
         
         <div className="flex items-center space-x-4">
@@ -99,15 +110,6 @@ const Header = ({ activeSection, showNotifications, setShowNotifications }: Head
                 </div>
               )}
             </div>
-          </div>
-          
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search"
-              className="bg-[#555555] rounded-full py-2 pl-10 pr-4 text-sm w-64 focus:outline-none text-white"
-            />
-            <Search size={16} className="absolute left-3 top-2.5 text-gray-400" />
           </div>
           
           {/* Wallet Connect Button */}

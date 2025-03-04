@@ -1,157 +1,121 @@
-import React, { useState } from 'react';
-import { ChevronDown, Filter, ExternalLink } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronDown, ExternalLink, Check, Calendar } from 'lucide-react';
+import { getMembers, Member } from '../data/members.db.ts';
 
 const Members = () => {
   const [sortOrder, setSortOrder] = useState('A-Z');
-  const [podFilter, setPodFilter] = useState('All');
-  const [socialFilter, setSocialFilter] = useState('All');
-  const [activityFilter, setActivityFilter] = useState('All');
+  const [podFilter, setPodFilter] = useState<string[]>([]);
+  const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  
+  // Date range filters
+  const [activitySince, setActivitySince] = useState<string>('');
+  const [activityUntil, setActivityUntil] = useState<string>('');
+  const [loginSince, setLoginSince] = useState<string>('');
+  const [loginUntil, setLoginUntil] = useState<string>('');
+  
+  // Get members data
+  const members = getMembers();
 
-  // Mock member data with expanded attributes
-  const members = [
-    { 
-      id: 1, 
-      name: 'Alex Johnson', 
-      wallet: '8xrt67Dj9q2rjvVwVVN2Nqeis1mGFHpwXamRYcSVsRXB', 
-      username: 'alexj', 
-      avatar: 'https://randomuser.me/api/portraits/men/1.jpg', 
-      pods: ['Design', 'Marketing'], 
-      discordId: 'alexj#1234', 
-      twitter: '@alexjohnson', 
-      telegram: '@alex_j', 
-      lastLogin: '2023-10-15T14:30:00Z', 
-      lastInteraction: '2023-10-15T16:45:00Z' 
-    },
-    { 
-      id: 2, 
-      name: 'Sarah Williams', 
-      wallet: '6Kcm7sSmKSsuDCPaAFTYo7aMvX9CzfPVcbCHDQrZ89QA', 
-      username: 'sarahw', 
-      avatar: 'https://randomuser.me/api/portraits/women/2.jpg', 
-      pods: ['Communication'], 
-      discordId: 'sarahw#5678', 
-      twitter: '@sarahwilliams', 
-      telegram: '@sarah_w', 
-      lastLogin: '2023-10-14T09:15:00Z', 
-      lastInteraction: '2023-10-14T11:20:00Z' 
-    },
-    { 
-      id: 3, 
-      name: 'Michael Brown', 
-      wallet: '2xPv3CnUAcxpWJJtpYQCxKrfZMjSPEsG2MxZ9P3FbfU1', 
-      username: 'mikeb', 
-      avatar: 'https://randomuser.me/api/portraits/men/3.jpg', 
-      pods: ['Trading'], 
-      discordId: 'mikeb#9012', 
-      twitter: '@michaelbrown', 
-      telegram: '@mike_b', 
-      lastLogin: '2023-10-13T18:45:00Z', 
-      lastInteraction: '2023-10-13T20:30:00Z' 
-    },
-    { 
-      id: 4, 
-      name: 'Emily Davis', 
-      wallet: '9xPv3CnUAcxpWJJtpYQCxKrfZMjSPEsG2MxZ9P3FbfU1', 
-      username: 'emilyd', 
-      avatar: 'https://randomuser.me/api/portraits/women/4.jpg', 
-      pods: ['Merch'], 
-      discordId: 'emilyd#3456', 
-      twitter: '@emilydavis', 
-      telegram: '@emily_d', 
-      lastLogin: '2023-10-12T11:30:00Z', 
-      lastInteraction: '2023-10-12T14:15:00Z' 
-    },
-    { 
-      id: 5, 
-      name: 'David Wilson', 
-      wallet: '7Kcm7sSmKSsuDCPaAFTYo7aMvX9CzfPVcbCHDQrZ89QA', 
-      username: 'davidw', 
-      avatar: 'https://randomuser.me/api/portraits/men/5.jpg', 
-      pods: ['Chilling'], 
-      discordId: 'davidw#7890', 
-      twitter: '@davidwilson', 
-      telegram: '@david_w', 
-      lastLogin: '2023-10-11T15:20:00Z', 
-      lastInteraction: '2023-10-11T17:45:00Z' 
-    },
-    { 
-      id: 6, 
-      name: 'Jessica Taylor', 
-      wallet: '5xrt67Dj9q2rjvVwVVN2Nqeis1mGFHpwXamRYcSVsRXB', 
-      username: 'jessicat', 
-      avatar: 'https://randomuser.me/api/portraits/women/6.jpg', 
-      pods: ['Design'], 
-      discordId: 'jessicat#2345', 
-      twitter: '@jessicataylor', 
-      telegram: '@jessica_t', 
-      lastLogin: '2023-10-10T08:45:00Z', 
-      lastInteraction: '2023-10-10T10:30:00Z' 
-    },
-    { 
-      id: 7, 
-      name: 'Ryan Martinez', 
-      wallet: '4xPv3CnUAcxpWJJtpYQCxKrfZMjSPEsG2MxZ9P3FbfU1', 
-      username: 'ryanm', 
-      avatar: 'https://randomuser.me/api/portraits/men/7.jpg', 
-      pods: ['Communication'], 
-      discordId: 'ryanm#6789', 
-      twitter: '@ryanmartinez', 
-      telegram: '@ryan_m', 
-      lastLogin: '2023-10-09T13:15:00Z', 
-      lastInteraction: '2023-10-09T15:45:00Z' 
-    },
-    { 
-      id: 8, 
-      name: 'Olivia Anderson', 
-      wallet: '3Kcm7sSmKSsuDCPaAFTYo7aMvX9CzfPVcbCHDQrZ89QA', 
-      username: 'oliviaa', 
-      avatar: 'https://randomuser.me/api/portraits/women/8.jpg', 
-      pods: ['Trading'], 
-      discordId: 'oliviaa#0123', 
-      twitter: '@oliviaanderson', 
-      telegram: '@olivia_a', 
-      lastLogin: '2023-10-08T16:30:00Z', 
-      lastInteraction: '2023-10-08T18:15:00Z' 
-    },
-    { 
-      id: 9, 
-      name: 'Daniel Thomas', 
-      wallet: '1xrt67Dj9q2rjvVwVVN2Nqeis1mGFHpwXamRYcSVsRXB', 
-      username: 'danielt', 
-      avatar: 'https://randomuser.me/api/portraits/men/9.jpg', 
-      pods: ['Cuddling'], 
-      discordId: 'danielt#4567', 
-      twitter: '@danielthomas', 
-      telegram: '@daniel_t', 
-      lastLogin: '2023-10-07T10:45:00Z', 
-      lastInteraction: '2023-10-07T12:30:00Z' 
-    },
-    { 
-      id: 10, 
-      name: 'Sophia Jackson', 
-      wallet: '0Kcm7sSmKSsuDCPaAFTYo7aMvX9CzfPVcbCHDQrZ89QA', 
-      username: 'sophiaj', 
-      avatar: 'https://randomuser.me/api/portraits/women/10.jpg', 
-      pods: ['Merch'], 
-      discordId: 'sophiaj#8901', 
-      twitter: '@sophiajackson', 
-      telegram: '@sophia_j', 
-      lastLogin: '2023-10-06T14:15:00Z', 
-      lastInteraction: '2023-10-06T16:45:00Z' 
-    },
-  ];
+  // Get unique pod values for filter
+  const uniquePods = [...new Set(members.flatMap(member => member.pods))].sort();
+
+  // Toggle dropdown visibility
+  const toggleDropdown = (dropdown: string) => {
+    setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
+  };
+
+  // Apply filters and sorting
+  useEffect(() => {
+    let result = [...members];
+    
+    // Apply pod filter
+    if (podFilter.length > 0) {
+      result = result.filter(member => 
+        member.pods.some(pod => podFilter.includes(pod))
+      );
+    }
+    
+    // Apply activity date range filters
+    if (activitySince || activityUntil) {
+      result = result.filter(member => {
+        const activityDate = new Date(member.lastInteraction);
+        
+        if (activitySince && activityUntil) {
+          return activityDate >= new Date(activitySince) && activityDate <= new Date(activityUntil);
+        } else if (activitySince) {
+          return activityDate >= new Date(activitySince);
+        } else if (activityUntil) {
+          return activityDate <= new Date(activityUntil);
+        }
+        
+        return true;
+      });
+    }
+    
+    // Apply login date range filters
+    if (loginSince || loginUntil) {
+      result = result.filter(member => {
+        const loginDate = new Date(member.lastLogin);
+        
+        if (loginSince && loginUntil) {
+          return loginDate >= new Date(loginSince) && loginDate <= new Date(loginUntil);
+        } else if (loginSince) {
+          return loginDate >= new Date(loginSince);
+        } else if (loginUntil) {
+          return loginDate <= new Date(loginUntil);
+        }
+        
+        return true;
+      });
+    }
+    
+    // Apply sorting
+    switch (sortOrder) {
+      case 'A-Z':
+        result.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'Z-A':
+        result.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case 'Recent':
+        result.sort((a, b) => new Date(b.lastLogin).getTime() - new Date(a.lastLogin).getTime());
+        break;
+      case 'Oldest':
+        result.sort((a, b) => new Date(a.lastLogin).getTime() - new Date(b.lastLogin).getTime());
+        break;
+    }
+    
+    setFilteredMembers(result);
+  }, [members, sortOrder, podFilter, activitySince, activityUntil, loginSince, loginUntil]);
+
+  // Reset all activity filters
+  const resetActivityFilters = () => {
+    setActivitySince('');
+    setActivityUntil('');
+    setLoginSince('');
+    setLoginUntil('');
+  };
+
+  // Toggle pod in filter
+  const togglePodFilter = (pod: string) => {
+    setPodFilter(podFilter.includes(pod) 
+      ? podFilter.filter(p => p !== pod) 
+      : [...podFilter, pod]
+    );
+  };
 
   // Format date for display
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
   // Format time ago for display
-  const getTimeAgo = (dateString) => {
+  const getTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
-    const diffMs = now - date;
+    const diffMs = now.getTime() - date.getTime();
     const diffSec = Math.floor(diffMs / 1000);
     const diffMin = Math.floor(diffSec / 60);
     const diffHour = Math.floor(diffMin / 60);
@@ -169,9 +133,12 @@ const Members = () => {
   };
 
   // Truncate wallet address for display
-  const truncateWallet = (wallet) => {
+  const truncateWallet = (wallet: string) => {
     return wallet.substring(0, 6) + '...' + wallet.substring(wallet.length - 4);
   };
+
+  // Check if any activity filter is active
+  const isActivityFilterActive = activitySince || activityUntil || loginSince || loginUntil;
 
   // Get the most recently joined member
   const lastJoinedMember = [...members].sort((a, b) => 
@@ -180,9 +147,6 @@ const Members = () => {
 
   return (
     <div className="p-6">
-      <div className="flex items-center text-sm text-[#555555] mb-4">
-        <h1 className="text-2xl font-bold mb-6">Members</h1>
-      </div>
       
       <div className="grid grid-cols-2 gap-6 mb-6">
         <div className="bg-[#3b4da8] rounded-lg p-4 text-white">
@@ -199,38 +163,150 @@ const Members = () => {
       
       <div className="flex justify-between items-center mb-4">
         <div className="flex space-x-2">
+          {/* Sort Dropdown */}
           <div className="relative">
-            <button className="flex items-center space-x-1 bg-[#252525] text-white px-3 py-2 rounded-md text-sm">
-              <span>Sort: {sortOrder}</span>
+            <button 
+              className={`flex items-center space-x-1 ${sortOrder !== 'A-Z' ? 'bg-white text-[#252525]' : 'bg-[#252525] text-white'} px-3 py-2 rounded-md text-sm`}
+              onClick={() => toggleDropdown('sort')}
+            >
+              <span>Sort</span>
               <ChevronDown size={16} />
             </button>
+            
+            {activeDropdown === 'sort' && (
+              <div className="absolute z-10 mt-1 w-36 bg-[#333333] rounded-md shadow-lg">
+                <ul className="py-1">
+                  {['A-Z', 'Z-A', 'Recent', 'Oldest First'].map((option) => (
+                    <li 
+                      key={option}
+                      className={`px-3 py-2 text-sm ${sortOrder === option.replace(' First', '') ? 'bg-white text-[#252525]' : 'text-white hover:bg-[#444444]'} cursor-pointer`}
+                      onClick={() => {
+                        setSortOrder(option.replace(' First', ''));
+                        setActiveDropdown(null);
+                      }}
+                    >
+                      {option}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
           
+          {/* Pods Dropdown */}
           <div className="relative">
-            <button className="flex items-center space-x-1 bg-[#252525] text-white px-3 py-2 rounded-md text-sm">
-              <span>Pod</span>
+            <button 
+              className={`flex items-center space-x-1 ${podFilter.length > 0 ? 'bg-white text-[#252525]' : 'bg-[#252525] text-white'} px-3 py-2 rounded-md text-sm`}
+              onClick={() => toggleDropdown('pods')}
+            >
+              <span>Pods</span>
               <ChevronDown size={16} />
             </button>
+            
+            {activeDropdown === 'pods' && (
+              <div className="absolute z-10 mt-1 w-48 bg-[#333333] rounded-md shadow-lg">
+                <ul className="py-1 max-h-60 overflow-y-auto">
+                  {uniquePods.map((pod) => (
+                    <li 
+                      key={pod}
+                      className="px-3 py-2 text-sm text-white hover:bg-[#444444] cursor-pointer flex items-center justify-between"
+                      onClick={() => togglePodFilter(pod)}
+                    >
+                      <span className={podFilter.includes(pod) ? "font-bold" : ""}>
+                        {pod}
+                      </span>
+                      {podFilter.includes(pod) && <Check size={18} strokeWidth={2.5} className="text-white" />}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
           
+          {/* Activity Dropdown */}
           <div className="relative">
-            <button className="flex items-center space-x-1 bg-[#252525] text-white px-3 py-2 rounded-md text-sm">
-              <span>Socials</span>
-              <ChevronDown size={16} />
-            </button>
-          </div>
-          
-          <div className="relative">
-            <button className="flex items-center space-x-1 bg-[#252525] text-white px-3 py-2 rounded-md text-sm">
+            <button 
+              className={`flex items-center space-x-1 ${isActivityFilterActive ? 'bg-white text-[#252525]' : 'bg-[#252525] text-white'} px-3 py-2 rounded-md text-sm`}
+              onClick={() => toggleDropdown('activity')}
+            >
               <span>Activity</span>
               <ChevronDown size={16} />
             </button>
+            
+            {activeDropdown === 'activity' && (
+              <div className="absolute z-10 mt-1 w-80 bg-[#333333] rounded-md shadow-lg p-4">
+                <div className="mb-4">
+                  <h3 className="text-white text-sm font-medium mb-2 flex items-center">
+                    <Calendar size={16} className="mr-2 text-white" />
+                    Last Activity
+                  </h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-gray-400 text-xs mb-1">Since</label>
+                      <input 
+                        type="date" 
+                        className="w-full bg-[#252525] text-white text-sm rounded-md px-3 py-2"
+                        value={activitySince}
+                        onChange={(e) => setActivitySince(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-400 text-xs mb-1">Until</label>
+                      <input 
+                        type="date" 
+                        className="w-full bg-[#252525] text-white text-sm rounded-md px-3 py-2"
+                        value={activityUntil}
+                        onChange={(e) => setActivityUntil(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mb-4">
+                  <h3 className="text-white text-sm font-medium mb-2 flex items-center">
+                    <Calendar size={16} className="mr-2 text-white" />
+                    Last Login
+                  </h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-gray-400 text-xs mb-1">Since</label>
+                      <input 
+                        type="date" 
+                        className="w-full bg-[#252525] text-white text-sm rounded-md px-3 py-2"
+                        value={loginSince}
+                        onChange={(e) => setLoginSince(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-400 text-xs mb-1">Until</label>
+                      <input 
+                        type="date" 
+                        className="w-full bg-[#252525] text-white text-sm rounded-md px-3 py-2"
+                        value={loginUntil}
+                        onChange={(e) => setLoginUntil(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex justify-between">
+                  <button 
+                    className="text-xs text-gray-400 hover:text-white"
+                    onClick={resetActivityFilters}
+                  >
+                    Reset
+                  </button>
+                  <button 
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md text-xs"
+                    onClick={() => setActiveDropdown(null)}
+                  >
+                    Apply
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-        
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-md text-sm">
-          Apply Filter
-        </button>
       </div>
       
       <div className="bg-[#252525] rounded-lg overflow-hidden">
@@ -247,11 +323,10 @@ const Members = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Telegram</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Last Login</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Last Interaction</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#333333]">
-              {members.map((member) => (
+              {filteredMembers.map((member) => (
                 <tr key={member.id} className="hover:bg-[#2A2A2A]">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
@@ -296,9 +371,6 @@ const Members = () => {
                     <span title={formatDate(member.lastInteraction)}>
                       {getTimeAgo(member.lastInteraction)}
                     </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <button className="text-blue-400 hover:text-blue-300">View</button>
                   </td>
                 </tr>
               ))}
