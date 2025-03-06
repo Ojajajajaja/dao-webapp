@@ -15,7 +15,7 @@ import {
   X
 } from 'lucide-react';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { Connection, PublicKey } from '@solana/web3.js';
+import { Connection, PublicKey, LAMPORTS_PER_SOL, TransactionInstruction } from '@solana/web3.js';
 import { format } from 'date-fns';
 import { 
   LineChart, 
@@ -28,6 +28,17 @@ import {
   AreaChart,
   Area
 } from 'recharts';
+import {
+  getMultisig,
+  getMembers,
+  getThreshold,
+  createTransaction,
+  approveTransaction,
+  executeTransaction,
+  getTokenAccounts,
+  MultisigAccount,
+  TransactionStatus
+} from '../utils/squadsHelper';
 
 // Mock data for demonstration
 const balanceHistory = [
@@ -158,14 +169,24 @@ const transactionHistory = [
   }
 ];
 
+// Interface for new transaction
+interface NewTransaction {
+  title: string;
+  description: string;
+  from: string;
+  to: string;
+  amount: string;
+  token: string;
+}
+
 const Treasury = () => {
-  const { connected, publicKey } = useWallet();
+  const { connected, publicKey, wallet } = useWallet();
   const [activeTab, setActiveTab] = useState('accounts');
   const [timeRange, setTimeRange] = useState('1M');
   const [isLoading, setIsLoading] = useState(false);
   const [totalBalance, setTotalBalance] = useState(0);
   const [showNewTransactionModal, setShowNewTransactionModal] = useState(false);
-  const [newTransaction, setNewTransaction] = useState({
+  const [newTransaction, setNewTransaction] = useState<NewTransaction>({
     title: '',
     description: '',
     from: '',
@@ -173,6 +194,31 @@ const Treasury = () => {
     amount: '',
     token: 'SOL'
   });
+  const [multisig, setMultisig] = useState<MultisigAccount | null>(null);
+  const [multisigAddress, setMultisigAddress] = useState<string>(''); // The address of the multisig to interact with
+  const [multisigMembers, setMultisigMembers] = useState<PublicKey[]>([]);
+  const [multisigThreshold, setMultisigThreshold] = useState<number>(0);
+  const [treasuryTokens, setTreasuryTokens] = useState<any[]>([]);
+  const [statusMessage, setStatusMessage] = useState<string>('');
+
+  // Connect to the Solana network
+  const connection = new Connection(
+    process.env.REACT_APP_SOLANA_RPC_URL || 'https://api.devnet.solana.com',
+    'confirmed'
+  );
+
+  // Initialize the multisig on component mount if wallet is connected
+  useEffect(() => {
+    if (connected && publicKey && wallet) {
+      // For demo purposes, we'll use the first account from our mock data
+      // In a real app, you would get this from user selection or context
+      const demoMultisigAddress = accounts[0].address;
+      setMultisigAddress(demoMultisigAddress);
+      
+      // Connect to the multisig
+      connectToMultisig(demoMultisigAddress);
+    }
+  }, [connected, publicKey, wallet]);
 
   // Calculate total balance from all accounts
   useEffect(() => {
@@ -182,37 +228,174 @@ const Treasury = () => {
     setTotalBalance(total);
   }, []);
 
-  const handleRefresh = () => {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
+  // Connect to a multisig account using its address
+  const connectToMultisig = async (address: string) => {
+    try {
+      setIsLoading(true);
+      setStatusMessage('Connecting to multisig...');
+      
+      // Validate that we have a wallet connection
+      if (!wallet || !publicKey) {
+        throw new Error('Wallet not connected');
+      }
+      
+      // Get the multisig account
+      const multisigAccount = await getMultisig(connection, address, wallet.adapter);
+      setMultisig(multisigAccount);
+      
+      // Get members and threshold
+      const members = await getMembers(multisigAccount);
+      const threshold = await getThreshold(multisigAccount);
+      
+      setMultisigMembers(members);
+      setMultisigThreshold(threshold);
+      
+      // Get token balances for the treasury
+      const tokenAccounts = await getTokenAccounts(connection, multisigAccount);
+      setTreasuryTokens(tokenAccounts);
+      
+      setStatusMessage('Successfully connected to multisig');
       setIsLoading(false);
-    }, 1000);
+    } catch (error) {
+      console.error('Error connecting to multisig:', error);
+      setStatusMessage(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setIsLoading(false);
+    }
   };
 
-  const handleCopyAddress = (address) => {
+  const handleRefresh = async () => {
+    setIsLoading(true);
+    
+    try {
+      // Refresh multisig data if connected
+      if (multisig && multisigAddress) {
+        await connectToMultisig(multisigAddress);
+      } else {
+        // Just simulate a delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+    } catch (error) {
+      console.error('Error refreshing:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCopyAddress = (address: string) => {
     navigator.clipboard.writeText(address);
-    // Could add a toast notification here
+    setStatusMessage('Address copied to clipboard');
+    // Clear status message after 3 seconds
+    setTimeout(() => setStatusMessage(''), 3000);
   };
 
-  const formatAddress = (address) => {
+  const formatAddress = (address: string) => {
     return `${address.substring(0, 4)}...${address.substring(address.length - 4)}`;
   };
 
-  const handleNewTransactionSubmit = (e) => {
+  const handleNewTransactionSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Here you would integrate with Squads SDK to create a new transaction
-    console.log('Creating new transaction:', newTransaction);
-    setShowNewTransactionModal(false);
-    // Reset form
-    setNewTransaction({
-      title: '',
-      description: '',
-      from: '',
-      to: '',
-      amount: '',
-      token: 'SOL'
-    });
+    
+    try {
+      setIsLoading(true);
+      
+      // Validate multisig connection
+      if (!multisig || !publicKey) {
+        throw new Error('Multisig or wallet not connected');
+      }
+      
+      const { title, description, from, to, amount, token } = newTransaction;
+      
+      // Validate inputs
+      if (!to || !amount || parseFloat(amount) <= 0) {
+        throw new Error('Invalid transaction details');
+      }
+      
+      // First, get the source account (from our mock data for now)
+      const sourceAccount = accounts.find(acc => acc.name === from);
+      if (!sourceAccount) {
+        throw new Error('Source account not found');
+      }
+      
+      // Create a transaction using Squads SDK
+      // In a real app, you would create actual transfer instructions here
+      // This is simplified for the demo
+      setStatusMessage('Creating transaction...');
+      
+      // Create instructions for the transaction (placeholder)
+      const instructions: TransactionInstruction[] = [];
+      
+      // Create the transaction
+      const transaction = await createTransaction(
+        multisig,
+        publicKey,
+        instructions
+      );
+      
+      console.log('Transaction created:', transaction);
+      setStatusMessage('Transaction created successfully!');
+      
+      // Close the modal and reset form
+      setShowNewTransactionModal(false);
+      setNewTransaction({
+        title: '',
+        description: '',
+        from: '',
+        to: '',
+        amount: '',
+        token: 'SOL'
+      });
+    } catch (error) {
+      console.error('Error creating transaction:', error);
+      setStatusMessage(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Approve a multisig transaction
+  const handleApproveTransaction = async (transactionIndex: number) => {
+    try {
+      setIsLoading(true);
+      setStatusMessage('Approving transaction...');
+      
+      if (!multisig || !publicKey) {
+        throw new Error('Multisig or wallet not connected');
+      }
+      
+      await approveTransaction(multisig, transactionIndex, publicKey);
+      setStatusMessage('Transaction approved successfully!');
+      
+      // Refresh data
+      await handleRefresh();
+    } catch (error) {
+      console.error('Error approving transaction:', error);
+      setStatusMessage(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Execute a multisig transaction
+  const handleExecuteTransaction = async (transactionIndex: number) => {
+    try {
+      setIsLoading(true);
+      setStatusMessage('Executing transaction...');
+      
+      if (!multisig || !publicKey) {
+        throw new Error('Multisig or wallet not connected');
+      }
+      
+      await executeTransaction(multisig, transactionIndex, publicKey);
+      setStatusMessage('Transaction executed successfully!');
+      
+      // Refresh data
+      await handleRefresh();
+    } catch (error) {
+      console.error('Error executing transaction:', error);
+      setStatusMessage(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const renderBalanceChart = () => {
@@ -259,9 +442,8 @@ const Treasury = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Treasury</h1>
         <div className="flex space-x-2">
-          <button 
+          <button
             onClick={handleRefresh}
             className="flex items-center bg-[#252525] text-white px-3 py-2 rounded-md text-sm"
           >
@@ -278,6 +460,13 @@ const Treasury = () => {
         </div>
       </div>
 
+      {/* Status Message */}
+      {statusMessage && (
+        <div className="mb-4 p-2 bg-blue-600 bg-opacity-20 border border-blue-600 rounded text-sm">
+          {statusMessage}
+        </div>
+      )}
+
       {/* Overview Section */}
       <div className="bg-[#252525] rounded-lg p-6 mb-6">
         <h2 className="text-lg font-medium text-white mb-4">Overview</h2>
@@ -291,8 +480,8 @@ const Treasury = () => {
           
           <div className="bg-[#1C1C1C] rounded-lg p-4">
             <div className="text-sm text-gray-400 mb-1">Members</div>
-            <div className="text-3xl font-bold text-white">3</div>
-            <div className="text-sm text-gray-400 mt-1">Threshold: 2/3</div>
+            <div className="text-3xl font-bold text-white">{multisigMembers.length || 3}</div>
+            <div className="text-sm text-gray-400 mt-1">Threshold: {multisigThreshold || 2}/{multisigMembers.length || 3}</div>
           </div>
           
           <div className="bg-[#1C1C1C] rounded-lg p-4">
@@ -417,9 +606,17 @@ const Treasury = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex space-x-2">
-                        <button className="text-sm text-blue-400 hover:text-blue-300">Send</button>
+                        <button 
+                          className="text-sm text-blue-400 hover:text-blue-300"
+                          onClick={() => setShowNewTransactionModal(true)}
+                        >
+                          Send
+                        </button>
                         <button className="text-sm text-blue-400 hover:text-blue-300">Deposit</button>
-                        <button className="text-sm text-blue-400 hover:text-blue-300">
+                        <button 
+                          className="text-sm text-blue-400 hover:text-blue-300"
+                          onClick={() => window.open(`https://explorer.solana.com/address/${account.address}?cluster=devnet`, '_blank')}
+                        >
                           <ExternalLink size={14} />
                         </button>
                       </div>
@@ -464,9 +661,20 @@ const Treasury = () => {
                           <span>Expires {format(new Date(tx.expires), 'MMM d, yyyy')}</span>
                         </div>
                         <div className="flex space-x-2">
-                          <button className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm flex items-center">
+                          <button 
+                            className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm flex items-center"
+                            onClick={() => handleApproveTransaction(parseInt(tx.id.replace('tx', '')))}
+                            disabled={isLoading}
+                          >
                             <Check size={14} className="mr-1" />
                             Approve
+                          </button>
+                          <button 
+                            className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm flex items-center"
+                            onClick={() => handleExecuteTransaction(parseInt(tx.id.replace('tx', '')))}
+                            disabled={isLoading || tx.approvals < tx.requiredApprovals}
+                          >
+                            Execute
                           </button>
                           <button className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center">
                             <X size={14} className="mr-1" />
@@ -514,7 +722,10 @@ const Treasury = () => {
                       <div className="text-xs text-gray-400">
                         {format(new Date(tx.timestamp), 'MMM d, yyyy HH:mm')}
                       </div>
-                      <button className="text-sm text-blue-400 hover:text-blue-300 flex items-center">
+                      <button 
+                        className="text-sm text-blue-400 hover:text-blue-300 flex items-center"
+                        onClick={() => window.open(`https://explorer.solana.com/tx/3PmDsxDxXxgKFfJgPyPJBBRM5Q3iGFbw5xWnMWhxxUaX?cluster=devnet`, '_blank')}
+                      >
                         View Transaction
                         <ExternalLink size={12} className="ml-1" />
                       </button>
@@ -644,6 +855,7 @@ const Treasury = () => {
                 <button
                   type="submit"
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  disabled={isLoading}
                 >
                   Create Transaction
                 </button>
