@@ -13,17 +13,12 @@ const Header = ({ activeSection, showNotifications, setShowNotifications }: Head
   const { connected } = useWallet();
   const [apiStatus, setApiStatus] = useState<'online' | 'offline' | 'checking'>('checking');
   const [disableCors, setDisableCors] = useState(false);
-  const [apiEndpoint, setApiEndpoint] = useState('https://api.example.com/status');
+  const [apiEndpoint, setApiEndpoint] = useState('http://localhost:8081');
 
   useEffect(() => {
     const checkApiStatus = async () => {
       try {
         let url = apiEndpoint;
-        
-        // If CORS is disabled, use a proxy service
-        if (disableCors) {
-          url = `https://cors-anywhere.herokuapp.com/${apiEndpoint}`;
-        }
         
         const response = await fetch(url, {
           method: 'GET',
