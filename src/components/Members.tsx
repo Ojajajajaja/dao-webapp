@@ -3,6 +3,7 @@ import { ChevronDown, ExternalLink, Check, Calendar } from 'lucide-react';
 import { createConfiguration, DaosApi } from '../core/modules/dao-api';
 import { ServerConfiguration } from '../core/modules/dao-api/servers';
 import type { UserBasic } from '../core/modules/dao-api';
+import { useEffectOnce } from '../hooks/useEffectOnce';
 
 interface MemberData {
   id: number | undefined;
@@ -34,7 +35,7 @@ const Members = () => {
   const [loginUntil, setLoginUntil] = useState<string>('');
   
   // Fetch DAO members using the DAO-API SDK
-  useEffect(() => {
+  useEffectOnce(() => {
     const fetchDaoMembers = async () => {
       try {
         setLoading(true);

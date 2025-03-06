@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Bell, Wallet, Wifi, WifiOff, Settings } from 'lucide-react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { useEffectOnce } from '../hooks/useEffectOnce';
 
 interface HeaderProps {
   activeSection: string;
@@ -15,7 +16,7 @@ const Header = ({ activeSection, showNotifications, setShowNotifications }: Head
   const [disableCors, setDisableCors] = useState(false);
   const [apiEndpoint, setApiEndpoint] = useState('http://localhost:8081');
 
-  useEffect(() => {
+  useEffectOnce(() => {
     const checkApiStatus = async () => {
       try {
         let url = apiEndpoint;
