@@ -20,7 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) =>
     {
       section: 'DAO',
       items: [
-        { id: 'dashboard', label: 'Home', icon: <Home size={18} /> },
+        { id: 'home', label: 'Home', icon: <Home size={18} /> },
         { id: 'governance', label: 'Governance', icon: <Building2 size={18} /> },
         { id: 'pods', label: 'Pods', icon: <Layers size={18} /> },
         { id: 'treasury', label: 'Treasury', icon: <Wallet size={18} /> },

@@ -5,6 +5,7 @@ import Home from './components/Home';
 import Governance from './components/Governance';
 import Pods from './components/Pods';
 import Members from './components/Members';
+import Treasury from './components/Treasury';
 import NotificationsSidebar from './components/NotificationsSidebar';
 
 function App() {
@@ -28,6 +29,9 @@ function App() {
           break;
         case 'members':
           setCurrentComponent(<Members />);
+          break;
+        case 'treasury':
+          setCurrentComponent(<Treasury />);
           break;
         case 'home':
           setCurrentComponent(<Home />);
