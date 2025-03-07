@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Bell, Wallet, Wifi, WifiOff, Settings } from 'lucide-react';
+import { Search, Bell, Wallet, Wifi, WifiOff, Settings, Loader2 } from 'lucide-react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { useEffectOnce } from '../hooks/useEffectOnce';
+import { walletAuthService } from '../services/WalletAuthService';
+import { useAuth } from '../context/AuthContext';
 
 interface HeaderProps {
   activeSection: string;
@@ -11,10 +13,22 @@ interface HeaderProps {
 }
 
 const Header = ({ activeSection, showNotifications, setShowNotifications }: HeaderProps) => {
-  const { connected } = useWallet();
+  const { connected, publicKey } = useWallet();
+  const { isAuthenticated, isLoading } = useAuth();
   const [apiStatus, setApiStatus] = useState<'online' | 'offline' | 'checking'>('checking');
   const [disableCors, setDisableCors] = useState(false);
-  const [apiEndpoint, setApiEndpoint] = useState('http://localhost:8081');
+  const [apiEndpoint, setApiEndpoint] = useState('/api');
+
+  // Log wallet address when connected
+  useEffect(() => {
+    if (connected && publicKey) {
+      const walletAddress = publicKey.toString();
+      console.log('Connected wallet address:', walletAddress);
+      
+      // API endpoint is now handled by the AuthContext
+      walletAuthService.setApiEndpoint(apiEndpoint);
+    }
+  }, [connected, publicKey, apiEndpoint]);
 
   useEffectOnce(() => {
     const checkApiStatus = async () => {
@@ -72,6 +86,17 @@ const Header = ({ activeSection, showNotifications, setShowNotifications }: Head
           <span className="text-[#555555] select-none">DAO</span>
           <span className="mx-2 text-[#555555]">/</span>
           <span className="text-white select-none min-w-[100px]">{getSectionDisplayName()}</span>
+          {isAuthenticated && (
+            <span className="ml-2 text-xs bg-green-700 text-white px-2 py-0.5 rounded-full">
+              Authenticated
+            </span>
+          )}
+          {isLoading && (
+            <span className="ml-2 text-xs bg-yellow-700 text-white px-2 py-0.5 rounded-full flex items-center">
+              <Loader2 size={12} className="animate-spin mr-1" />
+              Authenticating
+            </span>
+          )}
         </div>
         
         <div className="flex-1 flex justify-center mx-4">
