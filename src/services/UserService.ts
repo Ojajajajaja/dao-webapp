@@ -22,6 +22,9 @@ const DEFAULT_API_ENDPOINT = '/api';
 export class UserService {
   private apiEndpoint: string;
   private usersApi: UsersApi;
+  // Add cache for user data with expiration
+  private userCache: { data: any; timestamp: number } | null = null;
+  private readonly CACHE_EXPIRY_MS = 60000; // Cache for 1 minute
 
   constructor(apiEndpoint: string = DEFAULT_API_ENDPOINT) {
     this.apiEndpoint = apiEndpoint;
@@ -104,30 +107,91 @@ export class UserService {
   }
 
   /**
-   * Get the currently authenticated user
-   * Note: This requires the user to be authenticated first
+   * Get the current authenticated user using the @me endpoint
    */
-  async getCurrentUser(): Promise<UserExistResponse | null> {
-    const token = walletAuthService.getAccessToken();
-    if (!token) {
-      console.error('No authentication token found. User is not logged in.');
-      return null;
-    }
-
+  async getMe(): Promise<any> {
     try {
-      // In a real implementation, you would use a specific endpoint to get the current user
-      // For now, we'll assume the wallet address can be used to get the user details
-      const walletAddress = localStorage.getItem('walletAddress');
-      if (!walletAddress) {
-        console.error('No wallet address found for the current user.');
+      // Return cached data if available and not expired
+      if (this.userCache && (Date.now() - this.userCache.timestamp < this.CACHE_EXPIRY_MS)) {
+        console.log('Returning cached user data (cached for 1 minute)');
+        return this.userCache.data;
+      }
+
+      // Check for token
+      const token = walletAuthService.getAccessToken();
+      if (!token) {
+        console.error('No authentication token available');
         return null;
       }
+
+      // Make a direct API call to the /users/@me endpoint
+      console.log('Fetching fresh user data from @me endpoint');
+      const response = await fetch(`${this.apiEndpoint}/users/@me`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch current user: ${response.status} ${response.statusText}`);
+      }
+
+      const userData = await response.json();
+      console.log('User data from @me endpoint:', userData);
       
-      return await this.getUserByWalletAddress(walletAddress);
+      // Cache the response
+      this.userCache = {
+        data: userData,
+        timestamp: Date.now()
+      };
+      
+      return userData;
+    } catch (error) {
+      console.error('Error fetching current user from @me endpoint:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Get the current authenticated user
+   */
+  async getCurrentUser(): Promise<any> {
+    try {
+      // Make sure we have an authentication token
+      const token = walletAuthService.getAccessToken();
+      if (!token) {
+        console.error('No authentication token found. User is not logged in.');
+        return null;
+      }
+
+      // Use the new @me endpoint to get current user
+      const meData = await this.getMe();
+      if (meData) {
+        return meData;
+      }
+
+      // If @me endpoint fails, return minimal user info based on wallet address
+      const walletAddress = localStorage.getItem('walletAddress');
+      if (walletAddress) {
+        console.log("Falling back to minimal user object with wallet address");
+        return { walletAddress };
+      }
+
+      return null;
     } catch (error) {
       console.error('Error getting current user:', error);
       return null;
     }
+  }
+
+  /**
+   * Clear the user cache - should be called on logout
+   */
+  clearUserCache(): void {
+    this.userCache = null;
   }
 }
 

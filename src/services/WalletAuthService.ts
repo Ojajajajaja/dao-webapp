@@ -3,8 +3,9 @@
  * Uses the DAO-API SDK to authenticate users with wallet addresses
  */
 
-import { createConfiguration, AuthApi, UsersApi, InputCreateUser, UserExistResponse, LoginResponse } from '../core/modules/dao-api';
+import { createConfiguration, AuthApi, UsersApi, InputCreateUser, ChallengeRequest, VerifySignature } from '../core/modules/dao-api';
 import { ServerConfiguration } from '../core/modules/dao-api/servers';
+import { userService } from '../services/UserService';
 
 // Default API endpoint - now using the proxy URL
 const DEFAULT_API_ENDPOINT = '/api';
@@ -55,7 +56,7 @@ export class WalletAuthService {
   async checkUserExists(walletAddress: string): Promise<boolean> {
     try {
       const response = await this.usersApi.getUserWithWalletAddress(walletAddress);
-      return response.exists || false;
+      return (response as any)?.exists || false;
     } catch (error) {
       console.error('Error checking if user exists:', error);
       return false;
@@ -68,8 +69,11 @@ export class WalletAuthService {
   async createUser(walletAddress: string, userInfo?: {
     username?: string;
     email?: string;
+    memberName?: string;
     discordUsername?: string;
-  }): Promise<boolean> {
+    twitterUsername?: string;
+    telegramUsername?: string;
+  }): Promise<{ success: boolean; error?: string }> {
     try {
       const userInput = new InputCreateUser();
       userInput.walletAddress = walletAddress;
@@ -91,39 +95,113 @@ export class WalletAuthService {
         userInput.discordUsername = userInfo.discordUsername;
       }
 
-      userInput.password = "password";
+      // Map the additional fields to the fields in the API model
+      if (userInfo?.memberName) {
+        // If your API has a member_name field, map it here
+        userInput.memberName = userInfo.memberName;
+      }
+
+      if (userInfo?.twitterUsername) {
+        // If your API has a twitter_username field, map it here
+        userInput.twitterUsername = userInfo.twitterUsername;
+      }
+
+      if (userInfo?.telegramUsername) {
+        // If your API has a telegram_username field, map it here
+        userInput.telegramUsername = userInfo.telegramUsername;
+      }
 
       console.log('Creating user with input:', userInput);
       
       await this.usersApi.createUser(userInput);
-      return true;
+      return { success: true };
     } catch (error) {
       console.error('Error creating user:', error);
-      return false;
+      
+      // Extract error message from the API response if available
+      let errorMessage = 'Failed to create user';
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === 'object' && error !== null) {
+        // Try to extract API error message
+        const anyError = error as any;
+        if (anyError.body?.message) {
+          errorMessage = anyError.body.message;
+        } else if (anyError.message) {
+          errorMessage = anyError.message;
+        }
+      }
+      
+      return { success: false, error: errorMessage };
     }
   }
 
   /**
-   * Login with wallet address
+   * Request a challenge message from the server for wallet authentication
    */
-  async login(walletAddress: string): Promise<string | null> {
+  async requestChallenge(walletAddress: string): Promise<string | null> {
     try {
-      const loginParams = {
-        email: walletAddress,
-        password: walletAddress
-      };
+      // Create the request object using the SDK model
+      const challengeRequest = new ChallengeRequest();
+      challengeRequest.walletAddress = walletAddress;
       
-      const response = await this.authApi.login(loginParams);
+      // Call the SDK method for getting a wallet challenge
+      const response = await this.authApi.getWalletChallenge(challengeRequest);
+      
+      // Extract the challenge message from the response
+      // ChallengeResponse has a 'message' field
+      return response.message || null;
+    } catch (error) {
+      console.error('Error requesting challenge:', error);
+      
+      // Extract and return more detailed error information
+      let errorMessage = null;
+      if (error instanceof Error) {
+        console.error('Challenge request error details:', error.message);
+      }
+      
+      return null;
+    }
+  }
+
+  /**
+   * Verify a signed message and get an access token
+   */
+  async verifySignature(walletAddress: string, signature: string, message: string): Promise<{token: string | null, user?: any}> {
+    try {
+      // Create the verify signature request object using the SDK model
+      const verifyRequest = new VerifySignature();
+      verifyRequest.walletAddress = walletAddress;
+      verifyRequest.signature = signature;
+      
+      // API expects a "challenge" field, but the model doesn't include it
+      // Cast to any to add the field manually
+      (verifyRequest as any).challenge = message;
+      
+      console.log('Verification request payload:', verifyRequest);
+      
+      // Call the SDK method to verify the wallet signature
+      const response = await this.authApi.verifyWalletSignature(verifyRequest);
+      
+      // Extract the token from the response
+      // LoginResponse only has 'token' field according to the SDK model
       const token = response.token;
       
       if (token) {
         this.setAccessToken(token);
+        
+        // Log full response for debugging
+        console.log('Authentication response:', response);
       }
       
-      return token || null;
+      // Return both token and user info if available
+      return { 
+        token: token || null,
+        user: (response as any).user || { walletAddress } // Use type assertion for potentially missing properties
+      };
     } catch (error) {
-      console.error('Error logging in:', error);
-      return null;
+      console.error('Error verifying signature:', error);
+      return { token: null };
     }
   }
 
@@ -154,58 +232,132 @@ export class WalletAuthService {
   }
 
   /**
-   * Main authentication flow with wallet address
-   * 1. Check if user exists
-   * 2. If yes, login
-   * 3. If no, collect user info and create user
-   * 
-   * Note: This method doesn't handle the form display. It expects
-   * the user info to be passed when a new user is being created.
+   * Check if an access token exists without validating it with the API
+   */
+  hasAccessToken(): boolean {
+    const token = this.getAccessToken();
+    return !!token;
+  }
+
+  /**
+   * Check if the current token is valid
+   * This now only checks for token existence, without making API calls
+   */
+  async validateToken(): Promise<boolean> {
+    // Simply check if a token exists
+    return this.hasAccessToken();
+  }
+
+  /**
+   * Begin the wallet authentication process
+   * Note: This method doesn't handle the actual signing, as that must be done
+   * by the wallet interface. It's expected that the signature is provided.
    */
   async authenticateWithWallet(
-    walletAddress: string, 
+    walletAddress: string,
+    signature?: string,
+    message?: string,
     userInfo?: {
       username?: string;
       email?: string;
+      memberName?: string;
       discordUsername?: string;
+      twitterUsername?: string;
+      telegramUsername?: string;
     }
-  ): Promise<{ success: boolean; newUser: boolean }> {
+  ): Promise<{ 
+    success: boolean; 
+    newUser: boolean; 
+    challenge?: string;
+    requiresSignature: boolean;
+    error?: string;
+    user?: any;
+    token?: string;
+  }> {
+    // If we already have a token, consider it valid and skip everything
+    if (this.hasAccessToken()) {
+      console.log('Already have access token, skipping authentication');
+      return {
+        success: true,
+        newUser: false,
+        requiresSignature: false
+      };
+    }
+    
     try {
       console.log(`Authenticating with wallet address: ${walletAddress}`);
       
-      // Step 1: Check if user exists
+      // If signature and message are provided, we're in the verification step
+      if (signature && message) {
+        const result = await this.verifySignature(walletAddress, signature, message);
+        console.log('Authentication response:', result);
+        return { 
+          success: !!result.token, 
+          newUser: false,
+          requiresSignature: false,
+          error: result.token ? undefined : 'Failed to verify signature',
+          user: result.user,
+          token: result.token || undefined // Convert null to undefined
+        };
+      }
+      
+      // Otherwise, we're in the initial authentication step - check if user exists
       const userExists = await this.checkUserExists(walletAddress);
       
-      // Step 2: If user doesn't exist, create user
       if (!userExists) {
-        console.log('User does not exist, creating new user...');
-        
-        // If user info is not provided, return that we need to collect it
-        if (!userInfo) {
-          return { success: false, newUser: true };
-        }
-        
-        const userCreated = await this.createUser(walletAddress, userInfo);
-        if (!userCreated) {
-          console.error('Failed to create user');
-          return { success: false, newUser: true };
-        }
+        // User doesn't exist, need registration info
+        return { 
+          success: false, 
+          newUser: true,
+          requiresSignature: false
+        };
       }
       
-      // Step 3: Login with wallet address
-      console.log('Logging in with wallet address...');
-      const token = await this.login(walletAddress);
+      // User exists, get a challenge for them to sign
+      const challenge = await this.requestChallenge(walletAddress);
       
-      if (token) {
-        console.log('Successfully authenticated with wallet');
-        return { success: true, newUser: !userExists };
-      } else {
-        console.error('Failed to login with wallet');
-        return { success: false, newUser: !userExists };
+      if (!challenge) {
+        return { 
+          success: false, 
+          newUser: false,
+          requiresSignature: false,
+          error: 'Failed to get challenge message'
+        };
       }
+      
+      // Return the challenge for signing
+      return { 
+        success: false, 
+        newUser: false,
+        challenge,
+        requiresSignature: true
+      };
     } catch (error) {
       console.error('Authentication flow error:', error);
-      return { success: false, newUser: false };
+      return { 
+        success: false, 
+        newUser: false,
+        requiresSignature: false,
+        error: error instanceof Error ? error.message : 'Unknown authentication error'
+      };
+    }
+  }
+
+  /**
+   * Log out the user from the API
+   */
+  async logout(): Promise<boolean> {
+    try {
+      // Only attempt to logout if we have an access token
+      if (this.accessToken) {
+        await this.authApi.logout();
+        this.clearAccessToken();
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Error logging out:', error);
+      return false;
     }
   }
 }
