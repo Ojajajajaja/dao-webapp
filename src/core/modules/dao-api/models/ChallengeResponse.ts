@@ -13,17 +13,17 @@
 import { HttpFile } from '../http/http';
 
 /**
-* Login details
+* Challenge message for wallet authentication
 */
-export class LoginParams {
+export class ChallengeResponse {
+    /**
+    * Challenge message to sign
+    */
+    'message'?: string;
     /**
     * Wallet address of the user
     */
-    'walletAddress': string;
-    /**
-    * Password of the login
-    */
-    'password': string;
+    'walletAddress'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -31,20 +31,20 @@ export class LoginParams {
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "walletAddress",
-            "baseName": "wallet_address",
+            "name": "message",
+            "baseName": "message",
             "type": "string",
             "format": ""
         },
         {
-            "name": "password",
-            "baseName": "password",
+            "name": "walletAddress",
+            "baseName": "wallet_address",
             "type": "string",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return LoginParams.attributeTypeMap;
+        return ChallengeResponse.attributeTypeMap;
     }
 
     public constructor() {

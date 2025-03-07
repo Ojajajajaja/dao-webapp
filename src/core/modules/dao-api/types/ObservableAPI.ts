@@ -3,6 +3,8 @@ import { Configuration, ConfigurationOptions } from '../configuration'
 import type { Middleware } from '../middleware';
 import { Observable, of, from } from '../rxjsStub';
 import {mergeMap, map} from  '../rxjsStub';
+import { ChallengeRequest } from '../models/ChallengeRequest';
+import { ChallengeResponse } from '../models/ChallengeResponse';
 import { DAO } from '../models/DAO';
 import { DAOMembership } from '../models/DAOMembership';
 import { DAOUpdate } from '../models/DAOUpdate';
@@ -10,7 +12,6 @@ import { InputCreateUser } from '../models/InputCreateUser';
 import { InputUpdateUser } from '../models/InputUpdateUser';
 import { Item } from '../models/Item';
 import { ItemsResponse } from '../models/ItemsResponse';
-import { LoginParams } from '../models/LoginParams';
 import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
@@ -25,6 +26,7 @@ import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
 import { UserExistResponse } from '../models/UserExistResponse';
 import { UserResponse } from '../models/UserResponse';
+import { VerifySignature } from '../models/VerifySignature';
 
 import { AuthApiRequestFactory, AuthApiResponseProcessor} from "../apis/AuthApi";
 export class ObservableAuthApi {
@@ -43,10 +45,10 @@ export class ObservableAuthApi {
     }
 
     /**
-     * Login the user
-     * @param loginParams
+     * Generate a challenge message for Solana wallet signature authentication
+     * @param challengeRequest
      */
-    public loginWithHttpInfo(loginParams: LoginParams, _options?: ConfigurationOptions): Observable<HttpInfo<LoginResponse>> {
+    public getWalletChallengeWithHttpInfo(challengeRequest: ChallengeRequest, _options?: ConfigurationOptions): Observable<HttpInfo<ChallengeResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -77,7 +79,7 @@ export class ObservableAuthApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.login(loginParams, _config);
+        const requestContextPromise = this.requestFactory.getWalletChallenge(challengeRequest, _config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -90,16 +92,16 @@ export class ObservableAuthApi {
                 for (const middleware of allMiddleware.reverse()) {
                     middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
                 }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.loginWithHttpInfo(rsp)));
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getWalletChallengeWithHttpInfo(rsp)));
             }));
     }
 
     /**
-     * Login the user
-     * @param loginParams
+     * Generate a challenge message for Solana wallet signature authentication
+     * @param challengeRequest
      */
-    public login(loginParams: LoginParams, _options?: ConfigurationOptions): Observable<LoginResponse> {
-        return this.loginWithHttpInfo(loginParams, _options).pipe(map((apiResponse: HttpInfo<LoginResponse>) => apiResponse.data));
+    public getWalletChallenge(challengeRequest: ChallengeRequest, _options?: ConfigurationOptions): Observable<ChallengeResponse> {
+        return this.getWalletChallengeWithHttpInfo(challengeRequest, _options).pipe(map((apiResponse: HttpInfo<ChallengeResponse>) => apiResponse.data));
     }
 
     /**
@@ -158,6 +160,66 @@ export class ObservableAuthApi {
      */
     public logout(_options?: ConfigurationOptions): Observable<LogoutResponse> {
         return this.logoutWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<LogoutResponse>) => apiResponse.data));
+    }
+
+    /**
+     * Verify a Solana wallet signature and authenticate the user
+     * @param verifySignature
+     */
+    public verifyWalletSignatureWithHttpInfo(verifySignature: VerifySignature, _options?: ConfigurationOptions): Observable<HttpInfo<LoginResponse>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.verifyWalletSignature(verifySignature, _config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.verifyWalletSignatureWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Verify a Solana wallet signature and authenticate the user
+     * @param verifySignature
+     */
+    public verifyWalletSignature(verifySignature: VerifySignature, _options?: ConfigurationOptions): Observable<LoginResponse> {
+        return this.verifyWalletSignatureWithHttpInfo(verifySignature, _options).pipe(map((apiResponse: HttpInfo<LoginResponse>) => apiResponse.data));
     }
 
 }
@@ -1514,6 +1576,64 @@ export class ObservableUsersApi {
      */
     public createUser(inputCreateUser: InputCreateUser, _options?: ConfigurationOptions): Observable<UserResponse> {
         return this.createUserWithHttpInfo(inputCreateUser, _options).pipe(map((apiResponse: HttpInfo<UserResponse>) => apiResponse.data));
+    }
+
+    /**
+     * Get authenticated user informations
+     */
+    public getAuthUserInfosWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<UserResponse>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.getAuthUserInfos(_config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getAuthUserInfosWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Get authenticated user informations
+     */
+    public getAuthUserInfos(_options?: ConfigurationOptions): Observable<UserResponse> {
+        return this.getAuthUserInfosWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<UserResponse>) => apiResponse.data));
     }
 
     /**

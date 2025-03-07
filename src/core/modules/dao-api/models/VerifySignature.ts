@@ -13,17 +13,17 @@
 import { HttpFile } from '../http/http';
 
 /**
-* Login details
+* Verification of wallet signature
 */
-export class LoginParams {
+export class VerifySignature {
     /**
     * Wallet address of the user
     */
     'walletAddress': string;
     /**
-    * Password of the login
+    * Signed message from wallet
     */
-    'password': string;
+    'signature': string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -37,14 +37,14 @@ export class LoginParams {
             "format": ""
         },
         {
-            "name": "password",
-            "baseName": "password",
+            "name": "signature",
+            "baseName": "signature",
             "type": "string",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return LoginParams.attributeTypeMap;
+        return VerifySignature.attributeTypeMap;
     }
 
     public constructor() {

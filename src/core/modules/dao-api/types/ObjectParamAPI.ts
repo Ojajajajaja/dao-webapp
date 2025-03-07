@@ -2,6 +2,8 @@ import { ResponseContext, RequestContext, HttpFile, HttpInfo } from '../http/htt
 import { Configuration, ConfigurationOptions } from '../configuration'
 import type { Middleware } from '../middleware';
 
+import { ChallengeRequest } from '../models/ChallengeRequest';
+import { ChallengeResponse } from '../models/ChallengeResponse';
 import { DAO } from '../models/DAO';
 import { DAOMembership } from '../models/DAOMembership';
 import { DAOUpdate } from '../models/DAOUpdate';
@@ -9,7 +11,6 @@ import { InputCreateUser } from '../models/InputCreateUser';
 import { InputUpdateUser } from '../models/InputUpdateUser';
 import { Item } from '../models/Item';
 import { ItemsResponse } from '../models/ItemsResponse';
-import { LoginParams } from '../models/LoginParams';
 import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
@@ -24,20 +25,30 @@ import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
 import { UserExistResponse } from '../models/UserExistResponse';
 import { UserResponse } from '../models/UserResponse';
+import { VerifySignature } from '../models/VerifySignature';
 
 import { ObservableAuthApi } from "./ObservableAPI";
 import { AuthApiRequestFactory, AuthApiResponseProcessor} from "../apis/AuthApi";
 
-export interface AuthApiLoginRequest {
+export interface AuthApiGetWalletChallengeRequest {
     /**
      * 
-     * @type LoginParams
-     * @memberof AuthApilogin
+     * @type ChallengeRequest
+     * @memberof AuthApigetWalletChallenge
      */
-    loginParams: LoginParams
+    challengeRequest: ChallengeRequest
 }
 
 export interface AuthApiLogoutRequest {
+}
+
+export interface AuthApiVerifyWalletSignatureRequest {
+    /**
+     * 
+     * @type VerifySignature
+     * @memberof AuthApiverifyWalletSignature
+     */
+    verifySignature: VerifySignature
 }
 
 export class ObjectAuthApi {
@@ -48,19 +59,19 @@ export class ObjectAuthApi {
     }
 
     /**
-     * Login the user
+     * Generate a challenge message for Solana wallet signature authentication
      * @param param the request object
      */
-    public loginWithHttpInfo(param: AuthApiLoginRequest, options?: ConfigurationOptions): Promise<HttpInfo<LoginResponse>> {
-        return this.api.loginWithHttpInfo(param.loginParams,  options).toPromise();
+    public getWalletChallengeWithHttpInfo(param: AuthApiGetWalletChallengeRequest, options?: ConfigurationOptions): Promise<HttpInfo<ChallengeResponse>> {
+        return this.api.getWalletChallengeWithHttpInfo(param.challengeRequest,  options).toPromise();
     }
 
     /**
-     * Login the user
+     * Generate a challenge message for Solana wallet signature authentication
      * @param param the request object
      */
-    public login(param: AuthApiLoginRequest, options?: ConfigurationOptions): Promise<LoginResponse> {
-        return this.api.login(param.loginParams,  options).toPromise();
+    public getWalletChallenge(param: AuthApiGetWalletChallengeRequest, options?: ConfigurationOptions): Promise<ChallengeResponse> {
+        return this.api.getWalletChallenge(param.challengeRequest,  options).toPromise();
     }
 
     /**
@@ -77,6 +88,22 @@ export class ObjectAuthApi {
      */
     public logout(param: AuthApiLogoutRequest = {}, options?: ConfigurationOptions): Promise<LogoutResponse> {
         return this.api.logout( options).toPromise();
+    }
+
+    /**
+     * Verify a Solana wallet signature and authenticate the user
+     * @param param the request object
+     */
+    public verifyWalletSignatureWithHttpInfo(param: AuthApiVerifyWalletSignatureRequest, options?: ConfigurationOptions): Promise<HttpInfo<LoginResponse>> {
+        return this.api.verifyWalletSignatureWithHttpInfo(param.verifySignature,  options).toPromise();
+    }
+
+    /**
+     * Verify a Solana wallet signature and authenticate the user
+     * @param param the request object
+     */
+    public verifyWalletSignature(param: AuthApiVerifyWalletSignatureRequest, options?: ConfigurationOptions): Promise<LoginResponse> {
+        return this.api.verifyWalletSignature(param.verifySignature,  options).toPromise();
     }
 
 }
@@ -792,6 +819,9 @@ export interface UsersApiCreateUserRequest {
     inputCreateUser: InputCreateUser
 }
 
+export interface UsersApiGetAuthUserInfosRequest {
+}
+
 export interface UsersApiGetUserRequest {
     /**
      * 
@@ -851,6 +881,22 @@ export class ObjectUsersApi {
      */
     public createUser(param: UsersApiCreateUserRequest, options?: ConfigurationOptions): Promise<UserResponse> {
         return this.api.createUser(param.inputCreateUser,  options).toPromise();
+    }
+
+    /**
+     * Get authenticated user informations
+     * @param param the request object
+     */
+    public getAuthUserInfosWithHttpInfo(param: UsersApiGetAuthUserInfosRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<UserResponse>> {
+        return this.api.getAuthUserInfosWithHttpInfo( options).toPromise();
+    }
+
+    /**
+     * Get authenticated user informations
+     * @param param the request object
+     */
+    public getAuthUserInfos(param: UsersApiGetAuthUserInfosRequest = {}, options?: ConfigurationOptions): Promise<UserResponse> {
+        return this.api.getAuthUserInfos( options).toPromise();
     }
 
     /**

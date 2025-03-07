@@ -2,6 +2,8 @@ import { ResponseContext, RequestContext, HttpFile, HttpInfo } from '../http/htt
 import { Configuration, ConfigurationOptions, PromiseConfigurationOptions } from '../configuration'
 import { PromiseMiddleware, Middleware, PromiseMiddlewareWrapper } from '../middleware';
 
+import { ChallengeRequest } from '../models/ChallengeRequest';
+import { ChallengeResponse } from '../models/ChallengeResponse';
 import { DAO } from '../models/DAO';
 import { DAOMembership } from '../models/DAOMembership';
 import { DAOUpdate } from '../models/DAOUpdate';
@@ -9,7 +11,6 @@ import { InputCreateUser } from '../models/InputCreateUser';
 import { InputUpdateUser } from '../models/InputUpdateUser';
 import { Item } from '../models/Item';
 import { ItemsResponse } from '../models/ItemsResponse';
-import { LoginParams } from '../models/LoginParams';
 import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
@@ -24,6 +25,7 @@ import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
 import { UserExistResponse } from '../models/UserExistResponse';
 import { UserResponse } from '../models/UserResponse';
+import { VerifySignature } from '../models/VerifySignature';
 import { ObservableAuthApi } from './ObservableAPI';
 
 import { AuthApiRequestFactory, AuthApiResponseProcessor} from "../apis/AuthApi";
@@ -39,10 +41,10 @@ export class PromiseAuthApi {
     }
 
     /**
-     * Login the user
-     * @param loginParams
+     * Generate a challenge message for Solana wallet signature authentication
+     * @param challengeRequest
      */
-    public loginWithHttpInfo(loginParams: LoginParams, _options?: PromiseConfigurationOptions): Promise<HttpInfo<LoginResponse>> {
+    public getWalletChallengeWithHttpInfo(challengeRequest: ChallengeRequest, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ChallengeResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -55,15 +57,15 @@ export class PromiseAuthApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.loginWithHttpInfo(loginParams, observableOptions);
+        const result = this.api.getWalletChallengeWithHttpInfo(challengeRequest, observableOptions);
         return result.toPromise();
     }
 
     /**
-     * Login the user
-     * @param loginParams
+     * Generate a challenge message for Solana wallet signature authentication
+     * @param challengeRequest
      */
-    public login(loginParams: LoginParams, _options?: PromiseConfigurationOptions): Promise<LoginResponse> {
+    public getWalletChallenge(challengeRequest: ChallengeRequest, _options?: PromiseConfigurationOptions): Promise<ChallengeResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -76,7 +78,7 @@ export class PromiseAuthApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.login(loginParams, observableOptions);
+        const result = this.api.getWalletChallenge(challengeRequest, observableOptions);
         return result.toPromise();
     }
 
@@ -117,6 +119,48 @@ export class PromiseAuthApi {
 	    }
 	}
         const result = this.api.logout(observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Verify a Solana wallet signature and authenticate the user
+     * @param verifySignature
+     */
+    public verifyWalletSignatureWithHttpInfo(verifySignature: VerifySignature, _options?: PromiseConfigurationOptions): Promise<HttpInfo<LoginResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.verifyWalletSignatureWithHttpInfo(verifySignature, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Verify a Solana wallet signature and authenticate the user
+     * @param verifySignature
+     */
+    public verifyWalletSignature(verifySignature: VerifySignature, _options?: PromiseConfigurationOptions): Promise<LoginResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.verifyWalletSignature(verifySignature, observableOptions);
         return result.toPromise();
     }
 
@@ -1098,6 +1142,46 @@ export class PromiseUsersApi {
 	    }
 	}
         const result = this.api.createUser(inputCreateUser, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get authenticated user informations
+     */
+    public getAuthUserInfosWithHttpInfo(_options?: PromiseConfigurationOptions): Promise<HttpInfo<UserResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getAuthUserInfosWithHttpInfo(observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get authenticated user informations
+     */
+    public getAuthUserInfos(_options?: PromiseConfigurationOptions): Promise<UserResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getAuthUserInfos(observableOptions);
         return result.toPromise();
     }
 

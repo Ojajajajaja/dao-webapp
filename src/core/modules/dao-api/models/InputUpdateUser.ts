@@ -17,21 +17,33 @@ import { HttpFile } from '../http/http';
 */
 export class InputUpdateUser {
     /**
-    * New Username of the user
+    * New username of the user
     */
     'username'?: string;
     /**
-    * New Email of the user
+    * New email of the user
     */
     'email'?: string;
     /**
-    * New Password of the user
+    * New display name of the user
     */
-    'password'?: string;
+    'memberName'?: string;
     /**
     * New Discord username of the user
     */
     'discordUsername'?: string;
+    /**
+    * New Twitter username of the user
+    */
+    'twitterUsername'?: string;
+    /**
+    * New Telegram username of the user
+    */
+    'telegramUsername'?: string;
+    /**
+    * New wallet address of the user
+    */
+    'walletAddress'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -51,14 +63,32 @@ export class InputUpdateUser {
             "format": ""
         },
         {
-            "name": "password",
-            "baseName": "password",
+            "name": "memberName",
+            "baseName": "member_name",
             "type": "string",
             "format": ""
         },
         {
             "name": "discordUsername",
             "baseName": "discord_username",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "twitterUsername",
+            "baseName": "twitter_username",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "telegramUsername",
+            "baseName": "telegram_username",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "walletAddress",
+            "baseName": "wallet_address",
             "type": "string",
             "format": ""
         }    ];

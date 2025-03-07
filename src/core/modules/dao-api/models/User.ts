@@ -25,17 +25,45 @@ export class User {
     */
     'username'?: string;
     /**
+    * Wallet address of the user
+    */
+    'walletAddress'?: string;
+    /**
     * Email of the user
     */
     'email'?: string;
+    /**
+    * Display name of the user
+    */
+    'memberName'?: string;
     /**
     * Discord username of the user
     */
     'discordUsername'?: string;
     /**
-    * Wallet address of the user
+    * Twitter username of the user
     */
-    'walletAddress'?: string;
+    'twitterUsername'?: string;
+    /**
+    * Telegram username of the user
+    */
+    'telegramUsername'?: string;
+    /**
+    * Last login timestamp
+    */
+    'lastLogin'?: Date;
+    /**
+    * Last interaction timestamp
+    */
+    'lastInteraction'?: Date;
+    /**
+    * Whether the email is verified
+    */
+    'emailVerified'?: boolean;
+    /**
+    * Whether the user is active
+    */
+    'isActive'?: boolean;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -55,8 +83,20 @@ export class User {
             "format": ""
         },
         {
+            "name": "walletAddress",
+            "baseName": "wallet_address",
+            "type": "string",
+            "format": ""
+        },
+        {
             "name": "email",
             "baseName": "email",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "memberName",
+            "baseName": "member_name",
             "type": "string",
             "format": ""
         },
@@ -67,9 +107,39 @@ export class User {
             "format": ""
         },
         {
-            "name": "walletAddress",
-            "baseName": "wallet_address",
+            "name": "twitterUsername",
+            "baseName": "twitter_username",
             "type": "string",
+            "format": ""
+        },
+        {
+            "name": "telegramUsername",
+            "baseName": "telegram_username",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "lastLogin",
+            "baseName": "last_login",
+            "type": "Date",
+            "format": "date-time"
+        },
+        {
+            "name": "lastInteraction",
+            "baseName": "last_interaction",
+            "type": "Date",
+            "format": "date-time"
+        },
+        {
+            "name": "emailVerified",
+            "baseName": "email_verified",
+            "type": "boolean",
+            "format": ""
+        },
+        {
+            "name": "isActive",
+            "baseName": "is_active",
+            "type": "boolean",
             "format": ""
         }    ];
 
