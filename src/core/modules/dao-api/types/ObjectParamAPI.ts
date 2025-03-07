@@ -16,11 +16,13 @@ import { ModelError } from '../models/ModelError';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
 import { PODUpdate } from '../models/PODUpdate';
+import { PODUserWhoMadeRequest } from '../models/PODUserWhoMadeRequest';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
 import { SummaryResponse } from '../models/SummaryResponse';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
+import { UserExistResponse } from '../models/UserExistResponse';
 import { UserResponse } from '../models/UserResponse';
 
 import { ObservableAuthApi } from "./ObservableAPI";
@@ -187,6 +189,12 @@ export interface DaosApiDaosDaoIdPodsGetRequest {
      * @memberof DaosApidaosDaoIdPodsGet
      */
     daoId: number
+    /**
+     * 
+     * @type PODUserWhoMadeRequest
+     * @memberof DaosApidaosDaoIdPodsGet
+     */
+    pODUserWhoMadeRequest: PODUserWhoMadeRequest
 }
 
 export interface DaosApiDaosDaoIdPodsPodIdDeleteRequest {
@@ -491,7 +499,7 @@ export class ObjectDaosApi {
      * @param param the request object
      */
     public daosDaoIdPodsGetWithHttpInfo(param: DaosApiDaosDaoIdPodsGetRequest, options?: ConfigurationOptions): Promise<HttpInfo<Array<POD>>> {
-        return this.api.daosDaoIdPodsGetWithHttpInfo(param.daoId,  options).toPromise();
+        return this.api.daosDaoIdPodsGetWithHttpInfo(param.daoId, param.pODUserWhoMadeRequest,  options).toPromise();
     }
 
     /**
@@ -499,7 +507,7 @@ export class ObjectDaosApi {
      * @param param the request object
      */
     public daosDaoIdPodsGet(param: DaosApiDaosDaoIdPodsGetRequest, options?: ConfigurationOptions): Promise<Array<POD>> {
-        return this.api.daosDaoIdPodsGet(param.daoId,  options).toPromise();
+        return this.api.daosDaoIdPodsGet(param.daoId, param.pODUserWhoMadeRequest,  options).toPromise();
     }
 
     /**
@@ -795,6 +803,16 @@ export interface UsersApiGetUserRequest {
     userId: number
 }
 
+export interface UsersApiGetUserWithWalletAddressRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof UsersApigetUserWithWalletAddress
+     */
+    walletAddress: string
+}
+
 export interface UsersApiUpdateUserRequest {
     /**
      * 
@@ -849,6 +867,22 @@ export class ObjectUsersApi {
      */
     public getUser(param: UsersApiGetUserRequest, options?: ConfigurationOptions): Promise<UserResponse> {
         return this.api.getUser(param.userId,  options).toPromise();
+    }
+
+    /**
+     * Check if user with the wallet address exists
+     * @param param the request object
+     */
+    public getUserWithWalletAddressWithHttpInfo(param: UsersApiGetUserWithWalletAddressRequest, options?: ConfigurationOptions): Promise<HttpInfo<UserExistResponse>> {
+        return this.api.getUserWithWalletAddressWithHttpInfo(param.walletAddress,  options).toPromise();
+    }
+
+    /**
+     * Check if user with the wallet address exists
+     * @param param the request object
+     */
+    public getUserWithWalletAddress(param: UsersApiGetUserWithWalletAddressRequest, options?: ConfigurationOptions): Promise<UserExistResponse> {
+        return this.api.getUserWithWalletAddress(param.walletAddress,  options).toPromise();
     }
 
     /**

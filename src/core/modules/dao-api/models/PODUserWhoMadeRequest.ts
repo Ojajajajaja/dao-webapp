@@ -12,8 +12,8 @@
 
 import { HttpFile } from '../http/http';
 
-export class PODMembership {
-    'userId': number;
+export class PODUserWhoMadeRequest {
+    'userWhoMadeRequest': number;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -21,14 +21,14 @@ export class PODMembership {
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "userId",
-            "baseName": "user_id",
+            "name": "userWhoMadeRequest",
+            "baseName": "user_who_made_request",
             "type": "number",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return PODMembership.attributeTypeMap;
+        return PODUserWhoMadeRequest.attributeTypeMap;
     }
 
     public constructor() {

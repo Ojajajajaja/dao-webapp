@@ -33,11 +33,13 @@ models/ObjectSerializer.ts
 models/POD.ts
 models/PODMembership.ts
 models/PODUpdate.ts
+models/PODUserWhoMadeRequest.ts
 models/PaginationMetadata.ts
 models/PagingError.ts
 models/SummaryResponse.ts
 models/User.ts
 models/UserBasic.ts
+models/UserExistResponse.ts
 models/UserResponse.ts
 models/all.ts
 package.json

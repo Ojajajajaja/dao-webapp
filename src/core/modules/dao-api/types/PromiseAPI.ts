@@ -16,11 +16,13 @@ import { ModelError } from '../models/ModelError';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
 import { PODUpdate } from '../models/PODUpdate';
+import { PODUserWhoMadeRequest } from '../models/PODUserWhoMadeRequest';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
 import { SummaryResponse } from '../models/SummaryResponse';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
+import { UserExistResponse } from '../models/UserExistResponse';
 import { UserResponse } from '../models/UserResponse';
 import { ObservableAuthApi } from './ObservableAPI';
 
@@ -402,8 +404,9 @@ export class PromiseDaosApi {
     /**
      * Get all PODs for a DAO
      * @param daoId
+     * @param pODUserWhoMadeRequest
      */
-    public daosDaoIdPodsGetWithHttpInfo(daoId: number, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Array<POD>>> {
+    public daosDaoIdPodsGetWithHttpInfo(daoId: number, pODUserWhoMadeRequest: PODUserWhoMadeRequest, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Array<POD>>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -416,15 +419,16 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdPodsGetWithHttpInfo(daoId, observableOptions);
+        const result = this.api.daosDaoIdPodsGetWithHttpInfo(daoId, pODUserWhoMadeRequest, observableOptions);
         return result.toPromise();
     }
 
     /**
      * Get all PODs for a DAO
      * @param daoId
+     * @param pODUserWhoMadeRequest
      */
-    public daosDaoIdPodsGet(daoId: number, _options?: PromiseConfigurationOptions): Promise<Array<POD>> {
+    public daosDaoIdPodsGet(daoId: number, pODUserWhoMadeRequest: PODUserWhoMadeRequest, _options?: PromiseConfigurationOptions): Promise<Array<POD>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -437,7 +441,7 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdPodsGet(daoId, observableOptions);
+        const result = this.api.daosDaoIdPodsGet(daoId, pODUserWhoMadeRequest, observableOptions);
         return result.toPromise();
     }
 
@@ -1136,6 +1140,48 @@ export class PromiseUsersApi {
 	    }
 	}
         const result = this.api.getUser(userId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Check if user with the wallet address exists
+     * @param walletAddress
+     */
+    public getUserWithWalletAddressWithHttpInfo(walletAddress: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<UserExistResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getUserWithWalletAddressWithHttpInfo(walletAddress, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Check if user with the wallet address exists
+     * @param walletAddress
+     */
+    public getUserWithWalletAddress(walletAddress: string, _options?: PromiseConfigurationOptions): Promise<UserExistResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getUserWithWalletAddress(walletAddress, observableOptions);
         return result.toPromise();
     }
 

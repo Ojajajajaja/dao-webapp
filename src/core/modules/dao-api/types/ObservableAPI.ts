@@ -17,11 +17,13 @@ import { ModelError } from '../models/ModelError';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
 import { PODUpdate } from '../models/PODUpdate';
+import { PODUserWhoMadeRequest } from '../models/PODUserWhoMadeRequest';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
 import { SummaryResponse } from '../models/SummaryResponse';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
+import { UserExistResponse } from '../models/UserExistResponse';
 import { UserResponse } from '../models/UserResponse';
 
 import { AuthApiRequestFactory, AuthApiResponseProcessor} from "../apis/AuthApi";
@@ -549,8 +551,9 @@ export class ObservableDaosApi {
     /**
      * Get all PODs for a DAO
      * @param daoId
+     * @param pODUserWhoMadeRequest
      */
-    public daosDaoIdPodsGetWithHttpInfo(daoId: number, _options?: ConfigurationOptions): Observable<HttpInfo<Array<POD>>> {
+    public daosDaoIdPodsGetWithHttpInfo(daoId: number, pODUserWhoMadeRequest: PODUserWhoMadeRequest, _options?: ConfigurationOptions): Observable<HttpInfo<Array<POD>>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -581,7 +584,7 @@ export class ObservableDaosApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.daosDaoIdPodsGet(daoId, _config);
+        const requestContextPromise = this.requestFactory.daosDaoIdPodsGet(daoId, pODUserWhoMadeRequest, _config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -601,9 +604,10 @@ export class ObservableDaosApi {
     /**
      * Get all PODs for a DAO
      * @param daoId
+     * @param pODUserWhoMadeRequest
      */
-    public daosDaoIdPodsGet(daoId: number, _options?: ConfigurationOptions): Observable<Array<POD>> {
-        return this.daosDaoIdPodsGetWithHttpInfo(daoId, _options).pipe(map((apiResponse: HttpInfo<Array<POD>>) => apiResponse.data));
+    public daosDaoIdPodsGet(daoId: number, pODUserWhoMadeRequest: PODUserWhoMadeRequest, _options?: ConfigurationOptions): Observable<Array<POD>> {
+        return this.daosDaoIdPodsGetWithHttpInfo(daoId, pODUserWhoMadeRequest, _options).pipe(map((apiResponse: HttpInfo<Array<POD>>) => apiResponse.data));
     }
 
     /**
@@ -1570,6 +1574,66 @@ export class ObservableUsersApi {
      */
     public getUser(userId: number, _options?: ConfigurationOptions): Observable<UserResponse> {
         return this.getUserWithHttpInfo(userId, _options).pipe(map((apiResponse: HttpInfo<UserResponse>) => apiResponse.data));
+    }
+
+    /**
+     * Check if user with the wallet address exists
+     * @param walletAddress
+     */
+    public getUserWithWalletAddressWithHttpInfo(walletAddress: string, _options?: ConfigurationOptions): Observable<HttpInfo<UserExistResponse>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.getUserWithWalletAddress(walletAddress, _config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getUserWithWalletAddressWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Check if user with the wallet address exists
+     * @param walletAddress
+     */
+    public getUserWithWalletAddress(walletAddress: string, _options?: ConfigurationOptions): Observable<UserExistResponse> {
+        return this.getUserWithWalletAddressWithHttpInfo(walletAddress, _options).pipe(map((apiResponse: HttpInfo<UserExistResponse>) => apiResponse.data));
     }
 
     /**

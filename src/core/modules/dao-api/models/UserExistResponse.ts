@@ -12,8 +12,11 @@
 
 import { HttpFile } from '../http/http';
 
-export class PODMembership {
-    'userId': number;
+/**
+* Check if user with the wallet address exists.
+*/
+export class UserExistResponse {
+    'exists'?: boolean;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -21,14 +24,14 @@ export class PODMembership {
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "userId",
-            "baseName": "user_id",
-            "type": "number",
+            "name": "exists",
+            "baseName": "exists",
+            "type": "boolean",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return PODMembership.attributeTypeMap;
+        return UserExistResponse.attributeTypeMap;
     }
 
     public constructor() {

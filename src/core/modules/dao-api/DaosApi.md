@@ -389,7 +389,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
 # **daosDaoIdPodsGet**
-> Array<POD> daosDaoIdPodsGet()
+> Array<POD> daosDaoIdPodsGet(pODUserWhoMadeRequest)
 
 
 ### Example
@@ -405,6 +405,10 @@ const apiInstance = new DaosApi(configuration);
 const request: DaosApiDaosDaoIdPodsGetRequest = {
   
   daoId: 0,
+  
+  pODUserWhoMadeRequest: {
+    userWhoMadeRequest: 1,
+  },
 };
 
 const data = await apiInstance.daosDaoIdPodsGet(request);
@@ -416,6 +420,7 @@ console.log('API called successfully. Returned data:', data);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **pODUserWhoMadeRequest** | **PODUserWhoMadeRequest**|  |
  **daoId** | [**number**] |  | defaults to undefined
 
 
@@ -429,13 +434,14 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
+**422** | Unprocessable Entity |  -  |
 **200** | OK |  -  |
 **404** | Not Found |  -  |
 **0** | Default error response |  -  |
@@ -464,7 +470,6 @@ const request: DaosApiDaosDaoIdPodsPodIdDeleteRequest = {
   
   pODMembership: {
     userId: 1,
-    userWhoMadeRequest: 1,
   },
 };
 
@@ -587,7 +592,6 @@ const request: DaosApiDaosDaoIdPodsPodIdMembersDeleteRequest = {
   
   pODMembership: {
     userId: 1,
-    userWhoMadeRequest: 1,
   },
 };
 
@@ -710,7 +714,6 @@ const request: DaosApiDaosDaoIdPodsPodIdMembersPostRequest = {
   
   pODMembership: {
     userId: 1,
-    userWhoMadeRequest: 1,
   },
 };
 
