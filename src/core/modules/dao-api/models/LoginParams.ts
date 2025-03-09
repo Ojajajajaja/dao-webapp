@@ -17,9 +17,9 @@ import { HttpFile } from '../http/http';
 */
 export class LoginParams {
     /**
-    * Email of the login
+    * Wallet address of the user
     */
-    'email': string;
+    'walletAddress': string;
     /**
     * Password of the login
     */
@@ -31,8 +31,8 @@ export class LoginParams {
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "email",
-            "baseName": "email",
+            "name": "walletAddress",
+            "baseName": "wallet_address",
             "type": "string",
             "format": ""
         },

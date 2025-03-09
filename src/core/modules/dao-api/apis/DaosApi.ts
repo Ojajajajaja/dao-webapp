@@ -23,71 +23,22 @@ import { User } from '../models/User';
 export class DaosApiRequestFactory extends BaseAPIRequestFactory {
 
     /**
-     * Remove an admin from a DAO
-     * @param daoId 
-     * @param dAOMembership 
-     */
-    public async daosDaoIdAdminsDelete(daoId: number, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
-        let _config = _options || this.configuration;
-
-        // verify required parameter 'daoId' is not null or undefined
-        if (daoId === null || daoId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdAdminsDelete", "daoId");
-        }
-
-
-        // verify required parameter 'dAOMembership' is not null or undefined
-        if (dAOMembership === null || dAOMembership === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdAdminsDelete", "dAOMembership");
-        }
-
-
-        // Path Params
-        const localVarPath = '/daos/{dao_id}/admins'
-            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)));
-
-        // Make Request Context
-        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.DELETE);
-        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-
-        // Body Params
-        const contentType = ObjectSerializer.getPreferredMediaType([
-            "application/json"
-        ]);
-        requestContext.setHeaderParam("Content-Type", contentType);
-        const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(dAOMembership, "DAOMembership", ""),
-            contentType
-        );
-        requestContext.setBody(serializedBody);
-
-        
-        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
-        if (defaultAuth?.applySecurityAuthentication) {
-            await defaultAuth?.applySecurityAuthentication(requestContext);
-        }
-
-        return requestContext;
-    }
-
-    /**
      * Add an admin to a DAO
      * @param daoId 
      * @param dAOMembership 
      */
-    public async daosDaoIdAdminsPost(daoId: number, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
+    public async addAdminToDAO(daoId: string, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
         if (daoId === null || daoId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdAdminsPost", "daoId");
+            throw new RequiredError("DaosApi", "addAdminToDAO", "daoId");
         }
 
 
         // verify required parameter 'dAOMembership' is not null or undefined
         if (dAOMembership === null || dAOMembership === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdAdminsPost", "dAOMembership");
+            throw new RequiredError("DaosApi", "addAdminToDAO", "dAOMembership");
         }
 
 
@@ -97,135 +48,6 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
 
         // Make Request Context
         const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.POST);
-        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-
-        // Body Params
-        const contentType = ObjectSerializer.getPreferredMediaType([
-            "application/json"
-        ]);
-        requestContext.setHeaderParam("Content-Type", contentType);
-        const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(dAOMembership, "DAOMembership", ""),
-            contentType
-        );
-        requestContext.setBody(serializedBody);
-
-        
-        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
-        if (defaultAuth?.applySecurityAuthentication) {
-            await defaultAuth?.applySecurityAuthentication(requestContext);
-        }
-
-        return requestContext;
-    }
-
-    /**
-     * Delete a DAO
-     * @param daoId 
-     * @param dAOMembership 
-     */
-    public async daosDaoIdDelete(daoId: number, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
-        let _config = _options || this.configuration;
-
-        // verify required parameter 'daoId' is not null or undefined
-        if (daoId === null || daoId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdDelete", "daoId");
-        }
-
-
-        // verify required parameter 'dAOMembership' is not null or undefined
-        if (dAOMembership === null || dAOMembership === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdDelete", "dAOMembership");
-        }
-
-
-        // Path Params
-        const localVarPath = '/daos/{dao_id}'
-            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)));
-
-        // Make Request Context
-        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.DELETE);
-        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-
-        // Body Params
-        const contentType = ObjectSerializer.getPreferredMediaType([
-            "application/json"
-        ]);
-        requestContext.setHeaderParam("Content-Type", contentType);
-        const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(dAOMembership, "DAOMembership", ""),
-            contentType
-        );
-        requestContext.setBody(serializedBody);
-
-        
-        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
-        if (defaultAuth?.applySecurityAuthentication) {
-            await defaultAuth?.applySecurityAuthentication(requestContext);
-        }
-
-        return requestContext;
-    }
-
-    /**
-     * Get a DAO by ID
-     * @param daoId 
-     */
-    public async daosDaoIdGet(daoId: number, _options?: Configuration): Promise<RequestContext> {
-        let _config = _options || this.configuration;
-
-        // verify required parameter 'daoId' is not null or undefined
-        if (daoId === null || daoId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdGet", "daoId");
-        }
-
-
-        // Path Params
-        const localVarPath = '/daos/{dao_id}'
-            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)));
-
-        // Make Request Context
-        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
-        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-
-        
-        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
-        if (defaultAuth?.applySecurityAuthentication) {
-            await defaultAuth?.applySecurityAuthentication(requestContext);
-        }
-
-        return requestContext;
-    }
-
-    /**
-     * Remove a member from a DAO
-     * @param daoId 
-     * @param dAOMembership 
-     */
-    public async daosDaoIdMembersDelete(daoId: number, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
-        let _config = _options || this.configuration;
-
-        // verify required parameter 'daoId' is not null or undefined
-        if (daoId === null || daoId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdMembersDelete", "daoId");
-        }
-
-
-        // verify required parameter 'dAOMembership' is not null or undefined
-        if (dAOMembership === null || dAOMembership === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdMembersDelete", "dAOMembership");
-        }
-
-
-        // Path Params
-        const localVarPath = '/daos/{dao_id}/members'
-            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)));
-
-        // Make Request Context
-        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.DELETE);
         requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
 
@@ -252,20 +74,13 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
     /**
      * Add a member to a DAO
      * @param daoId 
-     * @param dAOMembership 
      */
-    public async daosDaoIdMembersPost(daoId: number, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
+    public async addMemberToDAO(daoId: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
         if (daoId === null || daoId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdMembersPost", "daoId");
-        }
-
-
-        // verify required parameter 'dAOMembership' is not null or undefined
-        if (dAOMembership === null || dAOMembership === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdMembersPost", "dAOMembership");
+            throw new RequiredError("DaosApi", "addMemberToDAO", "daoId");
         }
 
 
@@ -275,240 +90,6 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
 
         // Make Request Context
         const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.POST);
-        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-
-        // Body Params
-        const contentType = ObjectSerializer.getPreferredMediaType([
-            "application/json"
-        ]);
-        requestContext.setHeaderParam("Content-Type", contentType);
-        const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(dAOMembership, "DAOMembership", ""),
-            contentType
-        );
-        requestContext.setBody(serializedBody);
-
-        
-        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
-        if (defaultAuth?.applySecurityAuthentication) {
-            await defaultAuth?.applySecurityAuthentication(requestContext);
-        }
-
-        return requestContext;
-    }
-
-    /**
-     * Get all PODs for a DAO
-     * @param daoId 
-     */
-    public async daosDaoIdPodsGet(daoId: number, _options?: Configuration): Promise<RequestContext> {
-        let _config = _options || this.configuration;
-
-        // verify required parameter 'daoId' is not null or undefined
-        if (daoId === null || daoId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsGet", "daoId");
-        }
-
-
-        // Path Params
-        const localVarPath = '/daos/{dao_id}/pods'
-            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)));
-
-        // Make Request Context
-        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
-        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-
-        
-        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
-        if (defaultAuth?.applySecurityAuthentication) {
-            await defaultAuth?.applySecurityAuthentication(requestContext);
-        }
-
-        return requestContext;
-    }
-
-    /**
-     * Delete a POD
-     * @param daoId 
-     * @param podId 
-     * @param pODMembership 
-     */
-    public async daosDaoIdPodsPodIdDelete(daoId: number, podId: number, pODMembership: PODMembership, _options?: Configuration): Promise<RequestContext> {
-        let _config = _options || this.configuration;
-
-        // verify required parameter 'daoId' is not null or undefined
-        if (daoId === null || daoId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPodIdDelete", "daoId");
-        }
-
-
-        // verify required parameter 'podId' is not null or undefined
-        if (podId === null || podId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPodIdDelete", "podId");
-        }
-
-
-        // verify required parameter 'pODMembership' is not null or undefined
-        if (pODMembership === null || pODMembership === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPodIdDelete", "pODMembership");
-        }
-
-
-        // Path Params
-        const localVarPath = '/daos/{dao_id}/pods/{pod_id}'
-            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
-            .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)));
-
-        // Make Request Context
-        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.DELETE);
-        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-
-        // Body Params
-        const contentType = ObjectSerializer.getPreferredMediaType([
-            "application/json"
-        ]);
-        requestContext.setHeaderParam("Content-Type", contentType);
-        const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(pODMembership, "PODMembership", ""),
-            contentType
-        );
-        requestContext.setBody(serializedBody);
-
-        
-        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
-        if (defaultAuth?.applySecurityAuthentication) {
-            await defaultAuth?.applySecurityAuthentication(requestContext);
-        }
-
-        return requestContext;
-    }
-
-    /**
-     * Get a POD by ID
-     * @param daoId 
-     * @param podId 
-     */
-    public async daosDaoIdPodsPodIdGet(daoId: number, podId: number, _options?: Configuration): Promise<RequestContext> {
-        let _config = _options || this.configuration;
-
-        // verify required parameter 'daoId' is not null or undefined
-        if (daoId === null || daoId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPodIdGet", "daoId");
-        }
-
-
-        // verify required parameter 'podId' is not null or undefined
-        if (podId === null || podId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPodIdGet", "podId");
-        }
-
-
-        // Path Params
-        const localVarPath = '/daos/{dao_id}/pods/{pod_id}'
-            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
-            .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)));
-
-        // Make Request Context
-        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
-        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-
-        
-        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
-        if (defaultAuth?.applySecurityAuthentication) {
-            await defaultAuth?.applySecurityAuthentication(requestContext);
-        }
-
-        return requestContext;
-    }
-
-    /**
-     * Remove a member from a POD
-     * @param daoId 
-     * @param podId 
-     * @param pODMembership 
-     */
-    public async daosDaoIdPodsPodIdMembersDelete(daoId: number, podId: number, pODMembership: PODMembership, _options?: Configuration): Promise<RequestContext> {
-        let _config = _options || this.configuration;
-
-        // verify required parameter 'daoId' is not null or undefined
-        if (daoId === null || daoId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPodIdMembersDelete", "daoId");
-        }
-
-
-        // verify required parameter 'podId' is not null or undefined
-        if (podId === null || podId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPodIdMembersDelete", "podId");
-        }
-
-
-        // verify required parameter 'pODMembership' is not null or undefined
-        if (pODMembership === null || pODMembership === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPodIdMembersDelete", "pODMembership");
-        }
-
-
-        // Path Params
-        const localVarPath = '/daos/{dao_id}/pods/{pod_id}/members'
-            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
-            .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)));
-
-        // Make Request Context
-        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.DELETE);
-        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-
-        // Body Params
-        const contentType = ObjectSerializer.getPreferredMediaType([
-            "application/json"
-        ]);
-        requestContext.setHeaderParam("Content-Type", contentType);
-        const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(pODMembership, "PODMembership", ""),
-            contentType
-        );
-        requestContext.setBody(serializedBody);
-
-        
-        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
-        if (defaultAuth?.applySecurityAuthentication) {
-            await defaultAuth?.applySecurityAuthentication(requestContext);
-        }
-
-        return requestContext;
-    }
-
-    /**
-     * Get all members of a POD
-     * @param daoId 
-     * @param podId 
-     */
-    public async daosDaoIdPodsPodIdMembersGet(daoId: number, podId: number, _options?: Configuration): Promise<RequestContext> {
-        let _config = _options || this.configuration;
-
-        // verify required parameter 'daoId' is not null or undefined
-        if (daoId === null || daoId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPodIdMembersGet", "daoId");
-        }
-
-
-        // verify required parameter 'podId' is not null or undefined
-        if (podId === null || podId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPodIdMembersGet", "podId");
-        }
-
-
-        // Path Params
-        const localVarPath = '/daos/{dao_id}/pods/{pod_id}/members'
-            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
-            .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)));
-
-        // Make Request Context
-        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
         requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
 
@@ -525,26 +106,19 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * Add a member to a POD
      * @param daoId 
      * @param podId 
-     * @param pODMembership 
      */
-    public async daosDaoIdPodsPodIdMembersPost(daoId: number, podId: number, pODMembership: PODMembership, _options?: Configuration): Promise<RequestContext> {
+    public async addMemberToPOD(daoId: string, podId: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
         if (daoId === null || daoId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPodIdMembersPost", "daoId");
+            throw new RequiredError("DaosApi", "addMemberToPOD", "daoId");
         }
 
 
         // verify required parameter 'podId' is not null or undefined
         if (podId === null || podId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPodIdMembersPost", "podId");
-        }
-
-
-        // verify required parameter 'pODMembership' is not null or undefined
-        if (pODMembership === null || pODMembership === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPodIdMembersPost", "pODMembership");
+            throw new RequiredError("DaosApi", "addMemberToPOD", "podId");
         }
 
 
@@ -558,17 +132,6 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
         requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
 
-        // Body Params
-        const contentType = ObjectSerializer.getPreferredMediaType([
-            "application/json"
-        ]);
-        requestContext.setHeaderParam("Content-Type", contentType);
-        const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(pODMembership, "PODMembership", ""),
-            contentType
-        );
-        requestContext.setBody(serializedBody);
-
         
         const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
         if (defaultAuth?.applySecurityAuthentication) {
@@ -579,39 +142,23 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
     }
 
     /**
-     * Update a POD
-     * @param daoId 
-     * @param podId 
-     * @param pODUpdate 
+     * Create a new DAO
+     * @param DAO 
      */
-    public async daosDaoIdPodsPodIdPut(daoId: number, podId: number, pODUpdate: PODUpdate, _options?: Configuration): Promise<RequestContext> {
+    public async createDAO(DAO: DAO, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
-        // verify required parameter 'daoId' is not null or undefined
-        if (daoId === null || daoId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPodIdPut", "daoId");
-        }
-
-
-        // verify required parameter 'podId' is not null or undefined
-        if (podId === null || podId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPodIdPut", "podId");
-        }
-
-
-        // verify required parameter 'pODUpdate' is not null or undefined
-        if (pODUpdate === null || pODUpdate === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPodIdPut", "pODUpdate");
+        // verify required parameter 'DAO' is not null or undefined
+        if (DAO === null || DAO === undefined) {
+            throw new RequiredError("DaosApi", "createDAO", "DAO");
         }
 
 
         // Path Params
-        const localVarPath = '/daos/{dao_id}/pods/{pod_id}'
-            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
-            .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)));
+        const localVarPath = '/daos/';
 
         // Make Request Context
-        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.PUT);
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.POST);
         requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
 
@@ -621,7 +168,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
         ]);
         requestContext.setHeaderParam("Content-Type", contentType);
         const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(pODUpdate, "PODUpdate", ""),
+            ObjectSerializer.serialize(DAO, "DAO", ""),
             contentType
         );
         requestContext.setBody(serializedBody);
@@ -640,18 +187,18 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * @param daoId 
      * @param POD 
      */
-    public async daosDaoIdPodsPost(daoId: number, POD: POD, _options?: Configuration): Promise<RequestContext> {
+    public async createPOD(daoId: string, POD: POD, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
         if (daoId === null || daoId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPost", "daoId");
+            throw new RequiredError("DaosApi", "createPOD", "daoId");
         }
 
 
         // verify required parameter 'POD' is not null or undefined
         if (POD === null || POD === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPodsPost", "POD");
+            throw new RequiredError("DaosApi", "createPOD", "POD");
         }
 
 
@@ -685,22 +232,410 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
     }
 
     /**
-     * Update a DAO
+     * Delete a DAO
      * @param daoId 
-     * @param dAOUpdate 
      */
-    public async daosDaoIdPut(daoId: number, dAOUpdate: DAOUpdate, _options?: Configuration): Promise<RequestContext> {
+    public async deleteDAO(daoId: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
         if (daoId === null || daoId === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPut", "daoId");
+            throw new RequiredError("DaosApi", "deleteDAO", "daoId");
+        }
+
+
+        // Path Params
+        const localVarPath = '/daos/{dao_id}'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)));
+
+        // Make Request Context
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.DELETE);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+
+        
+        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
+        if (defaultAuth?.applySecurityAuthentication) {
+            await defaultAuth?.applySecurityAuthentication(requestContext);
+        }
+
+        return requestContext;
+    }
+
+    /**
+     * Delete a POD
+     * @param daoId 
+     * @param podId 
+     */
+    public async deletePOD(daoId: string, podId: string, _options?: Configuration): Promise<RequestContext> {
+        let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("DaosApi", "deletePOD", "daoId");
+        }
+
+
+        // verify required parameter 'podId' is not null or undefined
+        if (podId === null || podId === undefined) {
+            throw new RequiredError("DaosApi", "deletePOD", "podId");
+        }
+
+
+        // Path Params
+        const localVarPath = '/daos/{dao_id}/pods/{pod_id}'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
+            .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)));
+
+        // Make Request Context
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.DELETE);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+
+        
+        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
+        if (defaultAuth?.applySecurityAuthentication) {
+            await defaultAuth?.applySecurityAuthentication(requestContext);
+        }
+
+        return requestContext;
+    }
+
+    /**
+     * List all DAOs
+     */
+    public async getAllDAOs(_options?: Configuration): Promise<RequestContext> {
+        let _config = _options || this.configuration;
+
+        // Path Params
+        const localVarPath = '/daos/';
+
+        // Make Request Context
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+
+        
+        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
+        if (defaultAuth?.applySecurityAuthentication) {
+            await defaultAuth?.applySecurityAuthentication(requestContext);
+        }
+
+        return requestContext;
+    }
+
+    /**
+     * Get all members of a POD
+     * @param daoId 
+     * @param podId 
+     */
+    public async getAllMembersOfPOD(daoId: string, podId: string, _options?: Configuration): Promise<RequestContext> {
+        let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("DaosApi", "getAllMembersOfPOD", "daoId");
+        }
+
+
+        // verify required parameter 'podId' is not null or undefined
+        if (podId === null || podId === undefined) {
+            throw new RequiredError("DaosApi", "getAllMembersOfPOD", "podId");
+        }
+
+
+        // Path Params
+        const localVarPath = '/daos/{dao_id}/pods/{pod_id}/members'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
+            .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)));
+
+        // Make Request Context
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+
+        
+        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
+        if (defaultAuth?.applySecurityAuthentication) {
+            await defaultAuth?.applySecurityAuthentication(requestContext);
+        }
+
+        return requestContext;
+    }
+
+    /**
+     * Get all PODs for a DAO
+     * @param daoId 
+     */
+    public async getAllPODsForDAO(daoId: string, _options?: Configuration): Promise<RequestContext> {
+        let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("DaosApi", "getAllPODsForDAO", "daoId");
+        }
+
+
+        // Path Params
+        const localVarPath = '/daos/{dao_id}/pods'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)));
+
+        // Make Request Context
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+
+        
+        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
+        if (defaultAuth?.applySecurityAuthentication) {
+            await defaultAuth?.applySecurityAuthentication(requestContext);
+        }
+
+        return requestContext;
+    }
+
+    /**
+     * Get a DAO by ID
+     * @param daoId 
+     */
+    public async getDAOById(daoId: string, _options?: Configuration): Promise<RequestContext> {
+        let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("DaosApi", "getDAOById", "daoId");
+        }
+
+
+        // Path Params
+        const localVarPath = '/daos/{dao_id}'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)));
+
+        // Make Request Context
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+
+        
+        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
+        if (defaultAuth?.applySecurityAuthentication) {
+            await defaultAuth?.applySecurityAuthentication(requestContext);
+        }
+
+        return requestContext;
+    }
+
+    /**
+     * Get a POD by ID
+     * @param daoId 
+     * @param podId 
+     */
+    public async getPODById(daoId: string, podId: string, _options?: Configuration): Promise<RequestContext> {
+        let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("DaosApi", "getPODById", "daoId");
+        }
+
+
+        // verify required parameter 'podId' is not null or undefined
+        if (podId === null || podId === undefined) {
+            throw new RequiredError("DaosApi", "getPODById", "podId");
+        }
+
+
+        // Path Params
+        const localVarPath = '/daos/{dao_id}/pods/{pod_id}'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
+            .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)));
+
+        // Make Request Context
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+
+        
+        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
+        if (defaultAuth?.applySecurityAuthentication) {
+            await defaultAuth?.applySecurityAuthentication(requestContext);
+        }
+
+        return requestContext;
+    }
+
+    /**
+     * Remove an admin from a DAO
+     * @param daoId 
+     * @param dAOMembership 
+     */
+    public async removeAdminFromDAO(daoId: string, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
+        let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("DaosApi", "removeAdminFromDAO", "daoId");
+        }
+
+
+        // verify required parameter 'dAOMembership' is not null or undefined
+        if (dAOMembership === null || dAOMembership === undefined) {
+            throw new RequiredError("DaosApi", "removeAdminFromDAO", "dAOMembership");
+        }
+
+
+        // Path Params
+        const localVarPath = '/daos/{dao_id}/admins'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)));
+
+        // Make Request Context
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.DELETE);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+
+        // Body Params
+        const contentType = ObjectSerializer.getPreferredMediaType([
+            "application/json"
+        ]);
+        requestContext.setHeaderParam("Content-Type", contentType);
+        const serializedBody = ObjectSerializer.stringify(
+            ObjectSerializer.serialize(dAOMembership, "DAOMembership", ""),
+            contentType
+        );
+        requestContext.setBody(serializedBody);
+
+        
+        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
+        if (defaultAuth?.applySecurityAuthentication) {
+            await defaultAuth?.applySecurityAuthentication(requestContext);
+        }
+
+        return requestContext;
+    }
+
+    /**
+     * Remove a member from a DAO
+     * @param daoId 
+     * @param dAOMembership 
+     */
+    public async removeMemberFromDAO(daoId: string, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
+        let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("DaosApi", "removeMemberFromDAO", "daoId");
+        }
+
+
+        // verify required parameter 'dAOMembership' is not null or undefined
+        if (dAOMembership === null || dAOMembership === undefined) {
+            throw new RequiredError("DaosApi", "removeMemberFromDAO", "dAOMembership");
+        }
+
+
+        // Path Params
+        const localVarPath = '/daos/{dao_id}/members'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)));
+
+        // Make Request Context
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.DELETE);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+
+        // Body Params
+        const contentType = ObjectSerializer.getPreferredMediaType([
+            "application/json"
+        ]);
+        requestContext.setHeaderParam("Content-Type", contentType);
+        const serializedBody = ObjectSerializer.stringify(
+            ObjectSerializer.serialize(dAOMembership, "DAOMembership", ""),
+            contentType
+        );
+        requestContext.setBody(serializedBody);
+
+        
+        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
+        if (defaultAuth?.applySecurityAuthentication) {
+            await defaultAuth?.applySecurityAuthentication(requestContext);
+        }
+
+        return requestContext;
+    }
+
+    /**
+     * Remove a member from a POD
+     * @param daoId 
+     * @param podId 
+     * @param pODMembership 
+     */
+    public async removeMemberFromPOD(daoId: string, podId: string, pODMembership: PODMembership, _options?: Configuration): Promise<RequestContext> {
+        let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("DaosApi", "removeMemberFromPOD", "daoId");
+        }
+
+
+        // verify required parameter 'podId' is not null or undefined
+        if (podId === null || podId === undefined) {
+            throw new RequiredError("DaosApi", "removeMemberFromPOD", "podId");
+        }
+
+
+        // verify required parameter 'pODMembership' is not null or undefined
+        if (pODMembership === null || pODMembership === undefined) {
+            throw new RequiredError("DaosApi", "removeMemberFromPOD", "pODMembership");
+        }
+
+
+        // Path Params
+        const localVarPath = '/daos/{dao_id}/pods/{pod_id}/members'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
+            .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)));
+
+        // Make Request Context
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.DELETE);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+
+        // Body Params
+        const contentType = ObjectSerializer.getPreferredMediaType([
+            "application/json"
+        ]);
+        requestContext.setHeaderParam("Content-Type", contentType);
+        const serializedBody = ObjectSerializer.stringify(
+            ObjectSerializer.serialize(pODMembership, "PODMembership", ""),
+            contentType
+        );
+        requestContext.setBody(serializedBody);
+
+        
+        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
+        if (defaultAuth?.applySecurityAuthentication) {
+            await defaultAuth?.applySecurityAuthentication(requestContext);
+        }
+
+        return requestContext;
+    }
+
+    /**
+     * Update a DAO
+     * @param daoId 
+     * @param dAOUpdate 
+     */
+    public async updateDAO(daoId: string, dAOUpdate: DAOUpdate, _options?: Configuration): Promise<RequestContext> {
+        let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("DaosApi", "updateDAO", "daoId");
         }
 
 
         // verify required parameter 'dAOUpdate' is not null or undefined
         if (dAOUpdate === null || dAOUpdate === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoIdPut", "dAOUpdate");
+            throw new RequiredError("DaosApi", "updateDAO", "dAOUpdate");
         }
 
 
@@ -734,77 +669,39 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
     }
 
     /**
-     * Get a DAO by name
-     * @param daoName 
+     * Update a POD
+     * @param daoId 
+     * @param podId 
+     * @param pODUpdate 
      */
-    public async daosDaoNameGet(daoName: string, _options?: Configuration): Promise<RequestContext> {
+    public async updatePOD(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
-        // verify required parameter 'daoName' is not null or undefined
-        if (daoName === null || daoName === undefined) {
-            throw new RequiredError("DaosApi", "daosDaoNameGet", "daoName");
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("DaosApi", "updatePOD", "daoId");
+        }
+
+
+        // verify required parameter 'podId' is not null or undefined
+        if (podId === null || podId === undefined) {
+            throw new RequiredError("DaosApi", "updatePOD", "podId");
+        }
+
+
+        // verify required parameter 'pODUpdate' is not null or undefined
+        if (pODUpdate === null || pODUpdate === undefined) {
+            throw new RequiredError("DaosApi", "updatePOD", "pODUpdate");
         }
 
 
         // Path Params
-        const localVarPath = '/daos/{dao_name}'
-            .replace('{' + 'dao_name' + '}', encodeURIComponent(String(daoName)));
+        const localVarPath = '/daos/{dao_id}/pods/{pod_id}'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
+            .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)));
 
         // Make Request Context
-        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
-        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-
-        
-        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
-        if (defaultAuth?.applySecurityAuthentication) {
-            await defaultAuth?.applySecurityAuthentication(requestContext);
-        }
-
-        return requestContext;
-    }
-
-    /**
-     * List all DAOs
-     */
-    public async daosGet(_options?: Configuration): Promise<RequestContext> {
-        let _config = _options || this.configuration;
-
-        // Path Params
-        const localVarPath = '/daos/';
-
-        // Make Request Context
-        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
-        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-
-        
-        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
-        if (defaultAuth?.applySecurityAuthentication) {
-            await defaultAuth?.applySecurityAuthentication(requestContext);
-        }
-
-        return requestContext;
-    }
-
-    /**
-     * Create a new DAO
-     * @param DAO 
-     */
-    public async daosPost(DAO: DAO, _options?: Configuration): Promise<RequestContext> {
-        let _config = _options || this.configuration;
-
-        // verify required parameter 'DAO' is not null or undefined
-        if (DAO === null || DAO === undefined) {
-            throw new RequiredError("DaosApi", "daosPost", "DAO");
-        }
-
-
-        // Path Params
-        const localVarPath = '/daos/';
-
-        // Make Request Context
-        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.POST);
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.PUT);
         requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
 
@@ -814,7 +711,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
         ]);
         requestContext.setHeaderParam("Content-Type", contentType);
         const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(DAO, "DAO", ""),
+            ObjectSerializer.serialize(pODUpdate, "PODUpdate", ""),
             contentType
         );
         requestContext.setBody(serializedBody);
@@ -836,10 +733,10 @@ export class DaosApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to daosDaoIdAdminsDelete
+     * @params response Response returned by the server for a request to addAdminToDAO
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async daosDaoIdAdminsDeleteWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
+     public async addAdminToDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("422", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -900,18 +797,11 @@ export class DaosApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to daosDaoIdAdminsPost
+     * @params response Response returned by the server for a request to addMemberToDAO
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async daosDaoIdAdminsPostWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
+     public async addMemberToDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
-        if (isCodeInRange("422", response.httpStatusCode)) {
-            const body: Error = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Error", ""
-            ) as Error;
-            throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
-        }
         if (isCodeInRange("200", response.httpStatusCode)) {
             const body: DAO = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -964,10 +854,67 @@ export class DaosApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to daosDaoIdDelete
+     * @params response Response returned by the server for a request to addMemberToPOD
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async daosDaoIdDeleteWithHttpInfo(response: ResponseContext): Promise<HttpInfo<void >> {
+     public async addMemberToPODWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
+        if (isCodeInRange("200", response.httpStatusCode)) {
+            const body: POD = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "POD", ""
+            ) as POD;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+        if (isCodeInRange("400", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
+        }
+        if (isCodeInRange("403", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
+        }
+        if (isCodeInRange("404", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+        }
+        if (isCodeInRange("0", response.httpStatusCode)) {
+            const body: Error = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "Default error response", body, response.headers);
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: POD = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "POD", ""
+            ) as POD;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+
+        throw new ApiException<string | Blob | undefined>(response.httpStatusCode, "Unknown API Status Code!", await response.getBodyAsAny(), response.headers);
+    }
+
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to createDAO
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+     public async createDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("422", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -976,6 +923,113 @@ export class DaosApiResponseProcessor {
             ) as Error;
             throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
         }
+        if (isCodeInRange("201", response.httpStatusCode)) {
+            const body: DAO = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "DAO", ""
+            ) as DAO;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+        if (isCodeInRange("400", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
+        }
+        if (isCodeInRange("0", response.httpStatusCode)) {
+            const body: Error = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "Default error response", body, response.headers);
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: DAO = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "DAO", ""
+            ) as DAO;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+
+        throw new ApiException<string | Blob | undefined>(response.httpStatusCode, "Unknown API Status Code!", await response.getBodyAsAny(), response.headers);
+    }
+
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to createPOD
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+     public async createPODWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
+        if (isCodeInRange("422", response.httpStatusCode)) {
+            const body: Error = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
+        }
+        if (isCodeInRange("201", response.httpStatusCode)) {
+            const body: POD = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "POD", ""
+            ) as POD;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+        if (isCodeInRange("400", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
+        }
+        if (isCodeInRange("403", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
+        }
+        if (isCodeInRange("404", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+        }
+        if (isCodeInRange("0", response.httpStatusCode)) {
+            const body: Error = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "Default error response", body, response.headers);
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: POD = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "POD", ""
+            ) as POD;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+
+        throw new ApiException<string | Blob | undefined>(response.httpStatusCode, "Unknown API Status Code!", await response.getBodyAsAny(), response.headers);
+    }
+
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to deleteDAO
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+     public async deleteDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<void >> {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, undefined);
         }
@@ -1024,232 +1078,11 @@ export class DaosApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to daosDaoIdGet
+     * @params response Response returned by the server for a request to deletePOD
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async daosDaoIdGetWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
+     public async deletePODWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
-        if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: DAO = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
-            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
-        }
-        if (isCodeInRange("404", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
-        }
-        if (isCodeInRange("0", response.httpStatusCode)) {
-            const body: Error = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Error", ""
-            ) as Error;
-            throw new ApiException<Error>(response.httpStatusCode, "Default error response", body, response.headers);
-        }
-
-        // Work around for missing responses in specification, e.g. for petstore.yaml
-        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: DAO = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
-            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
-        }
-
-        throw new ApiException<string | Blob | undefined>(response.httpStatusCode, "Unknown API Status Code!", await response.getBodyAsAny(), response.headers);
-    }
-
-    /**
-     * Unwraps the actual response sent by the server from the response context and deserializes the response content
-     * to the expected objects
-     *
-     * @params response Response returned by the server for a request to daosDaoIdMembersDelete
-     * @throws ApiException if the response code was not in [200, 299]
-     */
-     public async daosDaoIdMembersDeleteWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
-        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
-        if (isCodeInRange("422", response.httpStatusCode)) {
-            const body: Error = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Error", ""
-            ) as Error;
-            throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
-        }
-        if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: DAO = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
-            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
-        }
-        if (isCodeInRange("400", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
-        }
-        if (isCodeInRange("403", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
-        }
-        if (isCodeInRange("404", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
-        }
-        if (isCodeInRange("0", response.httpStatusCode)) {
-            const body: Error = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Error", ""
-            ) as Error;
-            throw new ApiException<Error>(response.httpStatusCode, "Default error response", body, response.headers);
-        }
-
-        // Work around for missing responses in specification, e.g. for petstore.yaml
-        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: DAO = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
-            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
-        }
-
-        throw new ApiException<string | Blob | undefined>(response.httpStatusCode, "Unknown API Status Code!", await response.getBodyAsAny(), response.headers);
-    }
-
-    /**
-     * Unwraps the actual response sent by the server from the response context and deserializes the response content
-     * to the expected objects
-     *
-     * @params response Response returned by the server for a request to daosDaoIdMembersPost
-     * @throws ApiException if the response code was not in [200, 299]
-     */
-     public async daosDaoIdMembersPostWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
-        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
-        if (isCodeInRange("422", response.httpStatusCode)) {
-            const body: Error = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Error", ""
-            ) as Error;
-            throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
-        }
-        if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: DAO = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
-            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
-        }
-        if (isCodeInRange("400", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
-        }
-        if (isCodeInRange("403", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
-        }
-        if (isCodeInRange("404", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
-        }
-        if (isCodeInRange("0", response.httpStatusCode)) {
-            const body: Error = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Error", ""
-            ) as Error;
-            throw new ApiException<Error>(response.httpStatusCode, "Default error response", body, response.headers);
-        }
-
-        // Work around for missing responses in specification, e.g. for petstore.yaml
-        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: DAO = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
-            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
-        }
-
-        throw new ApiException<string | Blob | undefined>(response.httpStatusCode, "Unknown API Status Code!", await response.getBodyAsAny(), response.headers);
-    }
-
-    /**
-     * Unwraps the actual response sent by the server from the response context and deserializes the response content
-     * to the expected objects
-     *
-     * @params response Response returned by the server for a request to daosDaoIdPodsGet
-     * @throws ApiException if the response code was not in [200, 299]
-     */
-     public async daosDaoIdPodsGetWithHttpInfo(response: ResponseContext): Promise<HttpInfo<Array<POD> >> {
-        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
-        if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: Array<POD> = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Array<POD>", ""
-            ) as Array<POD>;
-            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
-        }
-        if (isCodeInRange("404", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
-        }
-        if (isCodeInRange("0", response.httpStatusCode)) {
-            const body: Error = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Error", ""
-            ) as Error;
-            throw new ApiException<Error>(response.httpStatusCode, "Default error response", body, response.headers);
-        }
-
-        // Work around for missing responses in specification, e.g. for petstore.yaml
-        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: Array<POD> = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Array<POD>", ""
-            ) as Array<POD>;
-            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
-        }
-
-        throw new ApiException<string | Blob | undefined>(response.httpStatusCode, "Unknown API Status Code!", await response.getBodyAsAny(), response.headers);
-    }
-
-    /**
-     * Unwraps the actual response sent by the server from the response context and deserializes the response content
-     * to the expected objects
-     *
-     * @params response Response returned by the server for a request to daosDaoIdPodsPodIdDelete
-     * @throws ApiException if the response code was not in [200, 299]
-     */
-     public async daosDaoIdPodsPodIdDeleteWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
-        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
-        if (isCodeInRange("422", response.httpStatusCode)) {
-            const body: Error = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Error", ""
-            ) as Error;
-            throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
-        }
         if (isCodeInRange("200", response.httpStatusCode)) {
             const body: POD = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -1302,24 +1135,17 @@ export class DaosApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to daosDaoIdPodsPodIdGet
+     * @params response Response returned by the server for a request to getAllDAOs
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async daosDaoIdPodsPodIdGetWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
+     public async getAllDAOsWithHttpInfo(response: ResponseContext): Promise<HttpInfo<Array<DAO> >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: POD = ObjectSerializer.deserialize(
+            const body: Array<DAO> = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
+                "Array<DAO>", ""
+            ) as Array<DAO>;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
-        }
-        if (isCodeInRange("404", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1331,10 +1157,10 @@ export class DaosApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: POD = ObjectSerializer.deserialize(
+            const body: Array<DAO> = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
+                "Array<DAO>", ""
+            ) as Array<DAO>;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -1345,74 +1171,10 @@ export class DaosApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to daosDaoIdPodsPodIdMembersDelete
+     * @params response Response returned by the server for a request to getAllMembersOfPOD
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async daosDaoIdPodsPodIdMembersDeleteWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
-        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
-        if (isCodeInRange("422", response.httpStatusCode)) {
-            const body: Error = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Error", ""
-            ) as Error;
-            throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
-        }
-        if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: POD = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
-            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
-        }
-        if (isCodeInRange("400", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
-        }
-        if (isCodeInRange("403", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
-        }
-        if (isCodeInRange("404", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
-        }
-        if (isCodeInRange("0", response.httpStatusCode)) {
-            const body: Error = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Error", ""
-            ) as Error;
-            throw new ApiException<Error>(response.httpStatusCode, "Default error response", body, response.headers);
-        }
-
-        // Work around for missing responses in specification, e.g. for petstore.yaml
-        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: POD = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
-            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
-        }
-
-        throw new ApiException<string | Blob | undefined>(response.httpStatusCode, "Unknown API Status Code!", await response.getBodyAsAny(), response.headers);
-    }
-
-    /**
-     * Unwraps the actual response sent by the server from the response context and deserializes the response content
-     * to the expected objects
-     *
-     * @params response Response returned by the server for a request to daosDaoIdPodsPodIdMembersGet
-     * @throws ApiException if the response code was not in [200, 299]
-     */
-     public async daosDaoIdPodsPodIdMembersGetWithHttpInfo(response: ResponseContext): Promise<HttpInfo<Array<User> >> {
+     public async getAllMembersOfPODWithHttpInfo(response: ResponseContext): Promise<HttpInfo<Array<User> >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
             const body: Array<User> = ObjectSerializer.deserialize(
@@ -1452,18 +1214,97 @@ export class DaosApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to daosDaoIdPodsPodIdMembersPost
+     * @params response Response returned by the server for a request to getAllPODsForDAO
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async daosDaoIdPodsPodIdMembersPostWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
+     public async getAllPODsForDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<Array<POD> >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
-        if (isCodeInRange("422", response.httpStatusCode)) {
+        if (isCodeInRange("200", response.httpStatusCode)) {
+            const body: Array<POD> = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Array<POD>", ""
+            ) as Array<POD>;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+        if (isCodeInRange("404", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+        }
+        if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "Error", ""
             ) as Error;
-            throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
+            throw new ApiException<Error>(response.httpStatusCode, "Default error response", body, response.headers);
         }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: Array<POD> = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Array<POD>", ""
+            ) as Array<POD>;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+
+        throw new ApiException<string | Blob | undefined>(response.httpStatusCode, "Unknown API Status Code!", await response.getBodyAsAny(), response.headers);
+    }
+
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to getDAOById
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+     public async getDAOByIdWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
+        if (isCodeInRange("200", response.httpStatusCode)) {
+            const body: DAO = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "DAO", ""
+            ) as DAO;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+        if (isCodeInRange("404", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+        }
+        if (isCodeInRange("0", response.httpStatusCode)) {
+            const body: Error = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "Default error response", body, response.headers);
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: DAO = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "DAO", ""
+            ) as DAO;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+
+        throw new ApiException<string | Blob | undefined>(response.httpStatusCode, "Unknown API Status Code!", await response.getBodyAsAny(), response.headers);
+    }
+
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to getPODById
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+     public async getPODByIdWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
             const body: POD = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -1471,20 +1312,6 @@ export class DaosApiResponseProcessor {
             ) as POD;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
-        if (isCodeInRange("400", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
-        }
-        if (isCodeInRange("403", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
-        }
         if (isCodeInRange("404", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -1516,138 +1343,10 @@ export class DaosApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to daosDaoIdPodsPodIdPut
+     * @params response Response returned by the server for a request to removeAdminFromDAO
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async daosDaoIdPodsPodIdPutWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
-        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
-        if (isCodeInRange("422", response.httpStatusCode)) {
-            const body: Error = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Error", ""
-            ) as Error;
-            throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
-        }
-        if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: POD = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
-            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
-        }
-        if (isCodeInRange("400", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
-        }
-        if (isCodeInRange("403", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
-        }
-        if (isCodeInRange("404", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
-        }
-        if (isCodeInRange("0", response.httpStatusCode)) {
-            const body: Error = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Error", ""
-            ) as Error;
-            throw new ApiException<Error>(response.httpStatusCode, "Default error response", body, response.headers);
-        }
-
-        // Work around for missing responses in specification, e.g. for petstore.yaml
-        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: POD = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
-            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
-        }
-
-        throw new ApiException<string | Blob | undefined>(response.httpStatusCode, "Unknown API Status Code!", await response.getBodyAsAny(), response.headers);
-    }
-
-    /**
-     * Unwraps the actual response sent by the server from the response context and deserializes the response content
-     * to the expected objects
-     *
-     * @params response Response returned by the server for a request to daosDaoIdPodsPost
-     * @throws ApiException if the response code was not in [200, 299]
-     */
-     public async daosDaoIdPodsPostWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
-        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
-        if (isCodeInRange("422", response.httpStatusCode)) {
-            const body: Error = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Error", ""
-            ) as Error;
-            throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
-        }
-        if (isCodeInRange("201", response.httpStatusCode)) {
-            const body: POD = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
-            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
-        }
-        if (isCodeInRange("400", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
-        }
-        if (isCodeInRange("403", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
-        }
-        if (isCodeInRange("404", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
-        }
-        if (isCodeInRange("0", response.httpStatusCode)) {
-            const body: Error = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Error", ""
-            ) as Error;
-            throw new ApiException<Error>(response.httpStatusCode, "Default error response", body, response.headers);
-        }
-
-        // Work around for missing responses in specification, e.g. for petstore.yaml
-        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: POD = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
-            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
-        }
-
-        throw new ApiException<string | Blob | undefined>(response.httpStatusCode, "Unknown API Status Code!", await response.getBodyAsAny(), response.headers);
-    }
-
-    /**
-     * Unwraps the actual response sent by the server from the response context and deserializes the response content
-     * to the expected objects
-     *
-     * @params response Response returned by the server for a request to daosDaoIdPut
-     * @throws ApiException if the response code was not in [200, 299]
-     */
-     public async daosDaoIdPutWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
+     public async removeAdminFromDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("422", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1708,17 +1407,38 @@ export class DaosApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to daosDaoNameGet
+     * @params response Response returned by the server for a request to removeMemberFromDAO
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async daosDaoNameGetWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
+     public async removeMemberFromDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
+        if (isCodeInRange("422", response.httpStatusCode)) {
+            const body: Error = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
+        }
         if (isCodeInRange("200", response.httpStatusCode)) {
             const body: DAO = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "DAO", ""
             ) as DAO;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+        if (isCodeInRange("400", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
+        }
+        if (isCodeInRange("403", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
         }
         if (isCodeInRange("404", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
@@ -1751,17 +1471,45 @@ export class DaosApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to daosGet
+     * @params response Response returned by the server for a request to removeMemberFromPOD
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async daosGetWithHttpInfo(response: ResponseContext): Promise<HttpInfo<Array<DAO> >> {
+     public async removeMemberFromPODWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
-        if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: Array<DAO> = ObjectSerializer.deserialize(
+        if (isCodeInRange("422", response.httpStatusCode)) {
+            const body: Error = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "Array<DAO>", ""
-            ) as Array<DAO>;
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
+        }
+        if (isCodeInRange("200", response.httpStatusCode)) {
+            const body: POD = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "POD", ""
+            ) as POD;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+        if (isCodeInRange("400", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
+        }
+        if (isCodeInRange("403", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
+        }
+        if (isCodeInRange("404", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1773,10 +1521,10 @@ export class DaosApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: Array<DAO> = ObjectSerializer.deserialize(
+            const body: POD = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "Array<DAO>", ""
-            ) as Array<DAO>;
+                "POD", ""
+            ) as POD;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -1787,10 +1535,10 @@ export class DaosApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to daosPost
+     * @params response Response returned by the server for a request to updateDAO
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async daosPostWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
+     public async updateDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("422", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1799,7 +1547,7 @@ export class DaosApiResponseProcessor {
             ) as Error;
             throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
         }
-        if (isCodeInRange("201", response.httpStatusCode)) {
+        if (isCodeInRange("200", response.httpStatusCode)) {
             const body: DAO = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "DAO", ""
@@ -1813,6 +1561,20 @@ export class DaosApiResponseProcessor {
             ) as PagingError;
             throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
         }
+        if (isCodeInRange("403", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
+        }
+        if (isCodeInRange("404", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+        }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -1827,6 +1589,70 @@ export class DaosApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "DAO", ""
             ) as DAO;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+
+        throw new ApiException<string | Blob | undefined>(response.httpStatusCode, "Unknown API Status Code!", await response.getBodyAsAny(), response.headers);
+    }
+
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to updatePOD
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+     public async updatePODWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
+        if (isCodeInRange("422", response.httpStatusCode)) {
+            const body: Error = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
+        }
+        if (isCodeInRange("200", response.httpStatusCode)) {
+            const body: POD = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "POD", ""
+            ) as POD;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+        if (isCodeInRange("400", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
+        }
+        if (isCodeInRange("403", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
+        }
+        if (isCodeInRange("404", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+        }
+        if (isCodeInRange("0", response.httpStatusCode)) {
+            const body: Error = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "Default error response", body, response.headers);
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: POD = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "POD", ""
+            ) as POD;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 

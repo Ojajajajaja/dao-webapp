@@ -13,7 +13,7 @@
 import { HttpFile } from '../http/http';
 
 export class UserBasic {
-    'userId'?: number;
+    'userId'?: string;
     'username'?: string;
 
     static readonly discriminator: string | undefined = undefined;
@@ -24,7 +24,7 @@ export class UserBasic {
         {
             "name": "userId",
             "baseName": "user_id",
-            "type": "number",
+            "type": "string",
             "format": ""
         },
         {

@@ -16,7 +16,6 @@ export class PODUpdate {
     'name'?: string;
     'description'?: string;
     'isActive'?: boolean;
-    'userWhoMadeRequest': number;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -39,12 +38,6 @@ export class PODUpdate {
             "name": "isActive",
             "baseName": "is_active",
             "type": "boolean",
-            "format": ""
-        },
-        {
-            "name": "userWhoMadeRequest",
-            "baseName": "user_who_made_request",
-            "type": "number",
             "format": ""
         }    ];
 

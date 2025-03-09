@@ -13,29 +13,37 @@
 import { HttpFile } from '../http/http';
 
 /**
-* Input informations need to create user.
+* Input information needed to create user.
 */
 export class InputCreateUser {
     /**
     * Username of the user
     */
-    'username'?: string;
+    'username': string;
+    /**
+    * Wallet address of the user
+    */
+    'walletAddress': string;
     /**
     * Email of the user
     */
     'email'?: string;
     /**
-    * Password of the user
+    * Display name of the user
     */
-    'password'?: string;
+    'memberName'?: string;
     /**
     * Discord username of the user
     */
     'discordUsername'?: string;
     /**
-    * Wallet address of the user
+    * Twitter username of the user
     */
-    'walletAddress'?: string;
+    'twitterUsername'?: string;
+    /**
+    * Telegram username of the user
+    */
+    'telegramUsername'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -49,14 +57,20 @@ export class InputCreateUser {
             "format": ""
         },
         {
-            "name": "email",
-            "baseName": "email",
+            "name": "walletAddress",
+            "baseName": "wallet_address",
             "type": "string",
             "format": ""
         },
         {
-            "name": "password",
-            "baseName": "password",
+            "name": "email",
+            "baseName": "email",
+            "type": "string",
+            "format": "email"
+        },
+        {
+            "name": "memberName",
+            "baseName": "member_name",
             "type": "string",
             "format": ""
         },
@@ -67,8 +81,14 @@ export class InputCreateUser {
             "format": ""
         },
         {
-            "name": "walletAddress",
-            "baseName": "wallet_address",
+            "name": "twitterUsername",
+            "baseName": "twitter_username",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "telegramUsername",
+            "baseName": "telegram_username",
             "type": "string",
             "format": ""
         }    ];

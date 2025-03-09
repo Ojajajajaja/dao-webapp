@@ -12,10 +12,18 @@
 
 import { HttpFile } from '../http/http';
 
-export class DAOUpdate {
-    'name'?: string;
-    'description'?: string;
-    'isActive'?: boolean;
+/**
+* Verification of wallet signature
+*/
+export class VerifySignature {
+    /**
+    * Wallet address of the user
+    */
+    'walletAddress': string;
+    /**
+    * Signed message from wallet
+    */
+    'signature': string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -23,26 +31,20 @@ export class DAOUpdate {
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "name",
-            "baseName": "name",
+            "name": "walletAddress",
+            "baseName": "wallet_address",
             "type": "string",
             "format": ""
         },
         {
-            "name": "description",
-            "baseName": "description",
+            "name": "signature",
+            "baseName": "signature",
             "type": "string",
-            "format": ""
-        },
-        {
-            "name": "isActive",
-            "baseName": "is_active",
-            "type": "boolean",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return DAOUpdate.attributeTypeMap;
+        return VerifySignature.attributeTypeMap;
     }
 
     public constructor() {

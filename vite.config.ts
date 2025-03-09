@@ -9,5 +9,15 @@ export default defineConfig({
   },
   server: {
     port: 5000,
+    proxy: {
+      // Proxy all requests starting with /api to the backend server
+      '/api': {
+        target: 'http://localhost:8081',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+        secure: false,
+        ws: true,
+      }
+    }
   },
 });

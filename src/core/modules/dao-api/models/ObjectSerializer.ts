@@ -1,3 +1,5 @@
+export * from '../models/ChallengeRequest';
+export * from '../models/ChallengeResponse';
 export * from '../models/DAO';
 export * from '../models/DAOMembership';
 export * from '../models/DAOUpdate';
@@ -5,7 +7,6 @@ export * from '../models/InputCreateUser';
 export * from '../models/InputUpdateUser';
 export * from '../models/Item';
 export * from '../models/ItemsResponse';
-export * from '../models/LoginParams';
 export * from '../models/LoginResponse';
 export * from '../models/LogoutResponse';
 export * from '../models/ModelError';
@@ -17,8 +18,12 @@ export * from '../models/PagingError';
 export * from '../models/SummaryResponse';
 export * from '../models/User';
 export * from '../models/UserBasic';
+export * from '../models/UserExistResponse';
 export * from '../models/UserResponse';
+export * from '../models/VerifySignature';
 
+import { ChallengeRequest } from '../models/ChallengeRequest';
+import { ChallengeResponse } from '../models/ChallengeResponse';
 import { DAO } from '../models/DAO';
 import { DAOMembership } from '../models/DAOMembership';
 import { DAOUpdate } from '../models/DAOUpdate';
@@ -26,7 +31,6 @@ import { InputCreateUser } from '../models/InputCreateUser';
 import { InputUpdateUser } from '../models/InputUpdateUser';
 import { Item } from '../models/Item';
 import { ItemsResponse } from '../models/ItemsResponse';
-import { LoginParams } from '../models/LoginParams';
 import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
@@ -38,7 +42,9 @@ import { PagingError } from '../models/PagingError';
 import { SummaryResponse } from '../models/SummaryResponse';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
+import { UserExistResponse } from '../models/UserExistResponse';
 import { UserResponse } from '../models/UserResponse';
+import { VerifySignature } from '../models/VerifySignature';
 
 /* tslint:disable:no-unused-variable */
 let primitives = [
@@ -56,6 +62,8 @@ let enumsMap: Set<string> = new Set<string>([
 ]);
 
 let typeMap: {[index: string]: any} = {
+    "ChallengeRequest": ChallengeRequest,
+    "ChallengeResponse": ChallengeResponse,
     "DAO": DAO,
     "DAOMembership": DAOMembership,
     "DAOUpdate": DAOUpdate,
@@ -63,7 +71,6 @@ let typeMap: {[index: string]: any} = {
     "InputUpdateUser": InputUpdateUser,
     "Item": Item,
     "ItemsResponse": ItemsResponse,
-    "LoginParams": LoginParams,
     "LoginResponse": LoginResponse,
     "LogoutResponse": LogoutResponse,
     "ModelError": ModelError,
@@ -75,7 +82,9 @@ let typeMap: {[index: string]: any} = {
     "SummaryResponse": SummaryResponse,
     "User": User,
     "UserBasic": UserBasic,
+    "UserExistResponse": UserExistResponse,
     "UserResponse": UserResponse,
+    "VerifySignature": VerifySignature,
 }
 
 type MimeTypeDescriptor = {

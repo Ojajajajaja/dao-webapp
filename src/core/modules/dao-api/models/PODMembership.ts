@@ -13,8 +13,7 @@
 import { HttpFile } from '../http/http';
 
 export class PODMembership {
-    'userId': number;
-    'userWhoMadeRequest': number;
+    'userId': string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -24,13 +23,7 @@ export class PODMembership {
         {
             "name": "userId",
             "baseName": "user_id",
-            "type": "number",
-            "format": ""
-        },
-        {
-            "name": "userWhoMadeRequest",
-            "baseName": "user_who_made_request",
-            "type": "number",
+            "type": "string",
             "format": ""
         }    ];
 

@@ -12,10 +12,11 @@
 
 import { HttpFile } from '../http/http';
 
-export class DAOUpdate {
-    'name'?: string;
-    'description'?: string;
-    'isActive'?: boolean;
+/**
+* Check if user with the wallet address exists.
+*/
+export class UserExistResponse {
+    'exists'?: boolean;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -23,26 +24,14 @@ export class DAOUpdate {
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "name",
-            "baseName": "name",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "description",
-            "baseName": "description",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "isActive",
-            "baseName": "is_active",
+            "name": "exists",
+            "baseName": "exists",
             "type": "boolean",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return DAOUpdate.attributeTypeMap;
+        return UserExistResponse.attributeTypeMap;
     }
 
     public constructor() {

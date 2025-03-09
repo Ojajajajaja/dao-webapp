@@ -4,12 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**login**](AuthApi.md#login) | **POST** /auth/login | Login the user
+[**getWalletChallenge**](AuthApi.md#getWalletChallenge) | **POST** /auth/wallet/challenge | Generate a challenge message for Solana wallet signature authentication
 [**logout**](AuthApi.md#logout) | **POST** /auth/logout | Logout the user
+[**verifyWalletSignature**](AuthApi.md#verifyWalletSignature) | **POST** /auth/wallet/verify | Verify a Solana wallet signature and authenticate the user
 
 
-# **login**
-> LoginResponse login(loginParams)
+# **getWalletChallenge**
+> ChallengeResponse getWalletChallenge(challengeRequest)
 
 
 ### Example
@@ -17,20 +18,19 @@ Method | HTTP request | Description
 
 ```typescript
 import { createConfiguration, AuthApi } from '';
-import type { AuthApiLoginRequest } from '';
+import type { AuthApiGetWalletChallengeRequest } from '';
 
 const configuration = createConfiguration();
 const apiInstance = new AuthApi(configuration);
 
-const request: AuthApiLoginRequest = {
+const request: AuthApiGetWalletChallengeRequest = {
   
-  loginParams: {
-    email: "email_example",
-    password: "password_example",
+  challengeRequest: {
+    walletAddress: "walletAddress_example",
   },
 };
 
-const data = await apiInstance.login(request);
+const data = await apiInstance.getWalletChallenge(request);
 console.log('API called successfully. Returned data:', data);
 ```
 
@@ -39,12 +39,12 @@ console.log('API called successfully. Returned data:', data);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **loginParams** | **LoginParams**|  |
+ **challengeRequest** | **ChallengeRequest**|  |
 
 
 ### Return type
 
-**LoginResponse**
+**ChallengeResponse**
 
 ### Authorization
 
@@ -60,8 +60,8 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **422** | Unprocessable Entity |  -  |
-**201** | Log the user |  -  |
-**401** | Invalid credentials |  -  |
+**200** | Challenge message |  -  |
+**404** | User not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
@@ -109,6 +109,64 @@ No authorization required
 |-------------|-------------|------------------|
 **201** | Logout the user |  -  |
 **401** | Not logged |  -  |
+**0** | Default error response |  -  |
+
+[[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
+
+# **verifyWalletSignature**
+> LoginResponse verifyWalletSignature(verifySignature)
+
+
+### Example
+
+
+```typescript
+import { createConfiguration, AuthApi } from '';
+import type { AuthApiVerifyWalletSignatureRequest } from '';
+
+const configuration = createConfiguration();
+const apiInstance = new AuthApi(configuration);
+
+const request: AuthApiVerifyWalletSignatureRequest = {
+  
+  verifySignature: {
+    walletAddress: "walletAddress_example",
+    signature: "signature_example",
+  },
+};
+
+const data = await apiInstance.verifyWalletSignature(request);
+console.log('API called successfully. Returned data:', data);
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **verifySignature** | **VerifySignature**|  |
+
+
+### Return type
+
+**LoginResponse**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**422** | Unprocessable Entity |  -  |
+**201** | Login successful |  -  |
+**401** | Invalid signature |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)

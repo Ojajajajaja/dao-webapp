@@ -18,6 +18,8 @@ http/http.ts
 http/isomorphic-fetch.ts
 index.ts
 middleware.ts
+models/ChallengeRequest.ts
+models/ChallengeResponse.ts
 models/DAO.ts
 models/DAOMembership.ts
 models/DAOUpdate.ts
@@ -25,7 +27,6 @@ models/InputCreateUser.ts
 models/InputUpdateUser.ts
 models/Item.ts
 models/ItemsResponse.ts
-models/LoginParams.ts
 models/LoginResponse.ts
 models/LogoutResponse.ts
 models/ModelError.ts
@@ -38,7 +39,9 @@ models/PagingError.ts
 models/SummaryResponse.ts
 models/User.ts
 models/UserBasic.ts
+models/UserExistResponse.ts
 models/UserResponse.ts
+models/VerifySignature.ts
 models/all.ts
 package.json
 rxjsStub.ts

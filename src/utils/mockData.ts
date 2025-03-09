@@ -2,7 +2,20 @@ import { DAO, Proposal, Member, Token, Transfer, Pod } from '../types';
 
 export const mockDaos: DAO[] = [
   {
-    id: 'solana-dao',
+    id: '123456789',
+    name: 'BWEN DAO',
+    description: 'BWEN DAO is the primary decentralized autonomous organization focused on community governance and blockchain empowerment.',
+    logo: 'https://placehold.co/400x400/2563eb/FFFFFF?text=BWEN',
+    members: 1800,
+    proposals: 42,
+    treasury: [
+      { amount: 2000000, symbol: 'SOL' },
+      { amount: 3500000, symbol: 'USDC' },
+      { amount: 1200000, symbol: 'BWEN' }
+    ]
+  },
+  {
+    id: '987654321',
     name: 'Solana DAO',
     description: 'The Solana DAO governs key parameters of Solana ecosystem using the voting power of SOL.',
     logo: 'https://cryptologos.cc/logos/solana-sol-logo.png',
@@ -14,7 +27,7 @@ export const mockDaos: DAO[] = [
     ]
   },
   {
-    id: 'serum-dao',
+    id: '456789123',
     name: 'Serum DAO',
     description: 'Serum DAO enables the community to govern the Serum DEX protocol.',
     logo: 'https://cryptologos.cc/logos/serum-srm-logo.png',
@@ -26,7 +39,7 @@ export const mockDaos: DAO[] = [
     ]
   },
   {
-    id: 'raydium-dao',
+    id: '789123456',
     name: 'Raydium DAO',
     description: 'Raydium DAO enables community governance for the Raydium AMM protocol.',
     logo: 'https://cryptologos.cc/logos/raydium-ray-logo.png',
@@ -38,7 +51,7 @@ export const mockDaos: DAO[] = [
     ]
   },
   {
-    id: 'mango-dao',
+    id: '321654987',
     name: 'Mango DAO',
     description: 'Mango DAO governs the Mango Markets protocol for decentralized trading.',
     logo: 'https://cryptologos.cc/logos/mango-markets-mngo-logo.png',

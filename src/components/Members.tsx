@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, ExternalLink, Check, Calendar } from 'lucide-react';
-import { createConfiguration, DaosApi } from '../core/modules/dao-api';
-import { ServerConfiguration } from '../core/modules/dao-api/servers';
-import type { UserBasic } from '../core/modules/dao-api';
+import type { User } from '../core/modules/dao-api';
 import { useEffectOnce } from '../hooks/useEffectOnce';
+import { useParams } from 'react-router-dom';
+import { daosService } from '../services/DaosService';
 
 interface MemberData {
-  id: number | undefined;
+  id: string | number | undefined;
   name: string;
   username: string;
   wallet: string;
@@ -20,6 +20,7 @@ interface MemberData {
 }
 
 const Members = () => {
+  const { daoId } = useParams<{ daoId: string }>();
   const [sortOrder, setSortOrder] = useState('A-Z');
   const [podFilter, setPodFilter] = useState<string[]>([]);
   const [filteredMembers, setFilteredMembers] = useState<MemberData[]>([]);
@@ -34,38 +35,31 @@ const Members = () => {
   const [loginSince, setLoginSince] = useState<string>('');
   const [loginUntil, setLoginUntil] = useState<string>('');
   
-  // Fetch DAO members using the DAO-API SDK
+  // Fetch DAO members using the DaosService
   useEffectOnce(() => {
     const fetchDaoMembers = async () => {
       try {
         setLoading(true);
         
-        // Create configuration for the API with custom base URL
-        const serverConfig = new ServerConfiguration("http://localhost:8081", {});
-        const configuration = createConfiguration({
-          baseServer: serverConfig
-        });
-        const daosApi = new DaosApi(configuration);
-        
-        // Fetch the DAO which includes its members
-        const daoData = await daosApi.daosDaoNameGet("BWEN");
+        // Use the daosService to fetch the DAO by ID
+        const daoData = await daosService.getDaoById(daoId || '');
         
         if (daoData && daoData.members) {
           // Transform the basic user data into the format expected by the component
-          const membersData = await Promise.all(daoData.members.map(async (member: UserBasic) => {
+          const membersData = await Promise.all(daoData.members.map(async (member: User) => {
             // You might need to fetch additional user details if needed
             return {
               id: member.userId,
               name: member.username || 'Unknown',
               username: member.username || 'Unknown',
-              wallet: member.userId?.toString() || '0x0000000000000000000000000000000000000000',
+              wallet: member.walletAddress || '0x0000000000000000000000000000000000000000',
               avatar: `https://avatars.dicebear.com/api/identicon/${member.userId}.svg`,
               pods: [], // This would need to be populated from another API call if needed
-              discordId: '',
-              twitter: '@user',
-              telegram: '',
-              lastLogin: new Date().toISOString(), // Default to current date
-              lastInteraction: new Date().toISOString() // Default to current date
+              discordId: member.discordUsername || '',
+              twitter: member.twitterUsername || '',
+              telegram: member.telegramUsername || '',
+              lastLogin: member.lastLogin || new Date().toISOString(), // Default to current date
+              lastInteraction: member.lastInteraction || new Date().toISOString() // Default to current date
             };
           }));
           
@@ -83,7 +77,7 @@ const Members = () => {
     };
     
     fetchDaoMembers();
-  }, []);
+  }, [daoId]);
 
   // Get unique pod values for filter
   const uniquePods = [...new Set(daoMembers.flatMap(member => member.pods))].sort();
