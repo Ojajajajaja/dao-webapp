@@ -17,7 +17,6 @@ import { ModelError } from '../models/ModelError';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
 import { PODUpdate } from '../models/PODUpdate';
-import { PODUserWhoMadeRequest } from '../models/PODUserWhoMadeRequest';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
 import { SummaryResponse } from '../models/SummaryResponse';
@@ -111,290 +110,250 @@ export class ObjectAuthApi {
 import { ObservableDaosApi } from "./ObservableAPI";
 import { DaosApiRequestFactory, DaosApiResponseProcessor} from "../apis/DaosApi";
 
-export interface DaosApiDaosDaoIdAdminsDeleteRequest {
+export interface DaosApiAddAdminToDAORequest {
     /**
      * 
      * Defaults to: undefined
      * @type string
-     * @memberof DaosApidaosDaoIdAdminsDelete
+     * @memberof DaosApiaddAdminToDAO
      */
     daoId: string
     /**
      * 
      * @type DAOMembership
-     * @memberof DaosApidaosDaoIdAdminsDelete
+     * @memberof DaosApiaddAdminToDAO
      */
     dAOMembership: DAOMembership
 }
 
-export interface DaosApiDaosDaoIdAdminsPostRequest {
+export interface DaosApiAddMemberToDAORequest {
     /**
      * 
      * Defaults to: undefined
      * @type string
-     * @memberof DaosApidaosDaoIdAdminsPost
-     */
-    daoId: string
-    /**
-     * 
-     * @type DAOMembership
-     * @memberof DaosApidaosDaoIdAdminsPost
-     */
-    dAOMembership: DAOMembership
-}
-
-export interface DaosApiDaosDaoIdDeleteRequest {
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DaosApidaosDaoIdDelete
-     */
-    daoId: string
-    /**
-     * 
-     * @type DAOMembership
-     * @memberof DaosApidaosDaoIdDelete
-     */
-    dAOMembership: DAOMembership
-}
-
-export interface DaosApiDaosDaoIdGetRequest {
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DaosApidaosDaoIdGet
+     * @memberof DaosApiaddMemberToDAO
      */
     daoId: string
 }
 
-export interface DaosApiDaosDaoIdMembersDeleteRequest {
+export interface DaosApiAddMemberToPODRequest {
     /**
      * 
      * Defaults to: undefined
      * @type string
-     * @memberof DaosApidaosDaoIdMembersDelete
-     */
-    daoId: string
-    /**
-     * 
-     * @type DAOMembership
-     * @memberof DaosApidaosDaoIdMembersDelete
-     */
-    dAOMembership: DAOMembership
-}
-
-export interface DaosApiDaosDaoIdMembersPostRequest {
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DaosApidaosDaoIdMembersPost
-     */
-    daoId: string
-    /**
-     * 
-     * @type DAOMembership
-     * @memberof DaosApidaosDaoIdMembersPost
-     */
-    dAOMembership: DAOMembership
-}
-
-export interface DaosApiDaosDaoIdPodsGetRequest {
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DaosApidaosDaoIdPodsGet
-     */
-    daoId: string
-    /**
-     * 
-     * @type PODUserWhoMadeRequest
-     * @memberof DaosApidaosDaoIdPodsGet
-     */
-    pODUserWhoMadeRequest: PODUserWhoMadeRequest
-}
-
-export interface DaosApiDaosDaoIdPodsPodIdDeleteRequest {
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DaosApidaosDaoIdPodsPodIdDelete
+     * @memberof DaosApiaddMemberToPOD
      */
     daoId: string
     /**
      * 
      * Defaults to: undefined
      * @type string
-     * @memberof DaosApidaosDaoIdPodsPodIdDelete
-     */
-    podId: string
-    /**
-     * 
-     * @type PODMembership
-     * @memberof DaosApidaosDaoIdPodsPodIdDelete
-     */
-    pODMembership: PODMembership
-}
-
-export interface DaosApiDaosDaoIdPodsPodIdGetRequest {
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DaosApidaosDaoIdPodsPodIdGet
-     */
-    daoId: string
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DaosApidaosDaoIdPodsPodIdGet
+     * @memberof DaosApiaddMemberToPOD
      */
     podId: string
 }
 
-export interface DaosApiDaosDaoIdPodsPodIdMembersDeleteRequest {
+export interface DaosApiCreateDAORequest {
     /**
      * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DaosApidaosDaoIdPodsPodIdMembersDelete
+     * @type DAO
+     * @memberof DaosApicreateDAO
      */
-    daoId: string
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DaosApidaosDaoIdPodsPodIdMembersDelete
-     */
-    podId: string
-    /**
-     * 
-     * @type PODMembership
-     * @memberof DaosApidaosDaoIdPodsPodIdMembersDelete
-     */
-    pODMembership: PODMembership
+    DAO: DAO
 }
 
-export interface DaosApiDaosDaoIdPodsPodIdMembersGetRequest {
+export interface DaosApiCreatePODRequest {
     /**
      * 
      * Defaults to: undefined
      * @type string
-     * @memberof DaosApidaosDaoIdPodsPodIdMembersGet
-     */
-    daoId: string
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DaosApidaosDaoIdPodsPodIdMembersGet
-     */
-    podId: string
-}
-
-export interface DaosApiDaosDaoIdPodsPodIdMembersPostRequest {
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DaosApidaosDaoIdPodsPodIdMembersPost
-     */
-    daoId: string
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DaosApidaosDaoIdPodsPodIdMembersPost
-     */
-    podId: string
-    /**
-     * 
-     * @type PODMembership
-     * @memberof DaosApidaosDaoIdPodsPodIdMembersPost
-     */
-    pODMembership: PODMembership
-}
-
-export interface DaosApiDaosDaoIdPodsPodIdPutRequest {
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DaosApidaosDaoIdPodsPodIdPut
-     */
-    daoId: string
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DaosApidaosDaoIdPodsPodIdPut
-     */
-    podId: string
-    /**
-     * 
-     * @type PODUpdate
-     * @memberof DaosApidaosDaoIdPodsPodIdPut
-     */
-    pODUpdate: PODUpdate
-}
-
-export interface DaosApiDaosDaoIdPodsPostRequest {
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DaosApidaosDaoIdPodsPost
+     * @memberof DaosApicreatePOD
      */
     daoId: string
     /**
      * 
      * @type POD
-     * @memberof DaosApidaosDaoIdPodsPost
+     * @memberof DaosApicreatePOD
      */
     POD: POD
 }
 
-export interface DaosApiDaosDaoIdPutRequest {
+export interface DaosApiDeleteDAORequest {
     /**
      * 
      * Defaults to: undefined
      * @type string
-     * @memberof DaosApidaosDaoIdPut
+     * @memberof DaosApideleteDAO
+     */
+    daoId: string
+}
+
+export interface DaosApiDeletePODRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApideletePOD
+     */
+    daoId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApideletePOD
+     */
+    podId: string
+}
+
+export interface DaosApiGetAllDAOsRequest {
+}
+
+export interface DaosApiGetAllMembersOfPODRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApigetAllMembersOfPOD
+     */
+    daoId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApigetAllMembersOfPOD
+     */
+    podId: string
+}
+
+export interface DaosApiGetAllPODsForDAORequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApigetAllPODsForDAO
+     */
+    daoId: string
+}
+
+export interface DaosApiGetDAOByIdRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApigetDAOById
+     */
+    daoId: string
+}
+
+export interface DaosApiGetPODByIdRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApigetPODById
+     */
+    daoId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApigetPODById
+     */
+    podId: string
+}
+
+export interface DaosApiRemoveAdminFromDAORequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApiremoveAdminFromDAO
+     */
+    daoId: string
+    /**
+     * 
+     * @type DAOMembership
+     * @memberof DaosApiremoveAdminFromDAO
+     */
+    dAOMembership: DAOMembership
+}
+
+export interface DaosApiRemoveMemberFromDAORequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApiremoveMemberFromDAO
+     */
+    daoId: string
+    /**
+     * 
+     * @type DAOMembership
+     * @memberof DaosApiremoveMemberFromDAO
+     */
+    dAOMembership: DAOMembership
+}
+
+export interface DaosApiRemoveMemberFromPODRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApiremoveMemberFromPOD
+     */
+    daoId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApiremoveMemberFromPOD
+     */
+    podId: string
+    /**
+     * 
+     * @type PODMembership
+     * @memberof DaosApiremoveMemberFromPOD
+     */
+    pODMembership: PODMembership
+}
+
+export interface DaosApiUpdateDAORequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApiupdateDAO
      */
     daoId: string
     /**
      * 
      * @type DAOUpdate
-     * @memberof DaosApidaosDaoIdPut
+     * @memberof DaosApiupdateDAO
      */
     dAOUpdate: DAOUpdate
 }
 
-export interface DaosApiDaosDaoNameGetRequest {
+export interface DaosApiUpdatePODRequest {
     /**
      * 
      * Defaults to: undefined
      * @type string
-     * @memberof DaosApidaosDaoNameGet
+     * @memberof DaosApiupdatePOD
      */
-    daoName: string
-}
-
-export interface DaosApiDaosGetRequest {
-}
-
-export interface DaosApiDaosPostRequest {
+    daoId: string
     /**
      * 
-     * @type DAO
-     * @memberof DaosApidaosPost
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApiupdatePOD
      */
-    DAO: DAO
+    podId: string
+    /**
+     * 
+     * @type PODUpdate
+     * @memberof DaosApiupdatePOD
+     */
+    pODUpdate: PODUpdate
 }
 
 export class ObjectDaosApi {
@@ -405,291 +364,275 @@ export class ObjectDaosApi {
     }
 
     /**
-     * Remove an admin from a DAO
+     * Add an admin to a DAO
      * @param param the request object
      */
-    public daosDaoIdAdminsDeleteWithHttpInfo(param: DaosApiDaosDaoIdAdminsDeleteRequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
-        return this.api.daosDaoIdAdminsDeleteWithHttpInfo(param.daoId, param.dAOMembership,  options).toPromise();
-    }
-
-    /**
-     * Remove an admin from a DAO
-     * @param param the request object
-     */
-    public daosDaoIdAdminsDelete(param: DaosApiDaosDaoIdAdminsDeleteRequest, options?: ConfigurationOptions): Promise<DAO> {
-        return this.api.daosDaoIdAdminsDelete(param.daoId, param.dAOMembership,  options).toPromise();
+    public addAdminToDAOWithHttpInfo(param: DaosApiAddAdminToDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
+        return this.api.addAdminToDAOWithHttpInfo(param.daoId, param.dAOMembership,  options).toPromise();
     }
 
     /**
      * Add an admin to a DAO
      * @param param the request object
      */
-    public daosDaoIdAdminsPostWithHttpInfo(param: DaosApiDaosDaoIdAdminsPostRequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
-        return this.api.daosDaoIdAdminsPostWithHttpInfo(param.daoId, param.dAOMembership,  options).toPromise();
-    }
-
-    /**
-     * Add an admin to a DAO
-     * @param param the request object
-     */
-    public daosDaoIdAdminsPost(param: DaosApiDaosDaoIdAdminsPostRequest, options?: ConfigurationOptions): Promise<DAO> {
-        return this.api.daosDaoIdAdminsPost(param.daoId, param.dAOMembership,  options).toPromise();
-    }
-
-    /**
-     * Delete a DAO
-     * @param param the request object
-     */
-    public daosDaoIdDeleteWithHttpInfo(param: DaosApiDaosDaoIdDeleteRequest, options?: ConfigurationOptions): Promise<HttpInfo<void>> {
-        return this.api.daosDaoIdDeleteWithHttpInfo(param.daoId, param.dAOMembership,  options).toPromise();
-    }
-
-    /**
-     * Delete a DAO
-     * @param param the request object
-     */
-    public daosDaoIdDelete(param: DaosApiDaosDaoIdDeleteRequest, options?: ConfigurationOptions): Promise<void> {
-        return this.api.daosDaoIdDelete(param.daoId, param.dAOMembership,  options).toPromise();
-    }
-
-    /**
-     * Get a DAO by ID
-     * @param param the request object
-     */
-    public daosDaoIdGetWithHttpInfo(param: DaosApiDaosDaoIdGetRequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
-        return this.api.daosDaoIdGetWithHttpInfo(param.daoId,  options).toPromise();
-    }
-
-    /**
-     * Get a DAO by ID
-     * @param param the request object
-     */
-    public daosDaoIdGet(param: DaosApiDaosDaoIdGetRequest, options?: ConfigurationOptions): Promise<DAO> {
-        return this.api.daosDaoIdGet(param.daoId,  options).toPromise();
-    }
-
-    /**
-     * Remove a member from a DAO
-     * @param param the request object
-     */
-    public daosDaoIdMembersDeleteWithHttpInfo(param: DaosApiDaosDaoIdMembersDeleteRequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
-        return this.api.daosDaoIdMembersDeleteWithHttpInfo(param.daoId, param.dAOMembership,  options).toPromise();
-    }
-
-    /**
-     * Remove a member from a DAO
-     * @param param the request object
-     */
-    public daosDaoIdMembersDelete(param: DaosApiDaosDaoIdMembersDeleteRequest, options?: ConfigurationOptions): Promise<DAO> {
-        return this.api.daosDaoIdMembersDelete(param.daoId, param.dAOMembership,  options).toPromise();
+    public addAdminToDAO(param: DaosApiAddAdminToDAORequest, options?: ConfigurationOptions): Promise<DAO> {
+        return this.api.addAdminToDAO(param.daoId, param.dAOMembership,  options).toPromise();
     }
 
     /**
      * Add a member to a DAO
      * @param param the request object
      */
-    public daosDaoIdMembersPostWithHttpInfo(param: DaosApiDaosDaoIdMembersPostRequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
-        return this.api.daosDaoIdMembersPostWithHttpInfo(param.daoId, param.dAOMembership,  options).toPromise();
+    public addMemberToDAOWithHttpInfo(param: DaosApiAddMemberToDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
+        return this.api.addMemberToDAOWithHttpInfo(param.daoId,  options).toPromise();
     }
 
     /**
      * Add a member to a DAO
      * @param param the request object
      */
-    public daosDaoIdMembersPost(param: DaosApiDaosDaoIdMembersPostRequest, options?: ConfigurationOptions): Promise<DAO> {
-        return this.api.daosDaoIdMembersPost(param.daoId, param.dAOMembership,  options).toPromise();
-    }
-
-    /**
-     * Get all PODs for a DAO
-     * @param param the request object
-     */
-    public daosDaoIdPodsGetWithHttpInfo(param: DaosApiDaosDaoIdPodsGetRequest, options?: ConfigurationOptions): Promise<HttpInfo<Array<POD>>> {
-        return this.api.daosDaoIdPodsGetWithHttpInfo(param.daoId, param.pODUserWhoMadeRequest,  options).toPromise();
-    }
-
-    /**
-     * Get all PODs for a DAO
-     * @param param the request object
-     */
-    public daosDaoIdPodsGet(param: DaosApiDaosDaoIdPodsGetRequest, options?: ConfigurationOptions): Promise<Array<POD>> {
-        return this.api.daosDaoIdPodsGet(param.daoId, param.pODUserWhoMadeRequest,  options).toPromise();
-    }
-
-    /**
-     * Delete a POD
-     * @param param the request object
-     */
-    public daosDaoIdPodsPodIdDeleteWithHttpInfo(param: DaosApiDaosDaoIdPodsPodIdDeleteRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
-        return this.api.daosDaoIdPodsPodIdDeleteWithHttpInfo(param.daoId, param.podId, param.pODMembership,  options).toPromise();
-    }
-
-    /**
-     * Delete a POD
-     * @param param the request object
-     */
-    public daosDaoIdPodsPodIdDelete(param: DaosApiDaosDaoIdPodsPodIdDeleteRequest, options?: ConfigurationOptions): Promise<POD> {
-        return this.api.daosDaoIdPodsPodIdDelete(param.daoId, param.podId, param.pODMembership,  options).toPromise();
-    }
-
-    /**
-     * Get a POD by ID
-     * @param param the request object
-     */
-    public daosDaoIdPodsPodIdGetWithHttpInfo(param: DaosApiDaosDaoIdPodsPodIdGetRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
-        return this.api.daosDaoIdPodsPodIdGetWithHttpInfo(param.daoId, param.podId,  options).toPromise();
-    }
-
-    /**
-     * Get a POD by ID
-     * @param param the request object
-     */
-    public daosDaoIdPodsPodIdGet(param: DaosApiDaosDaoIdPodsPodIdGetRequest, options?: ConfigurationOptions): Promise<POD> {
-        return this.api.daosDaoIdPodsPodIdGet(param.daoId, param.podId,  options).toPromise();
-    }
-
-    /**
-     * Remove a member from a POD
-     * @param param the request object
-     */
-    public daosDaoIdPodsPodIdMembersDeleteWithHttpInfo(param: DaosApiDaosDaoIdPodsPodIdMembersDeleteRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
-        return this.api.daosDaoIdPodsPodIdMembersDeleteWithHttpInfo(param.daoId, param.podId, param.pODMembership,  options).toPromise();
-    }
-
-    /**
-     * Remove a member from a POD
-     * @param param the request object
-     */
-    public daosDaoIdPodsPodIdMembersDelete(param: DaosApiDaosDaoIdPodsPodIdMembersDeleteRequest, options?: ConfigurationOptions): Promise<POD> {
-        return this.api.daosDaoIdPodsPodIdMembersDelete(param.daoId, param.podId, param.pODMembership,  options).toPromise();
-    }
-
-    /**
-     * Get all members of a POD
-     * @param param the request object
-     */
-    public daosDaoIdPodsPodIdMembersGetWithHttpInfo(param: DaosApiDaosDaoIdPodsPodIdMembersGetRequest, options?: ConfigurationOptions): Promise<HttpInfo<Array<User>>> {
-        return this.api.daosDaoIdPodsPodIdMembersGetWithHttpInfo(param.daoId, param.podId,  options).toPromise();
-    }
-
-    /**
-     * Get all members of a POD
-     * @param param the request object
-     */
-    public daosDaoIdPodsPodIdMembersGet(param: DaosApiDaosDaoIdPodsPodIdMembersGetRequest, options?: ConfigurationOptions): Promise<Array<User>> {
-        return this.api.daosDaoIdPodsPodIdMembersGet(param.daoId, param.podId,  options).toPromise();
+    public addMemberToDAO(param: DaosApiAddMemberToDAORequest, options?: ConfigurationOptions): Promise<DAO> {
+        return this.api.addMemberToDAO(param.daoId,  options).toPromise();
     }
 
     /**
      * Add a member to a POD
      * @param param the request object
      */
-    public daosDaoIdPodsPodIdMembersPostWithHttpInfo(param: DaosApiDaosDaoIdPodsPodIdMembersPostRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
-        return this.api.daosDaoIdPodsPodIdMembersPostWithHttpInfo(param.daoId, param.podId, param.pODMembership,  options).toPromise();
+    public addMemberToPODWithHttpInfo(param: DaosApiAddMemberToPODRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
+        return this.api.addMemberToPODWithHttpInfo(param.daoId, param.podId,  options).toPromise();
     }
 
     /**
      * Add a member to a POD
      * @param param the request object
      */
-    public daosDaoIdPodsPodIdMembersPost(param: DaosApiDaosDaoIdPodsPodIdMembersPostRequest, options?: ConfigurationOptions): Promise<POD> {
-        return this.api.daosDaoIdPodsPodIdMembersPost(param.daoId, param.podId, param.pODMembership,  options).toPromise();
-    }
-
-    /**
-     * Update a POD
-     * @param param the request object
-     */
-    public daosDaoIdPodsPodIdPutWithHttpInfo(param: DaosApiDaosDaoIdPodsPodIdPutRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
-        return this.api.daosDaoIdPodsPodIdPutWithHttpInfo(param.daoId, param.podId, param.pODUpdate,  options).toPromise();
-    }
-
-    /**
-     * Update a POD
-     * @param param the request object
-     */
-    public daosDaoIdPodsPodIdPut(param: DaosApiDaosDaoIdPodsPodIdPutRequest, options?: ConfigurationOptions): Promise<POD> {
-        return this.api.daosDaoIdPodsPodIdPut(param.daoId, param.podId, param.pODUpdate,  options).toPromise();
-    }
-
-    /**
-     * Create a new POD
-     * @param param the request object
-     */
-    public daosDaoIdPodsPostWithHttpInfo(param: DaosApiDaosDaoIdPodsPostRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
-        return this.api.daosDaoIdPodsPostWithHttpInfo(param.daoId, param.POD,  options).toPromise();
-    }
-
-    /**
-     * Create a new POD
-     * @param param the request object
-     */
-    public daosDaoIdPodsPost(param: DaosApiDaosDaoIdPodsPostRequest, options?: ConfigurationOptions): Promise<POD> {
-        return this.api.daosDaoIdPodsPost(param.daoId, param.POD,  options).toPromise();
-    }
-
-    /**
-     * Update a DAO
-     * @param param the request object
-     */
-    public daosDaoIdPutWithHttpInfo(param: DaosApiDaosDaoIdPutRequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
-        return this.api.daosDaoIdPutWithHttpInfo(param.daoId, param.dAOUpdate,  options).toPromise();
-    }
-
-    /**
-     * Update a DAO
-     * @param param the request object
-     */
-    public daosDaoIdPut(param: DaosApiDaosDaoIdPutRequest, options?: ConfigurationOptions): Promise<DAO> {
-        return this.api.daosDaoIdPut(param.daoId, param.dAOUpdate,  options).toPromise();
-    }
-
-    /**
-     * Get a DAO by name
-     * @param param the request object
-     */
-    public daosDaoNameGetWithHttpInfo(param: DaosApiDaosDaoNameGetRequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
-        return this.api.daosDaoNameGetWithHttpInfo(param.daoName,  options).toPromise();
-    }
-
-    /**
-     * Get a DAO by name
-     * @param param the request object
-     */
-    public daosDaoNameGet(param: DaosApiDaosDaoNameGetRequest, options?: ConfigurationOptions): Promise<DAO> {
-        return this.api.daosDaoNameGet(param.daoName,  options).toPromise();
-    }
-
-    /**
-     * List all DAOs
-     * @param param the request object
-     */
-    public daosGetWithHttpInfo(param: DaosApiDaosGetRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<Array<DAO>>> {
-        return this.api.daosGetWithHttpInfo( options).toPromise();
-    }
-
-    /**
-     * List all DAOs
-     * @param param the request object
-     */
-    public daosGet(param: DaosApiDaosGetRequest = {}, options?: ConfigurationOptions): Promise<Array<DAO>> {
-        return this.api.daosGet( options).toPromise();
+    public addMemberToPOD(param: DaosApiAddMemberToPODRequest, options?: ConfigurationOptions): Promise<POD> {
+        return this.api.addMemberToPOD(param.daoId, param.podId,  options).toPromise();
     }
 
     /**
      * Create a new DAO
      * @param param the request object
      */
-    public daosPostWithHttpInfo(param: DaosApiDaosPostRequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
-        return this.api.daosPostWithHttpInfo(param.DAO,  options).toPromise();
+    public createDAOWithHttpInfo(param: DaosApiCreateDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
+        return this.api.createDAOWithHttpInfo(param.DAO,  options).toPromise();
     }
 
     /**
      * Create a new DAO
      * @param param the request object
      */
-    public daosPost(param: DaosApiDaosPostRequest, options?: ConfigurationOptions): Promise<DAO> {
-        return this.api.daosPost(param.DAO,  options).toPromise();
+    public createDAO(param: DaosApiCreateDAORequest, options?: ConfigurationOptions): Promise<DAO> {
+        return this.api.createDAO(param.DAO,  options).toPromise();
+    }
+
+    /**
+     * Create a new POD
+     * @param param the request object
+     */
+    public createPODWithHttpInfo(param: DaosApiCreatePODRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
+        return this.api.createPODWithHttpInfo(param.daoId, param.POD,  options).toPromise();
+    }
+
+    /**
+     * Create a new POD
+     * @param param the request object
+     */
+    public createPOD(param: DaosApiCreatePODRequest, options?: ConfigurationOptions): Promise<POD> {
+        return this.api.createPOD(param.daoId, param.POD,  options).toPromise();
+    }
+
+    /**
+     * Delete a DAO
+     * @param param the request object
+     */
+    public deleteDAOWithHttpInfo(param: DaosApiDeleteDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<void>> {
+        return this.api.deleteDAOWithHttpInfo(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Delete a DAO
+     * @param param the request object
+     */
+    public deleteDAO(param: DaosApiDeleteDAORequest, options?: ConfigurationOptions): Promise<void> {
+        return this.api.deleteDAO(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Delete a POD
+     * @param param the request object
+     */
+    public deletePODWithHttpInfo(param: DaosApiDeletePODRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
+        return this.api.deletePODWithHttpInfo(param.daoId, param.podId,  options).toPromise();
+    }
+
+    /**
+     * Delete a POD
+     * @param param the request object
+     */
+    public deletePOD(param: DaosApiDeletePODRequest, options?: ConfigurationOptions): Promise<POD> {
+        return this.api.deletePOD(param.daoId, param.podId,  options).toPromise();
+    }
+
+    /**
+     * List all DAOs
+     * @param param the request object
+     */
+    public getAllDAOsWithHttpInfo(param: DaosApiGetAllDAOsRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<Array<DAO>>> {
+        return this.api.getAllDAOsWithHttpInfo( options).toPromise();
+    }
+
+    /**
+     * List all DAOs
+     * @param param the request object
+     */
+    public getAllDAOs(param: DaosApiGetAllDAOsRequest = {}, options?: ConfigurationOptions): Promise<Array<DAO>> {
+        return this.api.getAllDAOs( options).toPromise();
+    }
+
+    /**
+     * Get all members of a POD
+     * @param param the request object
+     */
+    public getAllMembersOfPODWithHttpInfo(param: DaosApiGetAllMembersOfPODRequest, options?: ConfigurationOptions): Promise<HttpInfo<Array<User>>> {
+        return this.api.getAllMembersOfPODWithHttpInfo(param.daoId, param.podId,  options).toPromise();
+    }
+
+    /**
+     * Get all members of a POD
+     * @param param the request object
+     */
+    public getAllMembersOfPOD(param: DaosApiGetAllMembersOfPODRequest, options?: ConfigurationOptions): Promise<Array<User>> {
+        return this.api.getAllMembersOfPOD(param.daoId, param.podId,  options).toPromise();
+    }
+
+    /**
+     * Get all PODs for a DAO
+     * @param param the request object
+     */
+    public getAllPODsForDAOWithHttpInfo(param: DaosApiGetAllPODsForDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<Array<POD>>> {
+        return this.api.getAllPODsForDAOWithHttpInfo(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Get all PODs for a DAO
+     * @param param the request object
+     */
+    public getAllPODsForDAO(param: DaosApiGetAllPODsForDAORequest, options?: ConfigurationOptions): Promise<Array<POD>> {
+        return this.api.getAllPODsForDAO(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Get a DAO by ID
+     * @param param the request object
+     */
+    public getDAOByIdWithHttpInfo(param: DaosApiGetDAOByIdRequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
+        return this.api.getDAOByIdWithHttpInfo(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Get a DAO by ID
+     * @param param the request object
+     */
+    public getDAOById(param: DaosApiGetDAOByIdRequest, options?: ConfigurationOptions): Promise<DAO> {
+        return this.api.getDAOById(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Get a POD by ID
+     * @param param the request object
+     */
+    public getPODByIdWithHttpInfo(param: DaosApiGetPODByIdRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
+        return this.api.getPODByIdWithHttpInfo(param.daoId, param.podId,  options).toPromise();
+    }
+
+    /**
+     * Get a POD by ID
+     * @param param the request object
+     */
+    public getPODById(param: DaosApiGetPODByIdRequest, options?: ConfigurationOptions): Promise<POD> {
+        return this.api.getPODById(param.daoId, param.podId,  options).toPromise();
+    }
+
+    /**
+     * Remove an admin from a DAO
+     * @param param the request object
+     */
+    public removeAdminFromDAOWithHttpInfo(param: DaosApiRemoveAdminFromDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
+        return this.api.removeAdminFromDAOWithHttpInfo(param.daoId, param.dAOMembership,  options).toPromise();
+    }
+
+    /**
+     * Remove an admin from a DAO
+     * @param param the request object
+     */
+    public removeAdminFromDAO(param: DaosApiRemoveAdminFromDAORequest, options?: ConfigurationOptions): Promise<DAO> {
+        return this.api.removeAdminFromDAO(param.daoId, param.dAOMembership,  options).toPromise();
+    }
+
+    /**
+     * Remove a member from a DAO
+     * @param param the request object
+     */
+    public removeMemberFromDAOWithHttpInfo(param: DaosApiRemoveMemberFromDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
+        return this.api.removeMemberFromDAOWithHttpInfo(param.daoId, param.dAOMembership,  options).toPromise();
+    }
+
+    /**
+     * Remove a member from a DAO
+     * @param param the request object
+     */
+    public removeMemberFromDAO(param: DaosApiRemoveMemberFromDAORequest, options?: ConfigurationOptions): Promise<DAO> {
+        return this.api.removeMemberFromDAO(param.daoId, param.dAOMembership,  options).toPromise();
+    }
+
+    /**
+     * Remove a member from a POD
+     * @param param the request object
+     */
+    public removeMemberFromPODWithHttpInfo(param: DaosApiRemoveMemberFromPODRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
+        return this.api.removeMemberFromPODWithHttpInfo(param.daoId, param.podId, param.pODMembership,  options).toPromise();
+    }
+
+    /**
+     * Remove a member from a POD
+     * @param param the request object
+     */
+    public removeMemberFromPOD(param: DaosApiRemoveMemberFromPODRequest, options?: ConfigurationOptions): Promise<POD> {
+        return this.api.removeMemberFromPOD(param.daoId, param.podId, param.pODMembership,  options).toPromise();
+    }
+
+    /**
+     * Update a DAO
+     * @param param the request object
+     */
+    public updateDAOWithHttpInfo(param: DaosApiUpdateDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
+        return this.api.updateDAOWithHttpInfo(param.daoId, param.dAOUpdate,  options).toPromise();
+    }
+
+    /**
+     * Update a DAO
+     * @param param the request object
+     */
+    public updateDAO(param: DaosApiUpdateDAORequest, options?: ConfigurationOptions): Promise<DAO> {
+        return this.api.updateDAO(param.daoId, param.dAOUpdate,  options).toPromise();
+    }
+
+    /**
+     * Update a POD
+     * @param param the request object
+     */
+    public updatePODWithHttpInfo(param: DaosApiUpdatePODRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
+        return this.api.updatePODWithHttpInfo(param.daoId, param.podId, param.pODUpdate,  options).toPromise();
+    }
+
+    /**
+     * Update a POD
+     * @param param the request object
+     */
+    public updatePOD(param: DaosApiUpdatePODRequest, options?: ConfigurationOptions): Promise<POD> {
+        return this.api.updatePOD(param.daoId, param.podId, param.pODUpdate,  options).toPromise();
     }
 
 }
@@ -801,16 +744,6 @@ export interface UsersApiCreateUserRequest {
 export interface UsersApiGetAuthUserInfosRequest {
 }
 
-export interface UsersApiGetUserRequest {
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof UsersApigetUser
-     */
-    userId: string
-}
-
 export interface UsersApiGetUserWithWalletAddressRequest {
     /**
      * 
@@ -874,22 +807,6 @@ export class ObjectUsersApi {
      */
     public getAuthUserInfos(param: UsersApiGetAuthUserInfosRequest = {}, options?: ConfigurationOptions): Promise<UserResponse> {
         return this.api.getAuthUserInfos( options).toPromise();
-    }
-
-    /**
-     * Get an existing user
-     * @param param the request object
-     */
-    public getUserWithHttpInfo(param: UsersApiGetUserRequest, options?: ConfigurationOptions): Promise<HttpInfo<UserResponse>> {
-        return this.api.getUserWithHttpInfo(param.userId,  options).toPromise();
-    }
-
-    /**
-     * Get an existing user
-     * @param param the request object
-     */
-    public getUser(param: UsersApiGetUserRequest, options?: ConfigurationOptions): Promise<UserResponse> {
-        return this.api.getUser(param.userId,  options).toPromise();
     }
 
     /**

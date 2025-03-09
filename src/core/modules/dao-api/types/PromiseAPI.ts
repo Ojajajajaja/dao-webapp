@@ -17,7 +17,6 @@ import { ModelError } from '../models/ModelError';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
 import { PODUpdate } from '../models/PODUpdate';
-import { PODUserWhoMadeRequest } from '../models/PODUserWhoMadeRequest';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
 import { SummaryResponse } from '../models/SummaryResponse';
@@ -184,11 +183,11 @@ export class PromiseDaosApi {
     }
 
     /**
-     * Remove an admin from a DAO
+     * Add an admin to a DAO
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdAdminsDeleteWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public addAdminToDAOWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -201,29 +200,7 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdAdminsDeleteWithHttpInfo(daoId, dAOMembership, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Remove an admin from a DAO
-     * @param daoId
-     * @param dAOMembership
-     */
-    public daosDaoIdAdminsDelete(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosDaoIdAdminsDelete(daoId, dAOMembership, observableOptions);
+        const result = this.api.addAdminToDAOWithHttpInfo(daoId, dAOMembership, observableOptions);
         return result.toPromise();
     }
 
@@ -232,7 +209,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdAdminsPostWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public addAdminToDAO(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -245,168 +222,15 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdAdminsPostWithHttpInfo(daoId, dAOMembership, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Add an admin to a DAO
-     * @param daoId
-     * @param dAOMembership
-     */
-    public daosDaoIdAdminsPost(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosDaoIdAdminsPost(daoId, dAOMembership, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Delete a DAO
-     * @param daoId
-     * @param dAOMembership
-     */
-    public daosDaoIdDeleteWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<void>> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosDaoIdDeleteWithHttpInfo(daoId, dAOMembership, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Delete a DAO
-     * @param daoId
-     * @param dAOMembership
-     */
-    public daosDaoIdDelete(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<void> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosDaoIdDelete(daoId, dAOMembership, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Get a DAO by ID
-     * @param daoId
-     */
-    public daosDaoIdGetWithHttpInfo(daoId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosDaoIdGetWithHttpInfo(daoId, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Get a DAO by ID
-     * @param daoId
-     */
-    public daosDaoIdGet(daoId: string, _options?: PromiseConfigurationOptions): Promise<DAO> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosDaoIdGet(daoId, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Remove a member from a DAO
-     * @param daoId
-     * @param dAOMembership
-     */
-    public daosDaoIdMembersDeleteWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosDaoIdMembersDeleteWithHttpInfo(daoId, dAOMembership, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Remove a member from a DAO
-     * @param daoId
-     * @param dAOMembership
-     */
-    public daosDaoIdMembersDelete(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosDaoIdMembersDelete(daoId, dAOMembership, observableOptions);
+        const result = this.api.addAdminToDAO(daoId, dAOMembership, observableOptions);
         return result.toPromise();
     }
 
     /**
      * Add a member to a DAO
      * @param daoId
-     * @param dAOMembership
      */
-    public daosDaoIdMembersPostWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public addMemberToDAOWithHttpInfo(daoId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -419,16 +243,15 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdMembersPostWithHttpInfo(daoId, dAOMembership, observableOptions);
+        const result = this.api.addMemberToDAOWithHttpInfo(daoId, observableOptions);
         return result.toPromise();
     }
 
     /**
      * Add a member to a DAO
      * @param daoId
-     * @param dAOMembership
      */
-    public daosDaoIdMembersPost(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
+    public addMemberToDAO(daoId: string, _options?: PromiseConfigurationOptions): Promise<DAO> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -441,16 +264,16 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdMembersPost(daoId, dAOMembership, observableOptions);
+        const result = this.api.addMemberToDAO(daoId, observableOptions);
         return result.toPromise();
     }
 
     /**
-     * Get all PODs for a DAO
+     * Add a member to a POD
      * @param daoId
-     * @param pODUserWhoMadeRequest
+     * @param podId
      */
-    public daosDaoIdPodsGetWithHttpInfo(daoId: string, pODUserWhoMadeRequest: PODUserWhoMadeRequest, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Array<POD>>> {
+    public addMemberToPODWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -463,16 +286,16 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdPodsGetWithHttpInfo(daoId, pODUserWhoMadeRequest, observableOptions);
+        const result = this.api.addMemberToPODWithHttpInfo(daoId, podId, observableOptions);
         return result.toPromise();
     }
 
     /**
-     * Get all PODs for a DAO
+     * Add a member to a POD
      * @param daoId
-     * @param pODUserWhoMadeRequest
+     * @param podId
      */
-    public daosDaoIdPodsGet(daoId: string, pODUserWhoMadeRequest: PODUserWhoMadeRequest, _options?: PromiseConfigurationOptions): Promise<Array<POD>> {
+    public addMemberToPOD(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<POD> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -485,7 +308,135 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdPodsGet(daoId, pODUserWhoMadeRequest, observableOptions);
+        const result = this.api.addMemberToPOD(daoId, podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Create a new DAO
+     * @param DAO
+     */
+    public createDAOWithHttpInfo(DAO: DAO, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.createDAOWithHttpInfo(DAO, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Create a new DAO
+     * @param DAO
+     */
+    public createDAO(DAO: DAO, _options?: PromiseConfigurationOptions): Promise<DAO> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.createDAO(DAO, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Create a new POD
+     * @param daoId
+     * @param POD
+     */
+    public createPODWithHttpInfo(daoId: string, POD: POD, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.createPODWithHttpInfo(daoId, POD, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Create a new POD
+     * @param daoId
+     * @param POD
+     */
+    public createPOD(daoId: string, POD: POD, _options?: PromiseConfigurationOptions): Promise<POD> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.createPOD(daoId, POD, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Delete a DAO
+     * @param daoId
+     */
+    public deleteDAOWithHttpInfo(daoId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<void>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.deleteDAOWithHttpInfo(daoId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Delete a DAO
+     * @param daoId
+     */
+    public deleteDAO(daoId: string, _options?: PromiseConfigurationOptions): Promise<void> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.deleteDAO(daoId, observableOptions);
         return result.toPromise();
     }
 
@@ -493,9 +444,8 @@ export class PromiseDaosApi {
      * Delete a POD
      * @param daoId
      * @param podId
-     * @param pODMembership
      */
-    public daosDaoIdPodsPodIdDeleteWithHttpInfo(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
+    public deletePODWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -508,7 +458,7 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdPodsPodIdDeleteWithHttpInfo(daoId, podId, pODMembership, observableOptions);
+        const result = this.api.deletePODWithHttpInfo(daoId, podId, observableOptions);
         return result.toPromise();
     }
 
@@ -516,9 +466,8 @@ export class PromiseDaosApi {
      * Delete a POD
      * @param daoId
      * @param podId
-     * @param pODMembership
      */
-    public daosDaoIdPodsPodIdDelete(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<POD> {
+    public deletePOD(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<POD> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -531,7 +480,175 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdPodsPodIdDelete(daoId, podId, pODMembership, observableOptions);
+        const result = this.api.deletePOD(daoId, podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * List all DAOs
+     */
+    public getAllDAOsWithHttpInfo(_options?: PromiseConfigurationOptions): Promise<HttpInfo<Array<DAO>>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getAllDAOsWithHttpInfo(observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * List all DAOs
+     */
+    public getAllDAOs(_options?: PromiseConfigurationOptions): Promise<Array<DAO>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getAllDAOs(observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all members of a POD
+     * @param daoId
+     * @param podId
+     */
+    public getAllMembersOfPODWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Array<User>>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getAllMembersOfPODWithHttpInfo(daoId, podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all members of a POD
+     * @param daoId
+     * @param podId
+     */
+    public getAllMembersOfPOD(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<Array<User>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getAllMembersOfPOD(daoId, podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all PODs for a DAO
+     * @param daoId
+     */
+    public getAllPODsForDAOWithHttpInfo(daoId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Array<POD>>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getAllPODsForDAOWithHttpInfo(daoId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all PODs for a DAO
+     * @param daoId
+     */
+    public getAllPODsForDAO(daoId: string, _options?: PromiseConfigurationOptions): Promise<Array<POD>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getAllPODsForDAO(daoId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get a DAO by ID
+     * @param daoId
+     */
+    public getDAOByIdWithHttpInfo(daoId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getDAOByIdWithHttpInfo(daoId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get a DAO by ID
+     * @param daoId
+     */
+    public getDAOById(daoId: string, _options?: PromiseConfigurationOptions): Promise<DAO> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getDAOById(daoId, observableOptions);
         return result.toPromise();
     }
 
@@ -540,7 +657,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param podId
      */
-    public daosDaoIdPodsPodIdGetWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
+    public getPODByIdWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -553,7 +670,7 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdPodsPodIdGetWithHttpInfo(daoId, podId, observableOptions);
+        const result = this.api.getPODByIdWithHttpInfo(daoId, podId, observableOptions);
         return result.toPromise();
     }
 
@@ -562,7 +679,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param podId
      */
-    public daosDaoIdPodsPodIdGet(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<POD> {
+    public getPODById(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<POD> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -575,7 +692,95 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdPodsPodIdGet(daoId, podId, observableOptions);
+        const result = this.api.getPODById(daoId, podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Remove an admin from a DAO
+     * @param daoId
+     * @param dAOMembership
+     */
+    public removeAdminFromDAOWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.removeAdminFromDAOWithHttpInfo(daoId, dAOMembership, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Remove an admin from a DAO
+     * @param daoId
+     * @param dAOMembership
+     */
+    public removeAdminFromDAO(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.removeAdminFromDAO(daoId, dAOMembership, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Remove a member from a DAO
+     * @param daoId
+     * @param dAOMembership
+     */
+    public removeMemberFromDAOWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.removeMemberFromDAOWithHttpInfo(daoId, dAOMembership, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Remove a member from a DAO
+     * @param daoId
+     * @param dAOMembership
+     */
+    public removeMemberFromDAO(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.removeMemberFromDAO(daoId, dAOMembership, observableOptions);
         return result.toPromise();
     }
 
@@ -585,7 +790,7 @@ export class PromiseDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public daosDaoIdPodsPodIdMembersDeleteWithHttpInfo(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
+    public removeMemberFromPODWithHttpInfo(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -598,7 +803,7 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdPodsPodIdMembersDeleteWithHttpInfo(daoId, podId, pODMembership, observableOptions);
+        const result = this.api.removeMemberFromPODWithHttpInfo(daoId, podId, pODMembership, observableOptions);
         return result.toPromise();
     }
 
@@ -608,7 +813,7 @@ export class PromiseDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public daosDaoIdPodsPodIdMembersDelete(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<POD> {
+    public removeMemberFromPOD(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<POD> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -621,16 +826,16 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdPodsPodIdMembersDelete(daoId, podId, pODMembership, observableOptions);
+        const result = this.api.removeMemberFromPOD(daoId, podId, pODMembership, observableOptions);
         return result.toPromise();
     }
 
     /**
-     * Get all members of a POD
+     * Update a DAO
      * @param daoId
-     * @param podId
+     * @param dAOUpdate
      */
-    public daosDaoIdPodsPodIdMembersGetWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Array<User>>> {
+    public updateDAOWithHttpInfo(daoId: string, dAOUpdate: DAOUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -643,16 +848,16 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdPodsPodIdMembersGetWithHttpInfo(daoId, podId, observableOptions);
+        const result = this.api.updateDAOWithHttpInfo(daoId, dAOUpdate, observableOptions);
         return result.toPromise();
     }
 
     /**
-     * Get all members of a POD
+     * Update a DAO
      * @param daoId
-     * @param podId
+     * @param dAOUpdate
      */
-    public daosDaoIdPodsPodIdMembersGet(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<Array<User>> {
+    public updateDAO(daoId: string, dAOUpdate: DAOUpdate, _options?: PromiseConfigurationOptions): Promise<DAO> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -665,53 +870,7 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdPodsPodIdMembersGet(daoId, podId, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Add a member to a POD
-     * @param daoId
-     * @param podId
-     * @param pODMembership
-     */
-    public daosDaoIdPodsPodIdMembersPostWithHttpInfo(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosDaoIdPodsPodIdMembersPostWithHttpInfo(daoId, podId, pODMembership, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Add a member to a POD
-     * @param daoId
-     * @param podId
-     * @param pODMembership
-     */
-    public daosDaoIdPodsPodIdMembersPost(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<POD> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosDaoIdPodsPodIdMembersPost(daoId, podId, pODMembership, observableOptions);
+        const result = this.api.updateDAO(daoId, dAOUpdate, observableOptions);
         return result.toPromise();
     }
 
@@ -721,7 +880,7 @@ export class PromiseDaosApi {
      * @param podId
      * @param pODUpdate
      */
-    public daosDaoIdPodsPodIdPutWithHttpInfo(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
+    public updatePODWithHttpInfo(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -734,7 +893,7 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdPodsPodIdPutWithHttpInfo(daoId, podId, pODUpdate, observableOptions);
+        const result = this.api.updatePODWithHttpInfo(daoId, podId, pODUpdate, observableOptions);
         return result.toPromise();
     }
 
@@ -744,7 +903,7 @@ export class PromiseDaosApi {
      * @param podId
      * @param pODUpdate
      */
-    public daosDaoIdPodsPodIdPut(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: PromiseConfigurationOptions): Promise<POD> {
+    public updatePOD(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: PromiseConfigurationOptions): Promise<POD> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -757,219 +916,7 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.daosDaoIdPodsPodIdPut(daoId, podId, pODUpdate, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Create a new POD
-     * @param daoId
-     * @param POD
-     */
-    public daosDaoIdPodsPostWithHttpInfo(daoId: string, POD: POD, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosDaoIdPodsPostWithHttpInfo(daoId, POD, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Create a new POD
-     * @param daoId
-     * @param POD
-     */
-    public daosDaoIdPodsPost(daoId: string, POD: POD, _options?: PromiseConfigurationOptions): Promise<POD> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosDaoIdPodsPost(daoId, POD, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Update a DAO
-     * @param daoId
-     * @param dAOUpdate
-     */
-    public daosDaoIdPutWithHttpInfo(daoId: string, dAOUpdate: DAOUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosDaoIdPutWithHttpInfo(daoId, dAOUpdate, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Update a DAO
-     * @param daoId
-     * @param dAOUpdate
-     */
-    public daosDaoIdPut(daoId: string, dAOUpdate: DAOUpdate, _options?: PromiseConfigurationOptions): Promise<DAO> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosDaoIdPut(daoId, dAOUpdate, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Get a DAO by name
-     * @param daoName
-     */
-    public daosDaoNameGetWithHttpInfo(daoName: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosDaoNameGetWithHttpInfo(daoName, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Get a DAO by name
-     * @param daoName
-     */
-    public daosDaoNameGet(daoName: string, _options?: PromiseConfigurationOptions): Promise<DAO> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosDaoNameGet(daoName, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * List all DAOs
-     */
-    public daosGetWithHttpInfo(_options?: PromiseConfigurationOptions): Promise<HttpInfo<Array<DAO>>> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosGetWithHttpInfo(observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * List all DAOs
-     */
-    public daosGet(_options?: PromiseConfigurationOptions): Promise<Array<DAO>> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosGet(observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Create a new DAO
-     * @param DAO
-     */
-    public daosPostWithHttpInfo(DAO: DAO, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosPostWithHttpInfo(DAO, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Create a new DAO
-     * @param DAO
-     */
-    public daosPost(DAO: DAO, _options?: PromiseConfigurationOptions): Promise<DAO> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.daosPost(DAO, observableOptions);
+        const result = this.api.updatePOD(daoId, podId, pODUpdate, observableOptions);
         return result.toPromise();
     }
 
@@ -1182,48 +1129,6 @@ export class PromiseUsersApi {
 	    }
 	}
         const result = this.api.getAuthUserInfos(observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Get an existing user
-     * @param userId
-     */
-    public getUserWithHttpInfo(userId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<UserResponse>> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.getUserWithHttpInfo(userId, observableOptions);
-        return result.toPromise();
-    }
-
-    /**
-     * Get an existing user
-     * @param userId
-     */
-    public getUser(userId: string, _options?: PromiseConfigurationOptions): Promise<UserResponse> {
-        let observableOptions: undefined | ConfigurationOptions
-        if (_options){
-	    observableOptions = {
-                baseServer: _options.baseServer,
-                httpApi: _options.httpApi,
-                middleware: _options.middleware?.map(
-                    m => new PromiseMiddlewareWrapper(m)
-		),
-		middlewareMergeStrategy: _options.middlewareMergeStrategy,
-                authMethods: _options.authMethods
-	    }
-	}
-        const result = this.api.getUser(userId, observableOptions);
         return result.toPromise();
     }
 

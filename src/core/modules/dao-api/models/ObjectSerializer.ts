@@ -13,7 +13,6 @@ export * from '../models/ModelError';
 export * from '../models/POD';
 export * from '../models/PODMembership';
 export * from '../models/PODUpdate';
-export * from '../models/PODUserWhoMadeRequest';
 export * from '../models/PaginationMetadata';
 export * from '../models/PagingError';
 export * from '../models/SummaryResponse';
@@ -38,7 +37,6 @@ import { ModelError } from '../models/ModelError';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
 import { PODUpdate } from '../models/PODUpdate';
-import { PODUserWhoMadeRequest } from '../models/PODUserWhoMadeRequest';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
 import { SummaryResponse } from '../models/SummaryResponse';
@@ -79,7 +77,6 @@ let typeMap: {[index: string]: any} = {
     "POD": POD,
     "PODMembership": PODMembership,
     "PODUpdate": PODUpdate,
-    "PODUserWhoMadeRequest": PODUserWhoMadeRequest,
     "PaginationMetadata": PaginationMetadata,
     "PagingError": PagingError,
     "SummaryResponse": SummaryResponse,

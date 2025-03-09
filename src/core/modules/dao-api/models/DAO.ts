@@ -21,7 +21,6 @@ export class DAO {
     'isActive'?: boolean;
     'admins'?: Array<UserBasic>;
     'members'?: Array<UserBasic>;
-    'userWhoMadeRequest': string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -68,12 +67,6 @@ export class DAO {
             "name": "members",
             "baseName": "members",
             "type": "Array<UserBasic>",
-            "format": ""
-        },
-        {
-            "name": "userWhoMadeRequest",
-            "baseName": "user_who_made_request",
-            "type": "string",
             "format": ""
         }    ];
 

@@ -19,7 +19,6 @@ export class POD {
     'description': string;
     'isActive'?: boolean;
     'createdAt'?: Date;
-    'userWhoMadeRequest': string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -61,12 +60,6 @@ export class POD {
             "baseName": "created_at",
             "type": "Date",
             "format": "date-time"
-        },
-        {
-            "name": "userWhoMadeRequest",
-            "baseName": "user_who_made_request",
-            "type": "string",
-            "format": ""
         }    ];
 
     static getAttributeTypeMap() {

@@ -40,10 +40,6 @@ export class InputUpdateUser {
     * New Telegram username of the user
     */
     'telegramUsername'?: string;
-    /**
-    * New wallet address of the user
-    */
-    'walletAddress'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -83,12 +79,6 @@ export class InputUpdateUser {
         {
             "name": "telegramUsername",
             "baseName": "telegram_username",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "walletAddress",
-            "baseName": "wallet_address",
             "type": "string",
             "format": ""
         }    ];
