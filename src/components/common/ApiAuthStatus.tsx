@@ -10,7 +10,7 @@ interface ApiAuthStatusProps {
 
 const ApiAuthStatus: React.FC<ApiAuthStatusProps> = ({ 
   apiStatus, 
-  userDisplayInfo 
+  userDisplayInfo,
 }) => {
   const { 
     isAuthenticated, 
@@ -21,7 +21,8 @@ const ApiAuthStatus: React.FC<ApiAuthStatusProps> = ({
   } = userDisplayInfo;
 
   return (
-    <div className="flex justify-between items-center w-full">
+    <div className="flex items-center space-x-4">
+      {/* Left side (title and auth status) - only show if requested */}
       <div className="flex items-center">
         {isAuthenticated && (
           <span className="ml-2 text-xs bg-green-700 text-white px-2 py-0.5 rounded-full flex items-center">
@@ -49,6 +50,7 @@ const ApiAuthStatus: React.FC<ApiAuthStatusProps> = ({
         )}
       </div>
       
+      {/* Right side (status indicators and wallet) */}
       <div className="flex items-center space-x-4">
         {/* API Status Indicator */}
         <div className="relative">

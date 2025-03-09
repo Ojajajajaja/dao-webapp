@@ -53,12 +53,12 @@ const Header = ({ activeSection, showNotifications, setShowNotifications, daoId 
           </div>
         </div>
         
-        <div className="flex items-center">
-          <ApiAuthStatus 
-            apiStatus={apiStatus} 
-            userDisplayInfo={userDisplayInfo}
-          />
-        </div>
+        {/* Only show the wallet and API status indicators */}
+        <ApiAuthStatus 
+          apiStatus={apiStatus} 
+          userDisplayInfo={userDisplayInfo}
+          showTitle={false}
+        />
       </div>
     </header>
   );
