@@ -9,8 +9,18 @@ const daosService = new DaosService();
 
 // Function to adapt API DAO type to our application DAO type
 const adaptApiDaoToAppDao = (apiDao: ApiDAO): DAO => {
+  // If daoId is available, use it, otherwise generate a random 9-digit number
+  let id = '';
+  
+  if (apiDao.daoId !== undefined && apiDao.daoId !== null) {
+    id = apiDao.daoId.toString();
+  } else {
+    // Generate a random 9-digit number for the ID
+    id = Math.floor(Math.random() * 900000000 + 100000000).toString();
+  }
+  
   return {
-    id: apiDao.daoId?.toString() || `dao-${Date.now()}`,
+    id: id,
     name: apiDao.name,
     description: apiDao.description,
     logo: undefined, // API doesn't provide this
@@ -22,7 +32,7 @@ const adaptApiDaoToAppDao = (apiDao: ApiDAO): DAO => {
 
 // Get BWEN DAO from mock data
 const getBwenDao = (): DAO | undefined => {
-  return mockDaos.find(dao => dao.id === 'bwen-dao');
+  return mockDaos.find(dao => dao.name === 'BWEN DAO');
 };
 
 export const useDaos = () => {
@@ -42,7 +52,7 @@ export const useDaos = () => {
             
             // Check if BWEN DAO exists in the API response
             const bwenDaoExists = adaptedDaos.some(dao => 
-              dao.name.toLowerCase().includes('bwen') || dao.id.toLowerCase().includes('bwen')
+              dao.name === 'BWEN DAO'
             );
             
             // If BWEN DAO doesn't exist in API response, add it from mock data
@@ -82,7 +92,7 @@ export const useFeaturedDaos = () => {
   
   // BWEN DAO is always featured
   const featuredDaos = daos.filter(dao => 
-    dao.id === 'bwen-dao' || dao.name.toLowerCase().includes('featured')
+    dao.name === 'BWEN DAO' || dao.name.toLowerCase().includes('featured')
   );
   
   return { daos: featuredDaos, loading, error };

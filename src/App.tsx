@@ -91,7 +91,7 @@ function App() {
   // Function to handle navigation to a specific DAO
   const handleEnterDashboard = (daoId?: string) => {
     if (daoId) {
-      navigate(`/dao/${daoId}`);
+      navigate(`/daos/${daoId}`);
     } else {
       navigate('/dashboard');
     }
@@ -101,7 +101,7 @@ function App() {
     <Routes>
       <Route path="/" element={<LandingPage onEnterDashboard={handleEnterDashboard} />} />
       <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/dao/:daoId" element={<Dashboard />} />
+      <Route path="/daos/:daoId" element={<Dashboard />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
