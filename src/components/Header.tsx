@@ -57,7 +57,6 @@ const Header = ({ activeSection, showNotifications, setShowNotifications, daoId 
         <ApiAuthStatus 
           apiStatus={apiStatus} 
           userDisplayInfo={userDisplayInfo}
-          showTitle={false}
         />
       </div>
     </header>

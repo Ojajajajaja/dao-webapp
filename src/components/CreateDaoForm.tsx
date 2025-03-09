@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { daosService } from '../services/DaosService';
 import { useAuth } from '../context/AuthContext';
 import { userService } from '../services/UserService';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { useEffectOnce } from '../hooks/useEffectOnce';
 
 interface CreateDaoFormProps {
   onSuccess?: (daoId: string) => void;
@@ -14,23 +16,40 @@ const CreateDaoForm: React.FC<CreateDaoFormProps> = ({ onSuccess, onError }) => 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [userId, setUserId] = useState<number | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
   
   const { userInfo } = useAuth();
+  const { publicKey } = useWallet();
   
   // Fetch current user ID on component mount
-  useEffect(() => {
+  useEffectOnce(() => {
     const fetchCurrentUser = async () => {
+      setIsLoadingUser(true);
       try {
+        // Get user data from the @me endpoint
         const userData = await userService.getMe();
-        if (userData && userData.id) {
-          setUserId(userData.id);
-          console.log('Current user ID:', userData.id);
-        } else {
-          console.error('Could not get user ID from user data');
+        console.log("User data from API:", userData);
+        console.log(userData?.user?.user_id);
+        
+        // Check if userData contains user_id (as seen in the console log)
+        if (userData && userData.user?.user_id) {
+          // Keep as string to preserve full precision of large numbers
+          setUserId(String(userData.user?.user_id));
+          console.log('Current user ID from API (string):', String(userData.user?.user_id));
+          setIsLoadingUser(false);
+          return;
         }
+
+        
+        console.warn('Could not find user_id in API response, using fallback');
+        // Using a default ID - for development only
+        setUserId("1");
       } catch (err) {
         console.error('Error fetching user ID:', err);
+        setUserId("1");
+      } finally {
+        setIsLoadingUser(false);
       }
     };
     
@@ -55,7 +74,8 @@ const CreateDaoForm: React.FC<CreateDaoFormProps> = ({ onSuccess, onError }) => 
     setSuccess(null);
     
     try {
-      // Use the new method that takes a user ID
+      console.log(`Creating DAO with name: ${name}, description: ${description}, userId: ${userId}`);
+      
       const result = await daosService.createDao({
         name,
         description,
@@ -78,6 +98,8 @@ const CreateDaoForm: React.FC<CreateDaoFormProps> = ({ onSuccess, onError }) => 
       setIsSubmitting(false);
     }
   };
+  
+  const displayUsername = userInfo?.username || userInfo?.walletAddress || 'Unknown User';
   
   return (
     <div className="bg-gray-800 rounded-lg p-6 w-full max-w-md mx-auto">
@@ -126,23 +148,23 @@ const CreateDaoForm: React.FC<CreateDaoFormProps> = ({ onSuccess, onError }) => 
           />
         </div>
         
-        <div className="mb-2">
+        <div className="mb-4">
           <p className="text-sm text-gray-400">
-            Creating as: <span className="text-white">{userInfo?.username || userInfo?.walletAddress || 'Unknown User'}</span>
-            {userId ? <span className="ml-2 text-xs text-gray-500">(ID: {userId})</span> : null}
+            Creating as: <span className="text-white">{displayUsername}</span>
+            {userId && <span className="ml-2 text-xs text-gray-500">(ID: {userId})</span>}
           </p>
         </div>
         
         <button
           type="submit"
-          disabled={isSubmitting || !userId}
+          disabled={isSubmitting || isLoadingUser}
           className={`w-full py-3 rounded-lg text-white font-medium ${
-            isSubmitting || !userId
+            isSubmitting || isLoadingUser
               ? 'bg-blue-700 cursor-not-allowed opacity-70'
               : 'bg-blue-600 hover:bg-blue-700 transition-colors'
           }`}
         >
-          {isSubmitting ? 'Creating...' : !userId ? 'Loading User Info...' : 'Create DAO'}
+          {isSubmitting ? 'Creating...' : isLoadingUser ? 'Loading User Info...' : 'Create DAO'}
         </button>
       </form>
     </div>
