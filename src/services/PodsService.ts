@@ -8,8 +8,7 @@ import {
   DaosApi, 
   POD, 
   PODUpdate, 
-  PODMembership, 
-  PODUserWhoMadeRequest 
+  PODMembership 
 } from '../core/modules/dao-api';
 import { ServerConfiguration } from '../core/modules/dao-api/servers';
 import { walletAuthService } from './WalletAuthService';
@@ -38,6 +37,35 @@ export class PodsService {
   }
 
   /**
+   * Create an authenticated API client with the current token
+   * @private
+   */
+  private createAuthenticatedApiClient(): DaosApi | null {
+    const token = walletAuthService.getAccessToken();
+    if (!token) {
+      console.error('No authentication token available');
+      return null;
+    }
+
+    // Create a custom configuration with the current token
+    const serverConfig = new ServerConfiguration(this.apiEndpoint, {});
+    const configuration = createConfiguration({
+      baseServer: serverConfig,
+      authMethods: {
+        default: {
+          getName: () => 'Bearer',
+          applySecurityAuthentication: (context: any) => {
+            context.setHeaderParam('Authorization', `Bearer ${token}`);
+          }
+        }
+      }
+    });
+
+    // Return a new API client instance with the token
+    return new DaosApi(configuration);
+  }
+
+  /**
    * Set the API endpoint and reinitialize API client
    */
   setApiEndpoint(endpoint: string): void {
@@ -58,17 +86,11 @@ export class PodsService {
    */
   async getPods(daoId: string): Promise<POD[]> {
     try {
-      // Check if user is authenticated
-      const token = walletAuthService.getAccessToken();
-      if (!token) {
-        console.error('No authentication token found. User must be logged in to get pods.');
-        return [];
-      }
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return [];
 
-      const userRequest = new PODUserWhoMadeRequest();
-      // Note: user is identified from the authentication token
-
-      const response = await this.daosApi.daosDaoIdPodsGet(daoId, userRequest);
+      // Call the API with proper authentication
+      const response = await apiClient.getAllPODsForDAO(daoId);
       return response || [];
     } catch (error) {
       console.error(`Error getting pods for DAO ${daoId}:`, error);
@@ -81,7 +103,10 @@ export class PodsService {
    */
   async getPodById(daoId: string, podId: string): Promise<POD | null> {
     try {
-      const response = await this.daosApi.daosDaoIdPodsPodIdGet(daoId, podId);
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return null;
+
+      const response = await apiClient.getPODById(daoId, podId);
       return response || null;
     } catch (error) {
       console.error(`Error getting pod with ID ${podId} from DAO ${daoId}:`, error);
@@ -97,19 +122,15 @@ export class PodsService {
     description?: string;
   }): Promise<POD | null> {
     try {
-      // Check if user is authenticated
-      const token = walletAuthService.getAccessToken();
-      if (!token) {
-        console.error('No authentication token found. User must be logged in to create a pod.');
-        return null;
-      }
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return null;
 
       const pod = new POD();
       pod.name = podData.name;
       pod.description = podData.description || '';
       // Other required properties are handled by the server
 
-      const response = await this.daosApi.daosDaoIdPodsPost(daoId, pod);
+      const response = await apiClient.createPOD(daoId, pod);
       return response || null;
     } catch (error) {
       console.error(`Error creating pod in DAO ${daoId}:`, error);
@@ -125,19 +146,15 @@ export class PodsService {
     description?: string;
   }): Promise<POD | null> {
     try {
-      // Check if user is authenticated
-      const token = walletAuthService.getAccessToken();
-      if (!token) {
-        console.error('No authentication token found. User must be logged in to update a pod.');
-        return null;
-      }
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return null;
 
       const podUpdate = new PODUpdate();
       if (podData.name !== undefined) podUpdate.name = podData.name;
       if (podData.description !== undefined) podUpdate.description = podData.description;
       // Other required properties are handled by the server
 
-      const response = await this.daosApi.daosDaoIdPodsPodIdPut(daoId, podId, podUpdate);
+      const response = await apiClient.updatePOD(daoId, podId, podUpdate);
       return response || null;
     } catch (error) {
       console.error(`Error updating pod ${podId} in DAO ${daoId}:`, error);
@@ -150,7 +167,10 @@ export class PodsService {
    */
   async getPodMembers(daoId: string, podId: string) {
     try {
-      const response = await this.daosApi.daosDaoIdPodsPodIdMembersGet(daoId, podId);
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return [];
+
+      const response = await apiClient.getAllMembersOfPOD(daoId, podId);
       return response || [];
     } catch (error) {
       console.error(`Error getting members of pod ${podId} in DAO ${daoId}:`, error);
@@ -161,20 +181,12 @@ export class PodsService {
   /**
    * Add a member to a pod
    */
-  async addMemberToPod(daoId: string, podId: string, userId: string): Promise<POD | null> {
+  async addMemberToPod(daoId: string, podId: string): Promise<POD | null> {
     try {
-      // Check if user is authenticated
-      const token = walletAuthService.getAccessToken();
-      if (!token) {
-        console.error('No authentication token found. User must be logged in to add members to a pod.');
-        return null;
-      }
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return null;
 
-      const membership = new PODMembership();
-      membership.userId = userId;
-      // Note: userWhoMadeRequest is handled by the server
-
-      const response = await this.daosApi.daosDaoIdPodsPodIdMembersPost(daoId, podId, membership);
+      const response = await apiClient.addMemberToPOD(daoId, podId);
       return response || null;
     } catch (error) {
       console.error(`Error adding member to pod ${podId} in DAO ${daoId}:`, error);
@@ -187,18 +199,13 @@ export class PodsService {
    */
   async removeMemberFromPod(daoId: string, podId: string, userId: string): Promise<POD | null> {
     try {
-      // Check if user is authenticated
-      const token = walletAuthService.getAccessToken();
-      if (!token) {
-        console.error('No authentication token found. User must be logged in to remove members from a pod.');
-        return null;
-      }
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return null;
 
       const membership = new PODMembership();
       membership.userId = userId;
-      // Note: userWhoMadeRequest is handled by the server
-
-      const response = await this.daosApi.daosDaoIdPodsPodIdMembersDelete(daoId, podId, membership);
+    
+      const response = await apiClient.removeMemberFromPOD(daoId, podId, membership);
       return response || null;
     } catch (error) {
       console.error(`Error removing member from pod ${podId} in DAO ${daoId}:`, error);
@@ -211,20 +218,13 @@ export class PodsService {
    */
   async deletePod(daoId: string, podId: string): Promise<POD | null> {
     try {
-      // Check if user is authenticated
-      const token = walletAuthService.getAccessToken();
-      if (!token) {
-        console.error('No authentication token found. User must be logged in to delete a pod.');
-        return null;
-      }
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return null;
 
-      const membership = new PODMembership();
-      // Note: userWhoMadeRequest is handled by the server
-
-      const response = await this.daosApi.daosDaoIdPodsPodIdDelete(daoId, podId, membership);
+      const response = await apiClient.deletePOD(daoId, podId);
       return response || null;
     } catch (error) {
-      console.error(`Error deleting pod ${podId} from DAO ${daoId}:`, error);
+      console.error(`Error deleting pod ${podId} in DAO ${daoId}:`, error);
       return null;
     }
   }

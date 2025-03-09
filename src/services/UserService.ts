@@ -40,6 +40,35 @@ export class UserService {
   }
 
   /**
+   * Create an authenticated API client with the current token
+   * @private
+   */
+  private createAuthenticatedApiClient(): UsersApi | null {
+    const token = walletAuthService.getAccessToken();
+    if (!token) {
+      console.error('No authentication token available');
+      return null;
+    }
+
+    // Create a custom configuration with the current token
+    const serverConfig = new ServerConfiguration(this.apiEndpoint, {});
+    const configuration = createConfiguration({
+      baseServer: serverConfig,
+      authMethods: {
+        default: {
+          getName: () => 'Bearer',
+          applySecurityAuthentication: (context: any) => {
+            context.setHeaderParam('Authorization', `Bearer ${token}`);
+          }
+        }
+      }
+    });
+
+    // Return a new API client instance with the token
+    return new UsersApi(configuration);
+  }
+
+  /**
    * Set the API endpoint and reinitialize API client
    */
   setApiEndpoint(endpoint: string): void {
@@ -55,18 +84,6 @@ export class UserService {
     this.usersApi = new UsersApi(configuration);
   }
 
-  /**
-   * Get a user by ID
-   */
-  async getUserById(userId: string): Promise<UserResponse | null> {
-    try {
-      const response = await this.usersApi.getUser(userId);
-      return response || null;
-    } catch (error) {
-      console.error(`Error getting user with ID ${userId}:`, error);
-      return null;
-    }
-  }
 
   /**
    * Get a user by wallet address
@@ -90,6 +107,9 @@ export class UserService {
     discordUsername?: string;
   }): Promise<UserResponse | null> {
     try {
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return null;
+
       // Create the update input object
       const updateInput = new InputUpdateUser();
       
@@ -98,7 +118,7 @@ export class UserService {
       if (userData.email !== undefined) updateInput.email = userData.email;
       if (userData.discordUsername !== undefined) updateInput.discordUsername = userData.discordUsername;
       
-      const response = await this.usersApi.updateUser(userId, updateInput);
+      const response = await apiClient.updateUser(userId, updateInput);
       return response || null;
     } catch (error) {
       console.error(`Error updating user with ID ${userId}:`, error);
@@ -117,40 +137,21 @@ export class UserService {
         return this.userCache.data;
       }
 
-      // Check for token
-      const token = walletAuthService.getAccessToken();
-      if (!token) {
-        console.error('No authentication token available');
-        return null;
-      }
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return null;
 
-      // Make a direct API call to the /users/@me endpoint
-      console.log('Fetching fresh user data from @me endpoint');
-      const response = await fetch(`${this.apiEndpoint}/users/@me`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch current user: ${response.status} ${response.statusText}`);
-      }
-
-      const userData = await response.json();
-      console.log('User data from @me endpoint:', userData);
+      // Use the SDK's getAuthUserInfos method with proper authentication
+      const response = await apiClient.getAuthUserInfos();
       
       // Cache the response
       this.userCache = {
-        data: userData,
+        data: response,
         timestamp: Date.now()
       };
       
-      return userData;
+      return response;
     } catch (error) {
-      console.error('Error fetching current user from @me endpoint:', error);
+      console.error('Error fetching current user with getAuthUserInfos:', error);
       return null;
     }
   }

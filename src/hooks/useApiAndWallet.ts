@@ -36,9 +36,6 @@ export const useApiAndWallet = (
   // Handle wallet connection
   useEffect(() => {
     if (connected && publicKey) {
-      const walletAddress = publicKey.toString();
-      console.log('Connected wallet address:', walletAddress);
-      
       // Set API endpoint for the wallet auth service
       walletAuthService.setApiEndpoint(apiEndpoint);
     }
