@@ -2,6 +2,19 @@ import { DAO, Proposal, Member, Token, Transfer, Pod } from '../types';
 
 export const mockDaos: DAO[] = [
   {
+    id: 'bwen-dao',
+    name: 'BWEN DAO',
+    description: 'BWEN DAO is the primary decentralized autonomous organization focused on community governance and blockchain empowerment.',
+    logo: 'https://placehold.co/400x400/2563eb/FFFFFF?text=BWEN',
+    members: 1800,
+    proposals: 42,
+    treasury: [
+      { amount: 2000000, symbol: 'SOL' },
+      { amount: 3500000, symbol: 'USDC' },
+      { amount: 1200000, symbol: 'BWEN' }
+    ]
+  },
+  {
     id: 'solana-dao',
     name: 'Solana DAO',
     description: 'The Solana DAO governs key parameters of Solana ecosystem using the voting power of SOL.',

@@ -1,6 +1,29 @@
 import { useState, useEffect } from 'react';
 import { DAO } from '../types';
 import { mockDaos } from '../utils/mockData';
+import { DaosService } from '../services/DaosService';
+import { DAO as ApiDAO } from '../core/modules/dao-api';
+
+// Initialize the DAOs service
+const daosService = new DaosService();
+
+// Function to adapt API DAO type to our application DAO type
+const adaptApiDaoToAppDao = (apiDao: ApiDAO): DAO => {
+  return {
+    id: apiDao.daoId?.toString() || `dao-${Date.now()}`,
+    name: apiDao.name,
+    description: apiDao.description,
+    logo: undefined, // API doesn't provide this
+    members: apiDao.members?.length || 0,
+    proposals: 0, // API doesn't provide this yet
+    treasury: [] // API doesn't provide this yet
+  };
+};
+
+// Get BWEN DAO from mock data
+const getBwenDao = (): DAO | undefined => {
+  return mockDaos.find(dao => dao.id === 'bwen-dao');
+};
 
 export const useDaos = () => {
   const [daos, setDaos] = useState<DAO[]>([]);
@@ -10,8 +33,35 @@ export const useDaos = () => {
   useEffect(() => {
     const fetchDaos = async () => {
       try {
-        // In a real implementation, this would fetch from an API or blockchain
-        // For now, we'll use mock data
+        // Try to fetch DAOs from the API
+        try {
+          const apiDaos = await daosService.getAllDaos();
+          if (apiDaos && apiDaos.length > 0) {
+            // Convert API DAOs to application DAOs
+            const adaptedDaos = apiDaos.map(adaptApiDaoToAppDao);
+            
+            // Check if BWEN DAO exists in the API response
+            const bwenDaoExists = adaptedDaos.some(dao => 
+              dao.name.toLowerCase().includes('bwen') || dao.id.toLowerCase().includes('bwen')
+            );
+            
+            // If BWEN DAO doesn't exist in API response, add it from mock data
+            if (!bwenDaoExists) {
+              const bwenDao = getBwenDao();
+              if (bwenDao) {
+                adaptedDaos.unshift(bwenDao);
+              }
+            }
+            
+            setDaos(adaptedDaos);
+            setLoading(false);
+            return;
+          }
+        } catch (apiError) {
+          console.warn('Failed to fetch DAOs from API, falling back to mock data:', apiError);
+        }
+
+        // Fallback to mock data if API fails or returns empty
         setDaos(mockDaos);
         setLoading(false);
       } catch (err) {
@@ -26,12 +76,14 @@ export const useDaos = () => {
   return { daos, loading, error };
 };
 
+// Hook to get only featured DAOs
 export const useFeaturedDaos = () => {
   const { daos, loading, error } = useDaos();
   
-  // In a real implementation, this would have specific logic for featured DAOs
-  // For now, we'll just return the first 4 DAOs
-  const featuredDaos = daos.slice(0, 4);
+  // BWEN DAO is always featured
+  const featuredDaos = daos.filter(dao => 
+    dao.id === 'bwen-dao' || dao.name.toLowerCase().includes('featured')
+  );
   
-  return { featuredDaos, loading, error };
+  return { daos: featuredDaos, loading, error };
 };

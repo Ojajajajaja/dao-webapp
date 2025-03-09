@@ -10,9 +10,10 @@ interface HeaderProps {
   activeSection: string;
   showNotifications: boolean;
   setShowNotifications: (show: boolean) => void;
+  daoId?: string; // Make daoId optional
 }
 
-const Header = ({ activeSection, showNotifications, setShowNotifications }: HeaderProps) => {
+const Header = ({ activeSection, showNotifications, setShowNotifications, daoId }: HeaderProps) => {
   const { connected, publicKey } = useWallet();
   const { isAuthenticated, isLoading, challengeMessage, authError, userInfo, refreshUserInfo } = useAuth();
   const [apiStatus, setApiStatus] = useState<'online' | 'offline' | 'checking'>('checking');
@@ -31,6 +32,13 @@ const Header = ({ activeSection, showNotifications, setShowNotifications }: Head
       walletAuthService.setApiEndpoint(apiEndpoint);
     }
   }, [connected, publicKey, apiEndpoint]);
+
+  // Display daoId in console when it changes
+  useEffect(() => {
+    if (daoId) {
+      console.log(`Current DAO ID in header: ${daoId}`);
+    }
+  }, [daoId]);
 
   useEffectOnce(() => {
     const checkApiStatus = async () => {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Home from './components/Home';
@@ -6,14 +7,17 @@ import Governance from './components/Governance';
 import Pods from './components/Pods';
 import Members from './components/Members';
 import NotificationsSidebar from './components/NotificationsSidebar';
+import LandingPage from './components/LandingPage';
 
-function App() {
+// Dashboard component that handles DAO-specific routing
+const Dashboard = () => {
+  const { daoId } = useParams();
   const [activeSection, setActiveSection] = useState('home');
   const [showNotifications, setShowNotifications] = useState(true);
   const [fadeIn, setFadeIn] = useState(true);
   const [currentComponent, setCurrentComponent] = useState<React.ReactNode>(null);
 
-  // Handle component transitions with fade effect
+  // Effect to initialize the correct component based on the active section
   useEffect(() => {
     setFadeIn(false); // Start fade out
     
@@ -42,6 +46,12 @@ function App() {
     return () => clearTimeout(timer);
   }, [activeSection]);
 
+  // Log the current DAO ID whenever it changes
+  useEffect(() => {
+    console.log('Current DAO ID:', daoId);
+    // Here you could fetch specific DAO data based on the ID
+  }, [daoId]);
+
   return (
     <div className="flex h-screen bg-[#1C1C1C]">
       {/* Left Sidebar */}
@@ -53,6 +63,7 @@ function App() {
           activeSection={activeSection} 
           showNotifications={showNotifications}
           setShowNotifications={setShowNotifications}
+          daoId={daoId}
         />
         
         {/* Main content area */}
@@ -65,12 +76,44 @@ function App() {
             </div>
           </main>
           
-          {/* Right Notifications Sidebar - always visible now */}
+          {/* Right Notifications Sidebar */}
           <NotificationsSidebar />
         </div>
       </div>
     </div>
   );
+};
+
+// The main App component with routing
+function App() {
+  const navigate = useNavigate();
+
+  // Function to handle navigation to a specific DAO
+  const handleEnterDashboard = (daoId?: string) => {
+    if (daoId) {
+      navigate(`/dao/${daoId}`);
+    } else {
+      navigate('/dashboard');
+    }
+  };
+
+  return (
+    <Routes>
+      <Route path="/" element={<LandingPage onEnterDashboard={handleEnterDashboard} />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/dao/:daoId" element={<Dashboard />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
 }
 
-export default App;
+// Wrapper component for routing
+const AppWithRouter = () => {
+  return (
+    <Router>
+      <App />
+    </Router>
+  );
+};
+
+export default AppWithRouter;
