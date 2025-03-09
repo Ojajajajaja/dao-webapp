@@ -14,14 +14,14 @@ import { UserBasic } from '../models/UserBasic';
 import { HttpFile } from '../http/http';
 
 export class DAO {
-    'daoId'?: number;
+    'daoId'?: string;
     'name': string;
     'description': string;
-    'ownerId': number;
+    'ownerId': string;
     'isActive'?: boolean;
     'admins'?: Array<UserBasic>;
     'members'?: Array<UserBasic>;
-    'userWhoMadeRequest': number;
+    'userWhoMadeRequest': string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -31,7 +31,7 @@ export class DAO {
         {
             "name": "daoId",
             "baseName": "dao_id",
-            "type": "number",
+            "type": "string",
             "format": ""
         },
         {
@@ -49,7 +49,7 @@ export class DAO {
         {
             "name": "ownerId",
             "baseName": "owner_id",
-            "type": "number",
+            "type": "string",
             "format": ""
         },
         {
@@ -73,7 +73,7 @@ export class DAO {
         {
             "name": "userWhoMadeRequest",
             "baseName": "user_who_made_request",
-            "type": "number",
+            "type": "string",
             "format": ""
         }    ];
 

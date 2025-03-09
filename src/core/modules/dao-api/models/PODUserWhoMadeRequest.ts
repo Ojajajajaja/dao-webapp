@@ -13,7 +13,7 @@
 import { HttpFile } from '../http/http';
 
 export class PODUserWhoMadeRequest {
-    'userWhoMadeRequest': number;
+    'userWhoMadeRequest': string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -23,7 +23,7 @@ export class PODUserWhoMadeRequest {
         {
             "name": "userWhoMadeRequest",
             "baseName": "user_who_made_request",
-            "type": "number",
+            "type": "string",
             "format": ""
         }    ];
 

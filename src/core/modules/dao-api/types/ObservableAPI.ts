@@ -245,7 +245,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdAdminsDeleteWithHttpInfo(daoId: number, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
+    public daosDaoIdAdminsDeleteWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -298,7 +298,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdAdminsDelete(daoId: number, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<DAO> {
+    public daosDaoIdAdminsDelete(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<DAO> {
         return this.daosDaoIdAdminsDeleteWithHttpInfo(daoId, dAOMembership, _options).pipe(map((apiResponse: HttpInfo<DAO>) => apiResponse.data));
     }
 
@@ -307,7 +307,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdAdminsPostWithHttpInfo(daoId: number, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
+    public daosDaoIdAdminsPostWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -360,7 +360,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdAdminsPost(daoId: number, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<DAO> {
+    public daosDaoIdAdminsPost(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<DAO> {
         return this.daosDaoIdAdminsPostWithHttpInfo(daoId, dAOMembership, _options).pipe(map((apiResponse: HttpInfo<DAO>) => apiResponse.data));
     }
 
@@ -369,7 +369,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdDeleteWithHttpInfo(daoId: number, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<HttpInfo<void>> {
+    public daosDaoIdDeleteWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<HttpInfo<void>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -422,7 +422,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdDelete(daoId: number, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<void> {
+    public daosDaoIdDelete(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<void> {
         return this.daosDaoIdDeleteWithHttpInfo(daoId, dAOMembership, _options).pipe(map((apiResponse: HttpInfo<void>) => apiResponse.data));
     }
 
@@ -430,7 +430,7 @@ export class ObservableDaosApi {
      * Get a DAO by ID
      * @param daoId
      */
-    public daosDaoIdGetWithHttpInfo(daoId: number, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
+    public daosDaoIdGetWithHttpInfo(daoId: string, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -482,7 +482,7 @@ export class ObservableDaosApi {
      * Get a DAO by ID
      * @param daoId
      */
-    public daosDaoIdGet(daoId: number, _options?: ConfigurationOptions): Observable<DAO> {
+    public daosDaoIdGet(daoId: string, _options?: ConfigurationOptions): Observable<DAO> {
         return this.daosDaoIdGetWithHttpInfo(daoId, _options).pipe(map((apiResponse: HttpInfo<DAO>) => apiResponse.data));
     }
 
@@ -491,7 +491,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdMembersDeleteWithHttpInfo(daoId: number, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
+    public daosDaoIdMembersDeleteWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -544,7 +544,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdMembersDelete(daoId: number, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<DAO> {
+    public daosDaoIdMembersDelete(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<DAO> {
         return this.daosDaoIdMembersDeleteWithHttpInfo(daoId, dAOMembership, _options).pipe(map((apiResponse: HttpInfo<DAO>) => apiResponse.data));
     }
 
@@ -553,7 +553,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdMembersPostWithHttpInfo(daoId: number, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
+    public daosDaoIdMembersPostWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -606,7 +606,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdMembersPost(daoId: number, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<DAO> {
+    public daosDaoIdMembersPost(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<DAO> {
         return this.daosDaoIdMembersPostWithHttpInfo(daoId, dAOMembership, _options).pipe(map((apiResponse: HttpInfo<DAO>) => apiResponse.data));
     }
 
@@ -615,7 +615,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param pODUserWhoMadeRequest
      */
-    public daosDaoIdPodsGetWithHttpInfo(daoId: number, pODUserWhoMadeRequest: PODUserWhoMadeRequest, _options?: ConfigurationOptions): Observable<HttpInfo<Array<POD>>> {
+    public daosDaoIdPodsGetWithHttpInfo(daoId: string, pODUserWhoMadeRequest: PODUserWhoMadeRequest, _options?: ConfigurationOptions): Observable<HttpInfo<Array<POD>>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -668,7 +668,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param pODUserWhoMadeRequest
      */
-    public daosDaoIdPodsGet(daoId: number, pODUserWhoMadeRequest: PODUserWhoMadeRequest, _options?: ConfigurationOptions): Observable<Array<POD>> {
+    public daosDaoIdPodsGet(daoId: string, pODUserWhoMadeRequest: PODUserWhoMadeRequest, _options?: ConfigurationOptions): Observable<Array<POD>> {
         return this.daosDaoIdPodsGetWithHttpInfo(daoId, pODUserWhoMadeRequest, _options).pipe(map((apiResponse: HttpInfo<Array<POD>>) => apiResponse.data));
     }
 
@@ -678,7 +678,7 @@ export class ObservableDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public daosDaoIdPodsPodIdDeleteWithHttpInfo(daoId: number, podId: number, pODMembership: PODMembership, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
+    public daosDaoIdPodsPodIdDeleteWithHttpInfo(daoId: string, podId: string, pODMembership: PODMembership, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -732,7 +732,7 @@ export class ObservableDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public daosDaoIdPodsPodIdDelete(daoId: number, podId: number, pODMembership: PODMembership, _options?: ConfigurationOptions): Observable<POD> {
+    public daosDaoIdPodsPodIdDelete(daoId: string, podId: string, pODMembership: PODMembership, _options?: ConfigurationOptions): Observable<POD> {
         return this.daosDaoIdPodsPodIdDeleteWithHttpInfo(daoId, podId, pODMembership, _options).pipe(map((apiResponse: HttpInfo<POD>) => apiResponse.data));
     }
 
@@ -741,7 +741,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param podId
      */
-    public daosDaoIdPodsPodIdGetWithHttpInfo(daoId: number, podId: number, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
+    public daosDaoIdPodsPodIdGetWithHttpInfo(daoId: string, podId: string, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -794,7 +794,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param podId
      */
-    public daosDaoIdPodsPodIdGet(daoId: number, podId: number, _options?: ConfigurationOptions): Observable<POD> {
+    public daosDaoIdPodsPodIdGet(daoId: string, podId: string, _options?: ConfigurationOptions): Observable<POD> {
         return this.daosDaoIdPodsPodIdGetWithHttpInfo(daoId, podId, _options).pipe(map((apiResponse: HttpInfo<POD>) => apiResponse.data));
     }
 
@@ -804,7 +804,7 @@ export class ObservableDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public daosDaoIdPodsPodIdMembersDeleteWithHttpInfo(daoId: number, podId: number, pODMembership: PODMembership, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
+    public daosDaoIdPodsPodIdMembersDeleteWithHttpInfo(daoId: string, podId: string, pODMembership: PODMembership, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -858,7 +858,7 @@ export class ObservableDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public daosDaoIdPodsPodIdMembersDelete(daoId: number, podId: number, pODMembership: PODMembership, _options?: ConfigurationOptions): Observable<POD> {
+    public daosDaoIdPodsPodIdMembersDelete(daoId: string, podId: string, pODMembership: PODMembership, _options?: ConfigurationOptions): Observable<POD> {
         return this.daosDaoIdPodsPodIdMembersDeleteWithHttpInfo(daoId, podId, pODMembership, _options).pipe(map((apiResponse: HttpInfo<POD>) => apiResponse.data));
     }
 
@@ -867,7 +867,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param podId
      */
-    public daosDaoIdPodsPodIdMembersGetWithHttpInfo(daoId: number, podId: number, _options?: ConfigurationOptions): Observable<HttpInfo<Array<User>>> {
+    public daosDaoIdPodsPodIdMembersGetWithHttpInfo(daoId: string, podId: string, _options?: ConfigurationOptions): Observable<HttpInfo<Array<User>>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -920,7 +920,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param podId
      */
-    public daosDaoIdPodsPodIdMembersGet(daoId: number, podId: number, _options?: ConfigurationOptions): Observable<Array<User>> {
+    public daosDaoIdPodsPodIdMembersGet(daoId: string, podId: string, _options?: ConfigurationOptions): Observable<Array<User>> {
         return this.daosDaoIdPodsPodIdMembersGetWithHttpInfo(daoId, podId, _options).pipe(map((apiResponse: HttpInfo<Array<User>>) => apiResponse.data));
     }
 
@@ -930,7 +930,7 @@ export class ObservableDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public daosDaoIdPodsPodIdMembersPostWithHttpInfo(daoId: number, podId: number, pODMembership: PODMembership, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
+    public daosDaoIdPodsPodIdMembersPostWithHttpInfo(daoId: string, podId: string, pODMembership: PODMembership, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -984,7 +984,7 @@ export class ObservableDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public daosDaoIdPodsPodIdMembersPost(daoId: number, podId: number, pODMembership: PODMembership, _options?: ConfigurationOptions): Observable<POD> {
+    public daosDaoIdPodsPodIdMembersPost(daoId: string, podId: string, pODMembership: PODMembership, _options?: ConfigurationOptions): Observable<POD> {
         return this.daosDaoIdPodsPodIdMembersPostWithHttpInfo(daoId, podId, pODMembership, _options).pipe(map((apiResponse: HttpInfo<POD>) => apiResponse.data));
     }
 
@@ -994,7 +994,7 @@ export class ObservableDaosApi {
      * @param podId
      * @param pODUpdate
      */
-    public daosDaoIdPodsPodIdPutWithHttpInfo(daoId: number, podId: number, pODUpdate: PODUpdate, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
+    public daosDaoIdPodsPodIdPutWithHttpInfo(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1048,7 +1048,7 @@ export class ObservableDaosApi {
      * @param podId
      * @param pODUpdate
      */
-    public daosDaoIdPodsPodIdPut(daoId: number, podId: number, pODUpdate: PODUpdate, _options?: ConfigurationOptions): Observable<POD> {
+    public daosDaoIdPodsPodIdPut(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: ConfigurationOptions): Observable<POD> {
         return this.daosDaoIdPodsPodIdPutWithHttpInfo(daoId, podId, pODUpdate, _options).pipe(map((apiResponse: HttpInfo<POD>) => apiResponse.data));
     }
 
@@ -1057,7 +1057,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param POD
      */
-    public daosDaoIdPodsPostWithHttpInfo(daoId: number, POD: POD, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
+    public daosDaoIdPodsPostWithHttpInfo(daoId: string, POD: POD, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1110,7 +1110,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param POD
      */
-    public daosDaoIdPodsPost(daoId: number, POD: POD, _options?: ConfigurationOptions): Observable<POD> {
+    public daosDaoIdPodsPost(daoId: string, POD: POD, _options?: ConfigurationOptions): Observable<POD> {
         return this.daosDaoIdPodsPostWithHttpInfo(daoId, POD, _options).pipe(map((apiResponse: HttpInfo<POD>) => apiResponse.data));
     }
 
@@ -1119,7 +1119,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOUpdate
      */
-    public daosDaoIdPutWithHttpInfo(daoId: number, dAOUpdate: DAOUpdate, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
+    public daosDaoIdPutWithHttpInfo(daoId: string, dAOUpdate: DAOUpdate, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1172,7 +1172,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOUpdate
      */
-    public daosDaoIdPut(daoId: number, dAOUpdate: DAOUpdate, _options?: ConfigurationOptions): Observable<DAO> {
+    public daosDaoIdPut(daoId: string, dAOUpdate: DAOUpdate, _options?: ConfigurationOptions): Observable<DAO> {
         return this.daosDaoIdPutWithHttpInfo(daoId, dAOUpdate, _options).pipe(map((apiResponse: HttpInfo<DAO>) => apiResponse.data));
     }
 
@@ -1640,7 +1640,7 @@ export class ObservableUsersApi {
      * Get an existing user
      * @param userId
      */
-    public getUserWithHttpInfo(userId: number, _options?: ConfigurationOptions): Observable<HttpInfo<UserResponse>> {
+    public getUserWithHttpInfo(userId: string, _options?: ConfigurationOptions): Observable<HttpInfo<UserResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1692,7 +1692,7 @@ export class ObservableUsersApi {
      * Get an existing user
      * @param userId
      */
-    public getUser(userId: number, _options?: ConfigurationOptions): Observable<UserResponse> {
+    public getUser(userId: string, _options?: ConfigurationOptions): Observable<UserResponse> {
         return this.getUserWithHttpInfo(userId, _options).pipe(map((apiResponse: HttpInfo<UserResponse>) => apiResponse.data));
     }
 
@@ -1761,7 +1761,7 @@ export class ObservableUsersApi {
      * @param userId
      * @param inputUpdateUser
      */
-    public updateUserWithHttpInfo(userId: number, inputUpdateUser: InputUpdateUser, _options?: ConfigurationOptions): Observable<HttpInfo<UserResponse>> {
+    public updateUserWithHttpInfo(userId: string, inputUpdateUser: InputUpdateUser, _options?: ConfigurationOptions): Observable<HttpInfo<UserResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1814,7 +1814,7 @@ export class ObservableUsersApi {
      * @param userId
      * @param inputUpdateUser
      */
-    public updateUser(userId: number, inputUpdateUser: InputUpdateUser, _options?: ConfigurationOptions): Observable<UserResponse> {
+    public updateUser(userId: string, inputUpdateUser: InputUpdateUser, _options?: ConfigurationOptions): Observable<UserResponse> {
         return this.updateUserWithHttpInfo(userId, inputUpdateUser, _options).pipe(map((apiResponse: HttpInfo<UserResponse>) => apiResponse.data));
     }
 

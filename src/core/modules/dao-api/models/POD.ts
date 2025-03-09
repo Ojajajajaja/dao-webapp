@@ -13,13 +13,13 @@
 import { HttpFile } from '../http/http';
 
 export class POD {
-    'podId'?: number;
-    'daoId': number;
+    'podId'?: string;
+    'daoId': string;
     'name': string;
     'description': string;
     'isActive'?: boolean;
     'createdAt'?: Date;
-    'userWhoMadeRequest': number;
+    'userWhoMadeRequest': string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -29,13 +29,13 @@ export class POD {
         {
             "name": "podId",
             "baseName": "pod_id",
-            "type": "number",
+            "type": "string",
             "format": ""
         },
         {
             "name": "daoId",
             "baseName": "dao_id",
-            "type": "number",
+            "type": "string",
             "format": ""
         },
         {
@@ -65,7 +65,7 @@ export class POD {
         {
             "name": "userWhoMadeRequest",
             "baseName": "user_who_made_request",
-            "type": "number",
+            "type": "string",
             "format": ""
         }    ];
 

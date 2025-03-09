@@ -40,10 +40,10 @@ const apiInstance = new DaosApi(configuration);
 
 const request: DaosApiDaosDaoIdAdminsDeleteRequest = {
   
-  daoId: 0,
+  daoId: "dao_id_example",
   
   dAOMembership: {
-    userId: 1,
+    userId: "userId_example",
   },
 };
 
@@ -57,7 +57,7 @@ console.log('API called successfully. Returned data:', data);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **dAOMembership** | **DAOMembership**|  |
- **daoId** | [**number**] |  | defaults to undefined
+ **daoId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
@@ -102,10 +102,10 @@ const apiInstance = new DaosApi(configuration);
 
 const request: DaosApiDaosDaoIdAdminsPostRequest = {
   
-  daoId: 0,
+  daoId: "dao_id_example",
   
   dAOMembership: {
-    userId: 1,
+    userId: "userId_example",
   },
 };
 
@@ -119,7 +119,7 @@ console.log('API called successfully. Returned data:', data);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **dAOMembership** | **DAOMembership**|  |
- **daoId** | [**number**] |  | defaults to undefined
+ **daoId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
@@ -164,10 +164,10 @@ const apiInstance = new DaosApi(configuration);
 
 const request: DaosApiDaosDaoIdDeleteRequest = {
   
-  daoId: 0,
+  daoId: "dao_id_example",
   
   dAOMembership: {
-    userId: 1,
+    userId: "userId_example",
   },
 };
 
@@ -181,7 +181,7 @@ console.log('API called successfully. Returned data:', data);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **dAOMembership** | **DAOMembership**|  |
- **daoId** | [**number**] |  | defaults to undefined
+ **daoId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
@@ -226,7 +226,7 @@ const apiInstance = new DaosApi(configuration);
 
 const request: DaosApiDaosDaoIdGetRequest = {
   
-  daoId: 0,
+  daoId: "dao_id_example",
 };
 
 const data = await apiInstance.daosDaoIdGet(request);
@@ -238,7 +238,7 @@ console.log('API called successfully. Returned data:', data);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **daoId** | [**number**] |  | defaults to undefined
+ **daoId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
@@ -280,10 +280,10 @@ const apiInstance = new DaosApi(configuration);
 
 const request: DaosApiDaosDaoIdMembersDeleteRequest = {
   
-  daoId: 0,
+  daoId: "dao_id_example",
   
   dAOMembership: {
-    userId: 1,
+    userId: "userId_example",
   },
 };
 
@@ -297,7 +297,7 @@ console.log('API called successfully. Returned data:', data);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **dAOMembership** | **DAOMembership**|  |
- **daoId** | [**number**] |  | defaults to undefined
+ **daoId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
@@ -342,10 +342,10 @@ const apiInstance = new DaosApi(configuration);
 
 const request: DaosApiDaosDaoIdMembersPostRequest = {
   
-  daoId: 0,
+  daoId: "dao_id_example",
   
   dAOMembership: {
-    userId: 1,
+    userId: "userId_example",
   },
 };
 
@@ -359,7 +359,7 @@ console.log('API called successfully. Returned data:', data);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **dAOMembership** | **DAOMembership**|  |
- **daoId** | [**number**] |  | defaults to undefined
+ **daoId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
@@ -404,10 +404,10 @@ const apiInstance = new DaosApi(configuration);
 
 const request: DaosApiDaosDaoIdPodsGetRequest = {
   
-  daoId: 0,
+  daoId: "dao_id_example",
   
   pODUserWhoMadeRequest: {
-    userWhoMadeRequest: 1,
+    userWhoMadeRequest: "userWhoMadeRequest_example",
   },
 };
 
@@ -421,7 +421,7 @@ console.log('API called successfully. Returned data:', data);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **pODUserWhoMadeRequest** | **PODUserWhoMadeRequest**|  |
- **daoId** | [**number**] |  | defaults to undefined
+ **daoId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
@@ -464,12 +464,12 @@ const apiInstance = new DaosApi(configuration);
 
 const request: DaosApiDaosDaoIdPodsPodIdDeleteRequest = {
   
-  daoId: 0,
+  daoId: "dao_id_example",
   
-  podId: 0,
+  podId: "pod_id_example",
   
   pODMembership: {
-    userId: 1,
+    userId: "userId_example",
   },
 };
 
@@ -483,8 +483,8 @@ console.log('API called successfully. Returned data:', data);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **pODMembership** | **PODMembership**|  |
- **daoId** | [**number**] |  | defaults to undefined
- **podId** | [**number**] |  | defaults to undefined
+ **daoId** | [**string**] |  | defaults to undefined
+ **podId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
@@ -529,9 +529,9 @@ const apiInstance = new DaosApi(configuration);
 
 const request: DaosApiDaosDaoIdPodsPodIdGetRequest = {
   
-  daoId: 0,
+  daoId: "dao_id_example",
   
-  podId: 0,
+  podId: "pod_id_example",
 };
 
 const data = await apiInstance.daosDaoIdPodsPodIdGet(request);
@@ -543,8 +543,8 @@ console.log('API called successfully. Returned data:', data);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **daoId** | [**number**] |  | defaults to undefined
- **podId** | [**number**] |  | defaults to undefined
+ **daoId** | [**string**] |  | defaults to undefined
+ **podId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
@@ -586,12 +586,12 @@ const apiInstance = new DaosApi(configuration);
 
 const request: DaosApiDaosDaoIdPodsPodIdMembersDeleteRequest = {
   
-  daoId: 0,
+  daoId: "dao_id_example",
   
-  podId: 0,
+  podId: "pod_id_example",
   
   pODMembership: {
-    userId: 1,
+    userId: "userId_example",
   },
 };
 
@@ -605,8 +605,8 @@ console.log('API called successfully. Returned data:', data);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **pODMembership** | **PODMembership**|  |
- **daoId** | [**number**] |  | defaults to undefined
- **podId** | [**number**] |  | defaults to undefined
+ **daoId** | [**string**] |  | defaults to undefined
+ **podId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
@@ -651,9 +651,9 @@ const apiInstance = new DaosApi(configuration);
 
 const request: DaosApiDaosDaoIdPodsPodIdMembersGetRequest = {
   
-  daoId: 0,
+  daoId: "dao_id_example",
   
-  podId: 0,
+  podId: "pod_id_example",
 };
 
 const data = await apiInstance.daosDaoIdPodsPodIdMembersGet(request);
@@ -665,8 +665,8 @@ console.log('API called successfully. Returned data:', data);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **daoId** | [**number**] |  | defaults to undefined
- **podId** | [**number**] |  | defaults to undefined
+ **daoId** | [**string**] |  | defaults to undefined
+ **podId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
@@ -708,12 +708,12 @@ const apiInstance = new DaosApi(configuration);
 
 const request: DaosApiDaosDaoIdPodsPodIdMembersPostRequest = {
   
-  daoId: 0,
+  daoId: "dao_id_example",
   
-  podId: 0,
+  podId: "pod_id_example",
   
   pODMembership: {
-    userId: 1,
+    userId: "userId_example",
   },
 };
 
@@ -727,8 +727,8 @@ console.log('API called successfully. Returned data:', data);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **pODMembership** | **PODMembership**|  |
- **daoId** | [**number**] |  | defaults to undefined
- **podId** | [**number**] |  | defaults to undefined
+ **daoId** | [**string**] |  | defaults to undefined
+ **podId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
@@ -773,15 +773,15 @@ const apiInstance = new DaosApi(configuration);
 
 const request: DaosApiDaosDaoIdPodsPodIdPutRequest = {
   
-  daoId: 0,
+  daoId: "dao_id_example",
   
-  podId: 0,
+  podId: "pod_id_example",
   
   pODUpdate: {
     name: "name_example",
     description: "description_example",
     isActive: true,
-    userWhoMadeRequest: 1,
+    userWhoMadeRequest: "userWhoMadeRequest_example",
   },
 };
 
@@ -795,8 +795,8 @@ console.log('API called successfully. Returned data:', data);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **pODUpdate** | **PODUpdate**|  |
- **daoId** | [**number**] |  | defaults to undefined
- **podId** | [**number**] |  | defaults to undefined
+ **daoId** | [**string**] |  | defaults to undefined
+ **podId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
@@ -841,13 +841,13 @@ const apiInstance = new DaosApi(configuration);
 
 const request: DaosApiDaosDaoIdPodsPostRequest = {
   
-  daoId: 0,
+  daoId: "dao_id_example",
   
   POD: {
-    daoId: 1,
+    daoId: "daoId_example",
     name: "name_example",
     description: "description_example",
-    userWhoMadeRequest: 1,
+    userWhoMadeRequest: "userWhoMadeRequest_example",
   },
 };
 
@@ -861,7 +861,7 @@ console.log('API called successfully. Returned data:', data);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **POD** | **POD**|  |
- **daoId** | [**number**] |  | defaults to undefined
+ **daoId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
@@ -906,13 +906,13 @@ const apiInstance = new DaosApi(configuration);
 
 const request: DaosApiDaosDaoIdPutRequest = {
   
-  daoId: 0,
+  daoId: "dao_id_example",
   
   dAOUpdate: {
     name: "name_example",
     description: "description_example",
     isActive: true,
-    userWhoMadeRequest: 1,
+    userWhoMadeRequest: "userWhoMadeRequest_example",
   },
 };
 
@@ -926,7 +926,7 @@ console.log('API called successfully. Returned data:', data);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **dAOUpdate** | **DAOUpdate**|  |
- **daoId** | [**number**] |  | defaults to undefined
+ **daoId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
@@ -1074,9 +1074,9 @@ const request: DaosApiDaosPostRequest = {
   DAO: {
     name: "name_example",
     description: "description_example",
-    ownerId: 1,
+    ownerId: "ownerId_example",
     isActive: true,
-    userWhoMadeRequest: 1,
+    userWhoMadeRequest: "userWhoMadeRequest_example",
   },
 };
 

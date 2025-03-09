@@ -87,7 +87,7 @@ export class UsersApiRequestFactory extends BaseAPIRequestFactory {
      * Get an existing user
      * @param userId 
      */
-    public async getUser(userId: number, _options?: Configuration): Promise<RequestContext> {
+    public async getUser(userId: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'userId' is not null or undefined
@@ -150,7 +150,7 @@ export class UsersApiRequestFactory extends BaseAPIRequestFactory {
      * @param userId 
      * @param inputUpdateUser 
      */
-    public async updateUser(userId: number, inputUpdateUser: InputUpdateUser, _options?: Configuration): Promise<RequestContext> {
+    public async updateUser(userId: string, inputUpdateUser: InputUpdateUser, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'userId' is not null or undefined

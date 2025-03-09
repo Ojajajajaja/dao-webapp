@@ -114,12 +114,11 @@ import { DaosApiRequestFactory, DaosApiResponseProcessor} from "../apis/DaosApi"
 export interface DaosApiDaosDaoIdAdminsDeleteRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdAdminsDelete
      */
-    daoId: number
+    daoId: string
     /**
      * 
      * @type DAOMembership
@@ -131,12 +130,11 @@ export interface DaosApiDaosDaoIdAdminsDeleteRequest {
 export interface DaosApiDaosDaoIdAdminsPostRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdAdminsPost
      */
-    daoId: number
+    daoId: string
     /**
      * 
      * @type DAOMembership
@@ -148,12 +146,11 @@ export interface DaosApiDaosDaoIdAdminsPostRequest {
 export interface DaosApiDaosDaoIdDeleteRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdDelete
      */
-    daoId: number
+    daoId: string
     /**
      * 
      * @type DAOMembership
@@ -165,23 +162,21 @@ export interface DaosApiDaosDaoIdDeleteRequest {
 export interface DaosApiDaosDaoIdGetRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdGet
      */
-    daoId: number
+    daoId: string
 }
 
 export interface DaosApiDaosDaoIdMembersDeleteRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdMembersDelete
      */
-    daoId: number
+    daoId: string
     /**
      * 
      * @type DAOMembership
@@ -193,12 +188,11 @@ export interface DaosApiDaosDaoIdMembersDeleteRequest {
 export interface DaosApiDaosDaoIdMembersPostRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdMembersPost
      */
-    daoId: number
+    daoId: string
     /**
      * 
      * @type DAOMembership
@@ -210,12 +204,11 @@ export interface DaosApiDaosDaoIdMembersPostRequest {
 export interface DaosApiDaosDaoIdPodsGetRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdPodsGet
      */
-    daoId: number
+    daoId: string
     /**
      * 
      * @type PODUserWhoMadeRequest
@@ -227,20 +220,18 @@ export interface DaosApiDaosDaoIdPodsGetRequest {
 export interface DaosApiDaosDaoIdPodsPodIdDeleteRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdPodsPodIdDelete
      */
-    daoId: number
+    daoId: string
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdPodsPodIdDelete
      */
-    podId: number
+    podId: string
     /**
      * 
      * @type PODMembership
@@ -252,39 +243,35 @@ export interface DaosApiDaosDaoIdPodsPodIdDeleteRequest {
 export interface DaosApiDaosDaoIdPodsPodIdGetRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdPodsPodIdGet
      */
-    daoId: number
+    daoId: string
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdPodsPodIdGet
      */
-    podId: number
+    podId: string
 }
 
 export interface DaosApiDaosDaoIdPodsPodIdMembersDeleteRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdPodsPodIdMembersDelete
      */
-    daoId: number
+    daoId: string
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdPodsPodIdMembersDelete
      */
-    podId: number
+    podId: string
     /**
      * 
      * @type PODMembership
@@ -296,39 +283,35 @@ export interface DaosApiDaosDaoIdPodsPodIdMembersDeleteRequest {
 export interface DaosApiDaosDaoIdPodsPodIdMembersGetRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdPodsPodIdMembersGet
      */
-    daoId: number
+    daoId: string
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdPodsPodIdMembersGet
      */
-    podId: number
+    podId: string
 }
 
 export interface DaosApiDaosDaoIdPodsPodIdMembersPostRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdPodsPodIdMembersPost
      */
-    daoId: number
+    daoId: string
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdPodsPodIdMembersPost
      */
-    podId: number
+    podId: string
     /**
      * 
      * @type PODMembership
@@ -340,20 +323,18 @@ export interface DaosApiDaosDaoIdPodsPodIdMembersPostRequest {
 export interface DaosApiDaosDaoIdPodsPodIdPutRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdPodsPodIdPut
      */
-    daoId: number
+    daoId: string
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdPodsPodIdPut
      */
-    podId: number
+    podId: string
     /**
      * 
      * @type PODUpdate
@@ -365,12 +346,11 @@ export interface DaosApiDaosDaoIdPodsPodIdPutRequest {
 export interface DaosApiDaosDaoIdPodsPostRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdPodsPost
      */
-    daoId: number
+    daoId: string
     /**
      * 
      * @type POD
@@ -382,12 +362,11 @@ export interface DaosApiDaosDaoIdPodsPostRequest {
 export interface DaosApiDaosDaoIdPutRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof DaosApidaosDaoIdPut
      */
-    daoId: number
+    daoId: string
     /**
      * 
      * @type DAOUpdate
@@ -825,12 +804,11 @@ export interface UsersApiGetAuthUserInfosRequest {
 export interface UsersApiGetUserRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof UsersApigetUser
      */
-    userId: number
+    userId: string
 }
 
 export interface UsersApiGetUserWithWalletAddressRequest {
@@ -846,12 +824,11 @@ export interface UsersApiGetUserWithWalletAddressRequest {
 export interface UsersApiUpdateUserRequest {
     /**
      * 
-     * Minimum: 0
      * Defaults to: undefined
-     * @type number
+     * @type string
      * @memberof UsersApiupdateUser
      */
-    userId: number
+    userId: string
     /**
      * 
      * @type InputUpdateUser

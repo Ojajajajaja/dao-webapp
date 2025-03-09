@@ -137,7 +137,7 @@ const apiInstance = new UsersApi(configuration);
 
 const request: UsersApiGetUserRequest = {
   
-  userId: 0,
+  userId: "user_id_example",
 };
 
 const data = await apiInstance.getUser(request);
@@ -149,7 +149,7 @@ console.log('API called successfully. Returned data:', data);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userId** | [**number**] |  | defaults to undefined
+ **userId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
@@ -245,7 +245,7 @@ const apiInstance = new UsersApi(configuration);
 
 const request: UsersApiUpdateUserRequest = {
   
-  userId: 0,
+  userId: "user_id_example",
   
   inputUpdateUser: {
     username: "username_example",
@@ -268,7 +268,7 @@ console.log('API called successfully. Returned data:', data);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **inputUpdateUser** | **InputUpdateUser**|  |
- **userId** | [**number**] |  | defaults to undefined
+ **userId** | [**string**] |  | defaults to undefined
 
 
 ### Return type

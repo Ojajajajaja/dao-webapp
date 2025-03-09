@@ -188,7 +188,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdAdminsDeleteWithHttpInfo(daoId: number, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public daosDaoIdAdminsDeleteWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -210,7 +210,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdAdminsDelete(daoId: number, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
+    public daosDaoIdAdminsDelete(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -232,7 +232,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdAdminsPostWithHttpInfo(daoId: number, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public daosDaoIdAdminsPostWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -254,7 +254,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdAdminsPost(daoId: number, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
+    public daosDaoIdAdminsPost(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -276,7 +276,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdDeleteWithHttpInfo(daoId: number, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<void>> {
+    public daosDaoIdDeleteWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<void>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -298,7 +298,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdDelete(daoId: number, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<void> {
+    public daosDaoIdDelete(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<void> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -319,7 +319,7 @@ export class PromiseDaosApi {
      * Get a DAO by ID
      * @param daoId
      */
-    public daosDaoIdGetWithHttpInfo(daoId: number, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public daosDaoIdGetWithHttpInfo(daoId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -340,7 +340,7 @@ export class PromiseDaosApi {
      * Get a DAO by ID
      * @param daoId
      */
-    public daosDaoIdGet(daoId: number, _options?: PromiseConfigurationOptions): Promise<DAO> {
+    public daosDaoIdGet(daoId: string, _options?: PromiseConfigurationOptions): Promise<DAO> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -362,7 +362,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdMembersDeleteWithHttpInfo(daoId: number, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public daosDaoIdMembersDeleteWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -384,7 +384,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdMembersDelete(daoId: number, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
+    public daosDaoIdMembersDelete(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -406,7 +406,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdMembersPostWithHttpInfo(daoId: number, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public daosDaoIdMembersPostWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -428,7 +428,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public daosDaoIdMembersPost(daoId: number, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
+    public daosDaoIdMembersPost(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -450,7 +450,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param pODUserWhoMadeRequest
      */
-    public daosDaoIdPodsGetWithHttpInfo(daoId: number, pODUserWhoMadeRequest: PODUserWhoMadeRequest, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Array<POD>>> {
+    public daosDaoIdPodsGetWithHttpInfo(daoId: string, pODUserWhoMadeRequest: PODUserWhoMadeRequest, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Array<POD>>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -472,7 +472,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param pODUserWhoMadeRequest
      */
-    public daosDaoIdPodsGet(daoId: number, pODUserWhoMadeRequest: PODUserWhoMadeRequest, _options?: PromiseConfigurationOptions): Promise<Array<POD>> {
+    public daosDaoIdPodsGet(daoId: string, pODUserWhoMadeRequest: PODUserWhoMadeRequest, _options?: PromiseConfigurationOptions): Promise<Array<POD>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -495,7 +495,7 @@ export class PromiseDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public daosDaoIdPodsPodIdDeleteWithHttpInfo(daoId: number, podId: number, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
+    public daosDaoIdPodsPodIdDeleteWithHttpInfo(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -518,7 +518,7 @@ export class PromiseDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public daosDaoIdPodsPodIdDelete(daoId: number, podId: number, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<POD> {
+    public daosDaoIdPodsPodIdDelete(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<POD> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -540,7 +540,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param podId
      */
-    public daosDaoIdPodsPodIdGetWithHttpInfo(daoId: number, podId: number, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
+    public daosDaoIdPodsPodIdGetWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -562,7 +562,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param podId
      */
-    public daosDaoIdPodsPodIdGet(daoId: number, podId: number, _options?: PromiseConfigurationOptions): Promise<POD> {
+    public daosDaoIdPodsPodIdGet(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<POD> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -585,7 +585,7 @@ export class PromiseDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public daosDaoIdPodsPodIdMembersDeleteWithHttpInfo(daoId: number, podId: number, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
+    public daosDaoIdPodsPodIdMembersDeleteWithHttpInfo(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -608,7 +608,7 @@ export class PromiseDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public daosDaoIdPodsPodIdMembersDelete(daoId: number, podId: number, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<POD> {
+    public daosDaoIdPodsPodIdMembersDelete(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<POD> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -630,7 +630,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param podId
      */
-    public daosDaoIdPodsPodIdMembersGetWithHttpInfo(daoId: number, podId: number, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Array<User>>> {
+    public daosDaoIdPodsPodIdMembersGetWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Array<User>>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -652,7 +652,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param podId
      */
-    public daosDaoIdPodsPodIdMembersGet(daoId: number, podId: number, _options?: PromiseConfigurationOptions): Promise<Array<User>> {
+    public daosDaoIdPodsPodIdMembersGet(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<Array<User>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -675,7 +675,7 @@ export class PromiseDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public daosDaoIdPodsPodIdMembersPostWithHttpInfo(daoId: number, podId: number, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
+    public daosDaoIdPodsPodIdMembersPostWithHttpInfo(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -698,7 +698,7 @@ export class PromiseDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public daosDaoIdPodsPodIdMembersPost(daoId: number, podId: number, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<POD> {
+    public daosDaoIdPodsPodIdMembersPost(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<POD> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -721,7 +721,7 @@ export class PromiseDaosApi {
      * @param podId
      * @param pODUpdate
      */
-    public daosDaoIdPodsPodIdPutWithHttpInfo(daoId: number, podId: number, pODUpdate: PODUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
+    public daosDaoIdPodsPodIdPutWithHttpInfo(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -744,7 +744,7 @@ export class PromiseDaosApi {
      * @param podId
      * @param pODUpdate
      */
-    public daosDaoIdPodsPodIdPut(daoId: number, podId: number, pODUpdate: PODUpdate, _options?: PromiseConfigurationOptions): Promise<POD> {
+    public daosDaoIdPodsPodIdPut(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: PromiseConfigurationOptions): Promise<POD> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -766,7 +766,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param POD
      */
-    public daosDaoIdPodsPostWithHttpInfo(daoId: number, POD: POD, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
+    public daosDaoIdPodsPostWithHttpInfo(daoId: string, POD: POD, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -788,7 +788,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param POD
      */
-    public daosDaoIdPodsPost(daoId: number, POD: POD, _options?: PromiseConfigurationOptions): Promise<POD> {
+    public daosDaoIdPodsPost(daoId: string, POD: POD, _options?: PromiseConfigurationOptions): Promise<POD> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -810,7 +810,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOUpdate
      */
-    public daosDaoIdPutWithHttpInfo(daoId: number, dAOUpdate: DAOUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public daosDaoIdPutWithHttpInfo(daoId: string, dAOUpdate: DAOUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -832,7 +832,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOUpdate
      */
-    public daosDaoIdPut(daoId: number, dAOUpdate: DAOUpdate, _options?: PromiseConfigurationOptions): Promise<DAO> {
+    public daosDaoIdPut(daoId: string, dAOUpdate: DAOUpdate, _options?: PromiseConfigurationOptions): Promise<DAO> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1189,7 +1189,7 @@ export class PromiseUsersApi {
      * Get an existing user
      * @param userId
      */
-    public getUserWithHttpInfo(userId: number, _options?: PromiseConfigurationOptions): Promise<HttpInfo<UserResponse>> {
+    public getUserWithHttpInfo(userId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<UserResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1210,7 +1210,7 @@ export class PromiseUsersApi {
      * Get an existing user
      * @param userId
      */
-    public getUser(userId: number, _options?: PromiseConfigurationOptions): Promise<UserResponse> {
+    public getUser(userId: string, _options?: PromiseConfigurationOptions): Promise<UserResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1274,7 +1274,7 @@ export class PromiseUsersApi {
      * @param userId
      * @param inputUpdateUser
      */
-    public updateUserWithHttpInfo(userId: number, inputUpdateUser: InputUpdateUser, _options?: PromiseConfigurationOptions): Promise<HttpInfo<UserResponse>> {
+    public updateUserWithHttpInfo(userId: string, inputUpdateUser: InputUpdateUser, _options?: PromiseConfigurationOptions): Promise<HttpInfo<UserResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1296,7 +1296,7 @@ export class PromiseUsersApi {
      * @param userId
      * @param inputUpdateUser
      */
-    public updateUser(userId: number, inputUpdateUser: InputUpdateUser, _options?: PromiseConfigurationOptions): Promise<UserResponse> {
+    public updateUser(userId: string, inputUpdateUser: InputUpdateUser, _options?: PromiseConfigurationOptions): Promise<UserResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {

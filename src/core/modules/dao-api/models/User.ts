@@ -19,7 +19,7 @@ export class User {
     /**
     * Unique user identifier
     */
-    'userId'?: number;
+    'userId'?: string;
     /**
     * Username of the user
     */
@@ -73,7 +73,7 @@ export class User {
         {
             "name": "userId",
             "baseName": "user_id",
-            "type": "number",
+            "type": "string",
             "format": ""
         },
         {

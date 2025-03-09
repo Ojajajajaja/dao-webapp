@@ -28,7 +28,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * @param daoId 
      * @param dAOMembership 
      */
-    public async daosDaoIdAdminsDelete(daoId: number, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
+    public async daosDaoIdAdminsDelete(daoId: string, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
@@ -77,7 +77,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * @param daoId 
      * @param dAOMembership 
      */
-    public async daosDaoIdAdminsPost(daoId: number, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
+    public async daosDaoIdAdminsPost(daoId: string, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
@@ -126,7 +126,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * @param daoId 
      * @param dAOMembership 
      */
-    public async daosDaoIdDelete(daoId: number, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
+    public async daosDaoIdDelete(daoId: string, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
@@ -174,7 +174,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * Get a DAO by ID
      * @param daoId 
      */
-    public async daosDaoIdGet(daoId: number, _options?: Configuration): Promise<RequestContext> {
+    public async daosDaoIdGet(daoId: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
@@ -206,7 +206,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * @param daoId 
      * @param dAOMembership 
      */
-    public async daosDaoIdMembersDelete(daoId: number, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
+    public async daosDaoIdMembersDelete(daoId: string, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
@@ -255,7 +255,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * @param daoId 
      * @param dAOMembership 
      */
-    public async daosDaoIdMembersPost(daoId: number, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
+    public async daosDaoIdMembersPost(daoId: string, dAOMembership: DAOMembership, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
@@ -304,7 +304,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * @param daoId 
      * @param pODUserWhoMadeRequest 
      */
-    public async daosDaoIdPodsGet(daoId: number, pODUserWhoMadeRequest: PODUserWhoMadeRequest, _options?: Configuration): Promise<RequestContext> {
+    public async daosDaoIdPodsGet(daoId: string, pODUserWhoMadeRequest: PODUserWhoMadeRequest, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
@@ -354,7 +354,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * @param podId 
      * @param pODMembership 
      */
-    public async daosDaoIdPodsPodIdDelete(daoId: number, podId: number, pODMembership: PODMembership, _options?: Configuration): Promise<RequestContext> {
+    public async daosDaoIdPodsPodIdDelete(daoId: string, podId: string, pODMembership: PODMembership, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
@@ -410,7 +410,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * @param daoId 
      * @param podId 
      */
-    public async daosDaoIdPodsPodIdGet(daoId: number, podId: number, _options?: Configuration): Promise<RequestContext> {
+    public async daosDaoIdPodsPodIdGet(daoId: string, podId: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
@@ -450,7 +450,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * @param podId 
      * @param pODMembership 
      */
-    public async daosDaoIdPodsPodIdMembersDelete(daoId: number, podId: number, pODMembership: PODMembership, _options?: Configuration): Promise<RequestContext> {
+    public async daosDaoIdPodsPodIdMembersDelete(daoId: string, podId: string, pODMembership: PODMembership, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
@@ -506,7 +506,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * @param daoId 
      * @param podId 
      */
-    public async daosDaoIdPodsPodIdMembersGet(daoId: number, podId: number, _options?: Configuration): Promise<RequestContext> {
+    public async daosDaoIdPodsPodIdMembersGet(daoId: string, podId: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
@@ -546,7 +546,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * @param podId 
      * @param pODMembership 
      */
-    public async daosDaoIdPodsPodIdMembersPost(daoId: number, podId: number, pODMembership: PODMembership, _options?: Configuration): Promise<RequestContext> {
+    public async daosDaoIdPodsPodIdMembersPost(daoId: string, podId: string, pODMembership: PODMembership, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
@@ -603,7 +603,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * @param podId 
      * @param pODUpdate 
      */
-    public async daosDaoIdPodsPodIdPut(daoId: number, podId: number, pODUpdate: PODUpdate, _options?: Configuration): Promise<RequestContext> {
+    public async daosDaoIdPodsPodIdPut(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
@@ -659,7 +659,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * @param daoId 
      * @param POD 
      */
-    public async daosDaoIdPodsPost(daoId: number, POD: POD, _options?: Configuration): Promise<RequestContext> {
+    public async daosDaoIdPodsPost(daoId: string, POD: POD, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
@@ -708,7 +708,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
      * @param daoId 
      * @param dAOUpdate 
      */
-    public async daosDaoIdPut(daoId: number, dAOUpdate: DAOUpdate, _options?: Configuration): Promise<RequestContext> {
+    public async daosDaoIdPut(daoId: string, dAOUpdate: DAOUpdate, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
