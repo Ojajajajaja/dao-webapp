@@ -91,6 +91,7 @@ export class DaosService {
   async createDao(daoData: {
     name: string;
     description?: string;
+    userId: string;
   }): Promise<DAO | null> {
     try {
       // Check if user is authenticated
@@ -103,7 +104,8 @@ export class DaosService {
       const daoInput = new DAO();
       daoInput.name = daoData.name;
       daoInput.description = daoData.description || '';
-      daoInput.userWhoMadeRequest = 0; // This would need to be set to the current user ID
+      daoInput.ownerId = daoData.userId;
+      daoInput.userWhoMadeRequest = daoData.userId;
 
       const response = await this.daosApi.daosPost(daoInput);
       return response || null;
@@ -116,7 +118,7 @@ export class DaosService {
   /**
    * Update a DAO by ID
    */
-  async updateDao(daoId: number, daoData: {
+  async updateDao(daoId: string, daoData: {
     description?: string;
     name?: string;
     isActive?: boolean;
@@ -133,7 +135,7 @@ export class DaosService {
       if (daoData.description !== undefined) daoUpdate.description = daoData.description;
       if (daoData.name !== undefined) daoUpdate.name = daoData.name;
       if (daoData.isActive !== undefined) daoUpdate.isActive = daoData.isActive;
-      daoUpdate.userWhoMadeRequest = 0; // This would need to be set to the current user ID
+      daoUpdate.userWhoMadeRequest = "0"; // This would need to be set to the current user ID
 
       const response = await this.daosApi.daosDaoIdPut(daoId, daoUpdate);
       return response || null;
@@ -146,7 +148,7 @@ export class DaosService {
   /**
    * Add a member to a DAO
    */
-  async addMemberToDao(daoId: number, userId: number): Promise<DAO | null> {
+  async addMemberToDao(daoId: string, userId: string): Promise<DAO | null> {
     try {
       // Check if user is authenticated
       const token = walletAuthService.getAccessToken();
@@ -170,7 +172,7 @@ export class DaosService {
   /**
    * Remove a member from a DAO
    */
-  async removeMemberFromDao(daoId: number, userId: number): Promise<DAO | null> {
+  async removeMemberFromDao(daoId: string, userId: string): Promise<DAO | null> {
     try {
       // Check if user is authenticated
       const token = walletAuthService.getAccessToken();

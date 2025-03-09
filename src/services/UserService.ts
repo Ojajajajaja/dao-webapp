@@ -58,7 +58,7 @@ export class UserService {
   /**
    * Get a user by ID
    */
-  async getUserById(userId: number): Promise<UserResponse | null> {
+  async getUserById(userId: string): Promise<UserResponse | null> {
     try {
       const response = await this.usersApi.getUser(userId);
       return response || null;
@@ -84,7 +84,7 @@ export class UserService {
   /**
    * Update a user's profile
    */
-  async updateUser(userId: number, userData: {
+  async updateUser(userId: string, userData: {
     username?: string;
     email?: string;
     discordUsername?: string;
@@ -109,7 +109,7 @@ export class UserService {
   /**
    * Get the current authenticated user using the @me endpoint
    */
-  async getMe(): Promise<any> {
+  async getMe(): Promise<UserResponse | null> {
     try {
       // Return cached data if available and not expired
       if (this.userCache && (Date.now() - this.userCache.timestamp < this.CACHE_EXPIRY_MS)) {

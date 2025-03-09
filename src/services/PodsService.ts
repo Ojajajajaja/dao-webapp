@@ -54,9 +54,9 @@ export class PodsService {
   }
 
   /**
-   * Get all pods in a DAO
+   * Get all pods for a DAO
    */
-  async getPods(daoId: number): Promise<POD[]> {
+  async getPods(daoId: string): Promise<POD[]> {
     try {
       // Check if user is authenticated
       const token = walletAuthService.getAccessToken();
@@ -77,22 +77,22 @@ export class PodsService {
   }
 
   /**
-   * Get a pod by ID
+   * Get a pod by its ID
    */
-  async getPodById(daoId: number, podId: number): Promise<POD | null> {
+  async getPodById(daoId: string, podId: string): Promise<POD | null> {
     try {
       const response = await this.daosApi.daosDaoIdPodsPodIdGet(daoId, podId);
       return response || null;
     } catch (error) {
-      console.error(`Error getting pod ${podId} in DAO ${daoId}:`, error);
+      console.error(`Error getting pod with ID ${podId} from DAO ${daoId}:`, error);
       return null;
     }
   }
 
   /**
-   * Create a new pod in a DAO
+   * Create a new pod
    */
-  async createPod(daoId: number, podData: {
+  async createPod(daoId: string, podData: {
     name: string;
     description?: string;
   }): Promise<POD | null> {
@@ -120,7 +120,7 @@ export class PodsService {
   /**
    * Update a pod
    */
-  async updatePod(daoId: number, podId: number, podData: {
+  async updatePod(daoId: string, podId: string, podData: {
     name?: string;
     description?: string;
   }): Promise<POD | null> {
@@ -146,9 +146,9 @@ export class PodsService {
   }
 
   /**
-   * Get members of a pod
+   * Get pod members
    */
-  async getPodMembers(daoId: number, podId: number) {
+  async getPodMembers(daoId: string, podId: string) {
     try {
       const response = await this.daosApi.daosDaoIdPodsPodIdMembersGet(daoId, podId);
       return response || [];
@@ -161,12 +161,12 @@ export class PodsService {
   /**
    * Add a member to a pod
    */
-  async addMemberToPod(daoId: number, podId: number, userId: number): Promise<POD | null> {
+  async addMemberToPod(daoId: string, podId: string, userId: string): Promise<POD | null> {
     try {
       // Check if user is authenticated
       const token = walletAuthService.getAccessToken();
       if (!token) {
-        console.error('No authentication token found. User must be logged in to add a member to a pod.');
+        console.error('No authentication token found. User must be logged in to add members to a pod.');
         return null;
       }
 
@@ -185,12 +185,12 @@ export class PodsService {
   /**
    * Remove a member from a pod
    */
-  async removeMemberFromPod(daoId: number, podId: number, userId: number): Promise<POD | null> {
+  async removeMemberFromPod(daoId: string, podId: string, userId: string): Promise<POD | null> {
     try {
       // Check if user is authenticated
       const token = walletAuthService.getAccessToken();
       if (!token) {
-        console.error('No authentication token found. User must be logged in to remove a member from a pod.');
+        console.error('No authentication token found. User must be logged in to remove members from a pod.');
         return null;
       }
 
@@ -209,7 +209,7 @@ export class PodsService {
   /**
    * Delete a pod
    */
-  async deletePod(daoId: number, podId: number): Promise<POD | null> {
+  async deletePod(daoId: string, podId: string): Promise<POD | null> {
     try {
       // Check if user is authenticated
       const token = walletAuthService.getAccessToken();
@@ -224,7 +224,7 @@ export class PodsService {
       const response = await this.daosApi.daosDaoIdPodsPodIdDelete(daoId, podId, membership);
       return response || null;
     } catch (error) {
-      console.error(`Error deleting pod ${podId} in DAO ${daoId}:`, error);
+      console.error(`Error deleting pod ${podId} from DAO ${daoId}:`, error);
       return null;
     }
   }
