@@ -9,6 +9,7 @@ import Members from './components/Members';
 import NotificationsSidebar from './components/NotificationsSidebar';
 import LandingPage from './components/LandingPage';
 import { useEffectOnce } from './hooks/useEffectOnce';
+import { containers } from './styles/theme';
 
 // Dashboard component that handles DAO-specific routing
 const Dashboard = () => {
@@ -54,7 +55,7 @@ const Dashboard = () => {
   }, [daoId]);
 
   return (
-    <div className="flex h-screen bg-[#1C1C1C]">
+    <div className="flex h-screen bg-background">
       {/* Left Sidebar */}
       <Sidebar activeSection={activeSection} setActiveSection={setActiveSection} />
       
@@ -69,7 +70,7 @@ const Dashboard = () => {
         
         {/* Main content area */}
         <div className="flex flex-1 overflow-hidden">
-          <main className="flex-1 overflow-y-auto bg-[#1C1C1C]">
+          <main className="flex-1 overflow-y-auto bg-background">
             <div 
               className={`transition-opacity duration-300 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}
             >

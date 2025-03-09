@@ -2,6 +2,7 @@ import React from 'react';
 import { Search } from 'lucide-react';
 import useApiAndWallet from '../hooks/useApiAndWallet';
 import ApiAuthStatus from './common/ApiAuthStatus';
+import { ui } from '../styles/theme';
 
 interface HeaderProps {
   activeSection: string;
@@ -27,12 +28,12 @@ const Header = ({ activeSection, showNotifications, setShowNotifications }: Head
   };
 
   return (
-    <header className="shadow-sm z-20 border-b-[1px] border-[#555555]">
-      <div className="flex items-center justify-between p-4">
+    <header className={ui.header}>
+      <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <span className="text-[#555555] select-none">DAO</span>
-          <span className="mx-2 text-[#555555]">/</span>
-          <span className="text-white select-none min-w-[100px]">{getSectionDisplayName()}</span>
+          <span className="text-surface-400 select-none">DAO</span>
+          <span className="mx-2 text-surface-400">/</span>
+          <span className="text-text select-none min-w-[100px]">{getSectionDisplayName()}</span>
         </div>
         
         <div className="flex-1 flex justify-center mx-4">
@@ -40,9 +41,9 @@ const Header = ({ activeSection, showNotifications, setShowNotifications }: Head
             <input
               type="text"
               placeholder="Search"
-              className="bg-[#555555] rounded-full py-2 pl-10 pr-4 text-sm w-full focus:outline-none text-white"
+              className="bg-surface-300 rounded-full py-2 pl-10 pr-4 text-sm w-full focus:outline-none focus:ring-1 focus:ring-primary text-text"
             />
-            <Search size={16} className="absolute left-3 top-2.5 text-gray-400" />
+            <Search size={16} className="absolute left-3 top-2.5 text-surface-500" />
           </div>
         </div>
         

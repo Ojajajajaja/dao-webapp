@@ -3,6 +3,7 @@ import { useDaos } from '../hooks/useDaos';
 import useApiAndWallet from '../hooks/useApiAndWallet';
 import ApiAuthStatus from './common/ApiAuthStatus';
 import CreateDaoForm from './CreateDaoForm';
+import { containers, ui, typography, states } from '../styles/theme';
 
 interface LandingPageProps {
   onEnterDashboard: (daoId?: string) => void;
@@ -21,9 +22,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterDashboard }) => {
   };
   
   return (
-    <div className="flex flex-col min-h-screen bg-[#1C1C1C] text-white">
+    <div className={containers.page}>
       {/* Header with Wallet & API Status */}
-      <header className="w-full p-2 border-b border-[#333333]">
+      <header className={ui.header}>
         <div className="flex justify-center items-center">
           <ApiAuthStatus 
             apiStatus={apiStatus} 
@@ -34,8 +35,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterDashboard }) => {
       
       {/* Main Content */}
       <div className="flex-1 flex flex-col items-center justify-center p-6">
-        <h2 className="text-4xl font-bold mb-8">Welcome to BWEN DAO</h2>
-        <p className="text-xl mb-12 max-w-lg text-center">
+        <h2 className={typography.h1 + " mb-8"}>Welcome to BWEN DAO</h2>
+        <p className="text-xl mb-12 max-w-lg text-center text-text">
           Join our decentralized autonomous organization and be part of the future of web3 governance.
         </p>
         
@@ -43,7 +44,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterDashboard }) => {
         <div className="mb-10 flex flex-col items-center">
           {userDisplayInfo.isAuthenticated ? (
             <div className="text-center">
-              <p className="text-lg text-green-500 mb-4">You are authenticated as <strong>{userDisplayInfo.displayUsername}</strong></p>
+              <p className="text-lg text-primary mb-4">You are authenticated as <strong>{userDisplayInfo.displayUsername}</strong></p>
               
               {showCreateForm ? (
                 <div className="mt-6 mb-10 w-full max-w-md">
@@ -53,7 +54,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterDashboard }) => {
                   />
                   <button 
                     onClick={() => setShowCreateForm(false)}
-                    className="mt-4 text-gray-400 hover:text-white text-sm"
+                    className="mt-4 text-surface-500 hover:text-text text-sm"
                   >
                     Cancel and return to DAO list
                   </button>
@@ -61,14 +62,14 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterDashboard }) => {
               ) : (
                 <button
                   onClick={() => setShowCreateForm(true)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                  className={ui.button.primary}
                 >
                   Create New DAO
                 </button>
               )}
             </div>
           ) : (
-            <div className="text-yellow-500 text-center">
+            <div className="text-primary text-center">
               <p className="text-lg">Please connect your wallet to access all features</p>
             </div>
           )}
@@ -77,18 +78,18 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterDashboard }) => {
         {/* Only show DAO list if not showing create form */}
         {!showCreateForm && (
           <div className="w-full max-w-4xl">
-            <h2 className="text-2xl font-bold mb-6">Available DAOs</h2>
+            <h2 className={typography.h2 + " mb-6"}>Available DAOs</h2>
             
             {loading ? (
               <div className="flex justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
               </div>
             ) : error ? (
-              <div className="text-red-500 text-center">
+              <div className="text-primary text-center">
                 Failed to load DAOs. Please try again later.
               </div>
             ) : daos.length === 0 ? (
-              <div className="text-center text-gray-400">
+              <div className="text-center text-surface-500">
                 No DAOs available at the moment.
               </div>
             ) : (
@@ -97,20 +98,20 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterDashboard }) => {
                   <div 
                     key={dao.id}
                     onClick={() => onEnterDashboard(dao.id)}
-                    className="bg-gray-800 rounded-lg p-6 cursor-pointer hover:bg-gray-700 transition-colors duration-200"
+                    className="bg-surface-200 rounded-lg p-6 cursor-pointer hover:bg-surface-300 transition-colors duration-200"
                   >
                     <div className="flex items-center mb-4">
                       {dao.logo ? (
                         <img src={dao.logo} alt={dao.name} className="w-12 h-12 rounded-full mr-4" />
                       ) : (
-                        <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center mr-4">
+                        <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center mr-4">
                           {dao.name.charAt(0)}
                         </div>
                       )}
-                      <h3 className="text-xl font-semibold">{dao.name}</h3>
+                      <h3 className={typography.h3}>{dao.name}</h3>
                     </div>
-                    <p className="text-gray-300 mb-4 line-clamp-3">{dao.description}</p>
-                    <div className="flex justify-between text-sm text-gray-400">
+                    <p className="text-text mb-4 line-clamp-3">{dao.description}</p>
+                    <div className="flex justify-between text-sm text-surface-500">
                       <span>{dao.members} members</span>
                       <span>{dao.proposals} proposals</span>
                     </div>
@@ -118,13 +119,13 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterDashboard }) => {
                       {dao.treasury.length > 0 ? (
                         <div className="flex flex-wrap gap-2">
                           {dao.treasury.map((asset, idx) => (
-                            <span key={idx} className="bg-gray-700 px-2 py-1 rounded text-sm">
+                            <span key={idx} className={ui.badge}>
                               {asset.amount.toLocaleString()} {asset.symbol}
                             </span>
                           ))}
                         </div>
                       ) : (
-                        <span className="text-sm text-gray-400">No treasury data</span>
+                        <span className="text-sm text-surface-400">No treasury data</span>
                       )}
                     </div>
                   </div>

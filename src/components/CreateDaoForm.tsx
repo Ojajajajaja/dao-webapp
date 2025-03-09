@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { userService } from '../services/UserService';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useEffectOnce } from '../hooks/useEffectOnce';
+import { ui, states } from '../styles/theme';
 
 interface CreateDaoFormProps {
   onSuccess?: (daoId: string) => void;
@@ -98,46 +99,46 @@ const CreateDaoForm: React.FC<CreateDaoFormProps> = ({ onSuccess, onError }) => 
   const displayUsername = userInfo?.username || userInfo?.walletAddress || 'Unknown User';
   
   return (
-    <div className="bg-gray-800 rounded-lg p-6 w-full max-w-md mx-auto">
-      <h2 className="text-2xl font-bold mb-6 text-center">Create New DAO</h2>
+    <div className="bg-surface-200 rounded-lg p-6 w-full max-w-md mx-auto">
+      <h2 className="text-2xl font-bold mb-6 text-center text-text">Create New DAO</h2>
       
       {success && (
-        <div className="bg-green-600 bg-opacity-20 border border-green-500 text-green-300 px-4 py-3 rounded mb-4">
+        <div className="bg-success bg-opacity-20 border border-success text-success px-4 py-3 rounded mb-4">
           {success}
         </div>
       )}
       
       {error && (
-        <div className="bg-red-600 bg-opacity-20 border border-red-500 text-red-300 px-4 py-3 rounded mb-4">
+        <div className="bg-error bg-opacity-20 border border-error text-error px-4 py-3 rounded mb-4">
           {error}
         </div>
       )}
       
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
-            DAO Name <span className="text-red-500">*</span>
+          <label htmlFor="name" className="block text-sm font-medium text-surface-500 mb-1">
+            DAO Name <span className="text-error">*</span>
           </label>
           <input
             type="text"
             id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 border border-gray-600 rounded-md bg-[#252525] text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border border-surface-300 rounded-md bg-surface-100 text-text focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="Enter a unique name for your DAO"
             disabled={isSubmitting}
           />
         </div>
         
         <div className="mb-6">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-300 mb-1">
+          <label htmlFor="description" className="block text-sm font-medium text-surface-500 mb-1">
             Description
           </label>
           <textarea
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2 border border-gray-600 rounded-md bg-[#252525] text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border border-surface-300 rounded-md bg-surface-100 text-text focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="Describe the purpose of your DAO"
             rows={4}
             disabled={isSubmitting}
@@ -145,19 +146,19 @@ const CreateDaoForm: React.FC<CreateDaoFormProps> = ({ onSuccess, onError }) => 
         </div>
         
         <div className="mb-4">
-          <p className="text-sm text-gray-400">
-            Creating as: <span className="text-white">{displayUsername}</span>
-            {userId && <span className="ml-2 text-xs text-gray-500">(ID: {userId})</span>}
+          <p className="text-sm text-surface-400">
+            Creating as: <span className="text-text">{displayUsername}</span>
+            {userId && <span className="ml-2 text-xs text-surface-400">(ID: {userId})</span>}
           </p>
         </div>
         
         <button
           type="submit"
           disabled={isSubmitting || isLoadingUser}
-          className={`w-full py-3 rounded-lg text-white font-medium ${
+          className={`w-full py-3 rounded-lg text-text font-medium ${
             isSubmitting || isLoadingUser
-              ? 'bg-blue-700 cursor-not-allowed opacity-70'
-              : 'bg-blue-600 hover:bg-blue-700 transition-colors'
+              ? 'bg-primary cursor-not-allowed opacity-70'
+              : 'bg-primary hover:bg-opacity-90 transition-colors'
           }`}
         >
           {isSubmitting ? 'Creating...' : isLoadingUser ? 'Loading User Info...' : 'Create DAO'}

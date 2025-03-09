@@ -4,6 +4,7 @@ import type { User } from '../core/modules/dao-api';
 import { useEffectOnce } from '../hooks/useEffectOnce';
 import { useParams } from 'react-router-dom';
 import { daosService } from '../services/DaosService';
+import { ui, states } from '../styles/theme';
 
 interface MemberData {
   id: string | number | undefined;
@@ -212,23 +213,23 @@ const Members = () => {
       
       {loading ? (
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
         </div>
       ) : error ? (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <div className="bg-error bg-opacity-10 border border-error text-error px-4 py-3 rounded relative" role="alert">
           <strong className="font-bold">Error!</strong>
           <span className="block sm:inline"> {error}</span>
         </div>
       ) : (
         <>
           <div className="grid grid-cols-2 gap-6 mb-6">
-            <div className="bg-[#3b4da8] rounded-lg p-4 text-white">
+            <div className="bg-primary rounded-lg p-4 text-text">
               <h3 className="text-sm font-medium mb-2">Total Members</h3>
               <p className="text-3xl font-bold">{daoMembers.length}</p>
             </div>
             
             {lastJoinedMember && (
-              <div className="bg-[#3b4da8] rounded-lg p-4 text-white">
+              <div className="bg-primary rounded-lg p-4 text-text">
                 <h3 className="text-sm font-medium mb-2">Last Joined</h3>
                 <p className="text-lg">{lastJoinedMember.name}</p>
                 <p className="text-sm">{getTimeAgo(lastJoinedMember.lastLogin)}</p>
@@ -241,7 +242,7 @@ const Members = () => {
               {/* Sort Dropdown */}
               <div className="relative">
                 <button 
-                  className={`flex items-center space-x-1 ${sortOrder !== 'A-Z' ? 'bg-white text-[#252525]' : 'bg-[#252525] text-white'} px-3 py-2 rounded-md text-sm`}
+                  className={`flex items-center space-x-1 ${sortOrder !== 'A-Z' ? 'bg-white text-[#252525]' : 'bg-surface-200 text-text'} px-3 py-2 rounded-md text-sm`}
                   onClick={() => toggleDropdown('sort')}
                 >
                   <span>Sort</span>
@@ -249,12 +250,12 @@ const Members = () => {
                 </button>
                 
                 {activeDropdown === 'sort' && (
-                  <div className="absolute z-10 mt-1 w-36 bg-[#333333] rounded-md shadow-lg">
+                  <div className="absolute z-10 mt-1 w-36 bg-surface-300 rounded-md shadow-lg">
                     <ul className="py-1">
                       {['A-Z', 'Z-A', 'Recent', 'Oldest First'].map((option) => (
                         <li 
                           key={option}
-                          className={`px-3 py-2 text-sm ${sortOrder === option.replace(' First', '') ? 'bg-white text-[#252525]' : 'text-white hover:bg-[#444444]'} cursor-pointer`}
+                          className={`px-3 py-2 text-sm ${sortOrder === option.replace(' First', '') ? 'bg-white text-[#252525]' : 'text-text hover:bg-[#444444]'} cursor-pointer`}
                           onClick={() => {
                             setSortOrder(option.replace(' First', ''));
                             setActiveDropdown(null);
@@ -271,7 +272,7 @@ const Members = () => {
               {/* Pods Dropdown */}
               <div className="relative">
                 <button 
-                  className={`flex items-center space-x-1 ${podFilter.length > 0 ? 'bg-white text-[#252525]' : 'bg-[#252525] text-white'} px-3 py-2 rounded-md text-sm`}
+                  className={`flex items-center space-x-1 ${podFilter.length > 0 ? 'bg-white text-[#252525]' : 'bg-surface-200 text-text'} px-3 py-2 rounded-md text-sm`}
                   onClick={() => toggleDropdown('pods')}
                 >
                   <span>Pods</span>
@@ -279,18 +280,18 @@ const Members = () => {
                 </button>
                 
                 {activeDropdown === 'pods' && (
-                  <div className="absolute z-10 mt-1 w-48 bg-[#333333] rounded-md shadow-lg">
+                  <div className="absolute z-10 mt-1 w-48 bg-surface-300 rounded-md shadow-lg">
                     <ul className="py-1 max-h-60 overflow-y-auto">
                       {uniquePods.map((pod) => (
                         <li 
                           key={pod}
-                          className="px-3 py-2 text-sm text-white hover:bg-[#444444] cursor-pointer flex items-center justify-between"
+                          className="px-3 py-2 text-sm text-text hover:bg-[#444444] cursor-pointer flex items-center justify-between"
                           onClick={() => togglePodFilter(pod)}
                         >
                           <span className={podFilter.includes(pod) ? "font-bold" : ""}>
                             {pod}
                           </span>
-                          {podFilter.includes(pod) && <Check size={18} strokeWidth={2.5} className="text-white" />}
+                          {podFilter.includes(pod) && <Check size={18} strokeWidth={2.5} className="text-text" />}
                         </li>
                       ))}
                     </ul>
@@ -301,7 +302,7 @@ const Members = () => {
               {/* Activity Dropdown */}
               <div className="relative">
                 <button 
-                  className={`flex items-center space-x-1 ${isActivityFilterActive ? 'bg-white text-[#252525]' : 'bg-[#252525] text-white'} px-3 py-2 rounded-md text-sm`}
+                  className={`flex items-center space-x-1 ${isActivityFilterActive ? 'bg-white text-[#252525]' : 'bg-surface-200 text-text'} px-3 py-2 rounded-md text-sm`}
                   onClick={() => toggleDropdown('activity')}
                 >
                   <span>Activity</span>
@@ -309,27 +310,27 @@ const Members = () => {
                 </button>
                 
                 {activeDropdown === 'activity' && (
-                  <div className="absolute z-10 mt-1 w-80 bg-[#333333] rounded-md shadow-lg p-4">
+                  <div className="absolute z-10 mt-1 w-80 bg-surface-300 rounded-md shadow-lg p-4">
                     <div className="mb-4">
-                      <h3 className="text-white text-sm font-medium mb-2 flex items-center">
-                        <Calendar size={16} className="mr-2 text-white" />
+                      <h3 className="text-text text-sm font-medium mb-2 flex items-center">
+                        <Calendar size={16} className="mr-2 text-text" />
                         Last Activity
                       </h3>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-gray-400 text-xs mb-1">Since</label>
+                          <label className="block text-surface-500 text-xs mb-1">Since</label>
                           <input 
                             type="date" 
-                            className="w-full bg-[#252525] text-white text-sm rounded-md px-3 py-2"
+                            className="w-full bg-surface-200 text-text text-sm rounded-md px-3 py-2"
                             value={activitySince}
                             onChange={(e) => setActivitySince(e.target.value)}
                           />
                         </div>
                         <div>
-                          <label className="block text-gray-400 text-xs mb-1">Until</label>
+                          <label className="block text-surface-500 text-xs mb-1">Until</label>
                           <input 
                             type="date" 
-                            className="w-full bg-[#252525] text-white text-sm rounded-md px-3 py-2"
+                            className="w-full bg-surface-200 text-text text-sm rounded-md px-3 py-2"
                             value={activityUntil}
                             onChange={(e) => setActivityUntil(e.target.value)}
                           />
@@ -338,25 +339,25 @@ const Members = () => {
                     </div>
                     
                     <div className="mb-4">
-                      <h3 className="text-white text-sm font-medium mb-2 flex items-center">
-                        <Calendar size={16} className="mr-2 text-white" />
+                      <h3 className="text-text text-sm font-medium mb-2 flex items-center">
+                        <Calendar size={16} className="mr-2 text-text" />
                         Last Login
                       </h3>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-gray-400 text-xs mb-1">Since</label>
+                          <label className="block text-surface-500 text-xs mb-1">Since</label>
                           <input 
                             type="date" 
-                            className="w-full bg-[#252525] text-white text-sm rounded-md px-3 py-2"
+                            className="w-full bg-surface-200 text-text text-sm rounded-md px-3 py-2"
                             value={loginSince}
                             onChange={(e) => setLoginSince(e.target.value)}
                           />
                         </div>
                         <div>
-                          <label className="block text-gray-400 text-xs mb-1">Until</label>
+                          <label className="block text-surface-500 text-xs mb-1">Until</label>
                           <input 
                             type="date" 
-                            className="w-full bg-[#252525] text-white text-sm rounded-md px-3 py-2"
+                            className="w-full bg-surface-200 text-text text-sm rounded-md px-3 py-2"
                             value={loginUntil}
                             onChange={(e) => setLoginUntil(e.target.value)}
                           />
@@ -366,13 +367,13 @@ const Members = () => {
                     
                     <div className="flex justify-between">
                       <button 
-                        className="text-xs text-gray-400 hover:text-white"
+                        className="text-xs text-surface-500 hover:text-text"
                         onClick={resetActivityFilters}
                       >
                         Reset
                       </button>
                       <button 
-                        className="bg-blue-500 text-white px-4 py-2 rounded-md text-xs"
+                        className="bg-primary text-text px-4 py-2 rounded-md text-xs"
                         onClick={() => setActiveDropdown(null)}
                       >
                         Apply
@@ -384,26 +385,26 @@ const Members = () => {
             </div>
           </div>
           
-          <div className="bg-[#252525] rounded-lg overflow-hidden">
+          <div className="bg-surface-200 rounded-lg overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-white">
+              <table className="w-full text-text">
                 <thead>
                   <tr className="border-b border-[#333333]">
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Member</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Wallet</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Username</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Pods</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Discord ID</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Twitter</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Telegram</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Last Login</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Last Interaction</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-surface-500 uppercase tracking-wider">Member</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-surface-500 uppercase tracking-wider">Wallet</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-surface-500 uppercase tracking-wider">Username</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-surface-500 uppercase tracking-wider">Pods</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-surface-500 uppercase tracking-wider">Discord ID</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-surface-500 uppercase tracking-wider">Twitter</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-surface-500 uppercase tracking-wider">Telegram</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-surface-500 uppercase tracking-wider">Last Login</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-surface-500 uppercase tracking-wider">Last Interaction</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#333333]">
                   {filteredMembers.length > 0 ? (
                     filteredMembers.map((member) => (
-                      <tr key={member.id} className="hover:bg-[#2A2A2A]">
+                      <tr key={member.id} className="hover:bg-surface-200">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="h-10 w-10 rounded-full overflow-hidden mr-3">
@@ -421,7 +422,7 @@ const Members = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                           <div className="flex flex-wrap gap-1">
                             {member.pods.map((pod: string, index: number) => (
-                              <span key={index} className="px-2 py-1 bg-[#3b4da8] rounded-full text-xs">
+                              <span key={index} className="px-2 py-1 bg-primary rounded-full text-xs">
                                 {pod}
                               </span>
                             ))}
@@ -432,7 +433,7 @@ const Members = () => {
                           <a href={`https://twitter.com/${member.twitter.replace('@', '')}`} 
                              target="_blank" 
                              rel="noopener noreferrer"
-                             className="text-blue-400 hover:text-blue-300 flex items-center">
+                             className="text-primary hover:text-primary flex items-center">
                             {member.twitter}
                             <ExternalLink size={12} className="ml-1" />
                           </a>
@@ -452,7 +453,7 @@ const Members = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={9} className="px-6 py-4 text-center text-gray-400">
+                      <td colSpan={9} className="px-6 py-4 text-center text-surface-500">
                         No members found
                       </td>
                     </tr>

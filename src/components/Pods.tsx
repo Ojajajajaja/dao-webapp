@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Users, MessageSquare, Calendar, ExternalLink } from 'lucide-react';
+import { Plus, Users, MessageSquare, Calendar, ExternalLink, Layers, ArrowUpRight, X, Check } from 'lucide-react';
+import { ui, states, typography, containers } from '../styles/theme';
 
 // Définition du type pour les messages du feed
 interface FeedMessage {
@@ -193,8 +194,8 @@ const Pods = () => {
               key={index} 
               className={`px-4 py-2 rounded-full text-sm ${
                 category === selectedPod 
-                  ? 'bg-blue-500 text-white' 
-                  : 'bg-[#252525] text-white hover:bg-[#333333]'
+                  ? 'bg-primary text-text' 
+                  : 'bg-surface-200 text-text hover:bg-surface-300'
               }`}
               onClick={() => setSelectedPod(category)}
             >
@@ -203,15 +204,15 @@ const Pods = () => {
           ))}
         </div>
         
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-full text-sm">
+        <button className="bg-primary text-text px-4 py-2 rounded-full text-sm">
           Join the Pod
         </button>
       </div>
       
       <div className="grid grid-cols-3 gap-6">
         <div className="col-span-2">
-          <div className="bg-[#252525] rounded-lg p-4">
-            <h2 className="text-white text-lg mb-4 flex items-center">
+          <div className="bg-surface-200 rounded-lg p-4">
+            <h2 className="text-text text-lg mb-4 flex items-center">
               <MessageSquare className="mr-2" size={20} />
               {selectedPod} Feed
             </h2>
@@ -219,27 +220,27 @@ const Pods = () => {
             {filteredFeed.length > 0 ? (
               <div className="space-y-4">
                 {filteredFeed.map((message) => (
-                  <div key={message.id} className="bg-[#2A2A2A] p-3 rounded-md">
+                  <div key={message.id} className="bg-surface-200 p-3 rounded-md">
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex items-center">
-                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold mr-2">
+                        <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-text font-bold mr-2">
                           {message.discord_username.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <div className="text-white font-medium">{message.discord_username}</div>
-                          <div className="text-gray-400 text-xs">{formatDate(message.date, message.hour)}</div>
+                          <div className="text-text font-medium">{message.discord_username}</div>
+                          <div className="text-surface-500 text-xs">{formatDate(message.date, message.hour)}</div>
                         </div>
                       </div>
                       <a 
                         href={`https://discord.com/users/${message.discord_user_id}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-400 hover:text-blue-300 text-xs flex items-center"
+                        className="text-primary hover:text-primary text-xs flex items-center"
                       >
                         Discord <ExternalLink size={12} className="ml-1" />
                       </a>
                     </div>
-                    <p className="text-white text-sm">{message.message}</p>
+                    <p className="text-text text-sm">{message.message}</p>
                   </div>
                 ))}
               </div>
@@ -252,8 +253,8 @@ const Pods = () => {
         </div>
         
         <div className="col-span-1">
-          <div className="bg-[#252525] rounded-lg p-4">
-            <h2 className="text-white text-lg mb-4 flex items-center">
+          <div className="bg-surface-200 rounded-lg p-4">
+            <h2 className="text-text text-lg mb-4 flex items-center">
               <Calendar className="mr-2" size={20} />
               {selectedPod} Proposals
             </h2>
@@ -261,14 +262,14 @@ const Pods = () => {
             {filteredProposals.length > 0 ? (
               <div className="space-y-4">
                 {filteredProposals.map((proposal) => (
-                  <div key={proposal.id} className="bg-[#2A2A2A] p-3 rounded-md">
-                    <h3 className="text-white font-medium mb-1">{proposal.title}</h3>
-                    <p className="text-gray-300 text-sm mb-2">{proposal.description}</p>
+                  <div key={proposal.id} className="bg-surface-200 p-3 rounded-md">
+                    <h3 className="text-text font-medium mb-1">{proposal.title}</h3>
+                    <p className="text-text opacity-80 text-sm mb-2">{proposal.description}</p>
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-gray-400">By {proposal.author} on {proposal.date}</span>
+                      <span className="text-surface-500">By {proposal.author} on {proposal.date}</span>
                       <div className="flex items-center">
-                        <span className="text-blue-400 mr-1">{proposal.votes}</span>
-                        <span className="text-gray-400">votes</span>
+                        <span className="text-primary mr-1">{proposal.votes}</span>
+                        <span className="text-surface-500">votes</span>
                       </div>
                     </div>
                   </div>
@@ -280,7 +281,7 @@ const Pods = () => {
               </div>
             )}
             
-            <button className="w-full mt-4 bg-blue-500 text-white px-4 py-2 rounded-md text-sm">
+            <button className="w-full mt-4 bg-primary text-text px-4 py-2 rounded-md text-sm">
               Create Proposal
             </button>
           </div>
