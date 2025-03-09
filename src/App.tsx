@@ -8,6 +8,7 @@ import Pods from './components/Pods';
 import Members from './components/Members';
 import NotificationsSidebar from './components/NotificationsSidebar';
 import LandingPage from './components/LandingPage';
+import { useEffectOnce } from './hooks/useEffectOnce';
 
 // Dashboard component that handles DAO-specific routing
 const Dashboard = () => {
@@ -47,7 +48,7 @@ const Dashboard = () => {
   }, [activeSection]);
 
   // Log the current DAO ID whenever it changes
-  useEffect(() => {
+  useEffectOnce(() => {
     console.log('Current DAO ID:', daoId);
     // Here you could fetch specific DAO data based on the ID
   }, [daoId]);

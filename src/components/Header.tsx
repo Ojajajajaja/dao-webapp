@@ -10,15 +10,8 @@ interface HeaderProps {
   daoId?: string; // Make daoId optional
 }
 
-const Header = ({ activeSection, showNotifications, setShowNotifications, daoId }: HeaderProps) => {
+const Header = ({ activeSection, showNotifications, setShowNotifications }: HeaderProps) => {
   const { apiStatus, userDisplayInfo } = useApiAndWallet();
-
-  // Log the current DAO ID whenever it changes
-  React.useEffect(() => {
-    if (daoId) {
-      console.log(`Current DAO ID in header: ${daoId}`);
-    }
-  }, [daoId]);
 
   const getSectionDisplayName = () => {
     switch (activeSection) {

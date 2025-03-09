@@ -29,14 +29,11 @@ const CreateDaoForm: React.FC<CreateDaoFormProps> = ({ onSuccess, onError }) => 
       try {
         // Get user data from the @me endpoint
         const userData = await userService.getMe();
-        console.log("User data from API:", userData);
-        console.log(userData?.user?.user_id);
         
         // Check if userData contains user_id (as seen in the console log)
-        if (userData && userData.user?.user_id) {
+        if (userData && userData.user?.userId) {
           // Keep as string to preserve full precision of large numbers
-          setUserId(String(userData.user?.user_id));
-          console.log('Current user ID from API (string):', String(userData.user?.user_id));
+          setUserId(String(userData.user?.userId));
           setIsLoadingUser(false);
           return;
         }
@@ -81,7 +78,6 @@ const CreateDaoForm: React.FC<CreateDaoFormProps> = ({ onSuccess, onError }) => 
         description,
         userId,
       });
-      
       if (result) {
         setSuccess(`DAO "${name}" created successfully!`);
         setName('');
