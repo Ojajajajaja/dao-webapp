@@ -120,6 +120,7 @@ export class PodsService {
   async createPod(daoId: string, podData: {
     name: string;
     description?: string;
+    daoId?: string;
   }): Promise<POD | null> {
     try {
       const apiClient = this.createAuthenticatedApiClient();
@@ -128,7 +129,7 @@ export class PodsService {
       const pod = new POD();
       pod.name = podData.name;
       pod.description = podData.description || '';
-      // Other required properties are handled by the server
+      pod.daoId = daoId;
 
       const response = await apiClient.createPOD(daoId, pod);
       return response || null;
