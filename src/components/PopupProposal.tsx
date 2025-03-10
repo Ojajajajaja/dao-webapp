@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { X, Check, AlertTriangle, ThumbsUp, ThumbsDown, Users, Calendar, Clock, Minus, Wallet, UserMinus, ArrowUpRight } from 'lucide-react';
-import { ui, states, typography } from '../styles/theme';
 
 interface ProposalAction {
   type: string;

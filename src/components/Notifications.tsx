@@ -1,6 +1,5 @@
 import React from 'react';
 import { Layers, Users, Vote, Bell, MessageSquareQuote, Wallet } from 'lucide-react';
-import { ui } from '../styles/theme';
 
 const Notifications = () => {
   const notifications = [

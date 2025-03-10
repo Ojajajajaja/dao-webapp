@@ -6,7 +6,6 @@ import {
   Activity,
   PieChart
 } from 'lucide-react';
-import { ui } from '../styles/theme';
 
 const Dashboard = () => {
   return (

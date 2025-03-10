@@ -2,7 +2,6 @@ import React from 'react';
 import { Wifi, WifiOff, Loader2, PenLine, AlertCircle, User } from 'lucide-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { UserDisplayInfo } from '../../hooks/useApiAndWallet';
-import { states } from '../../styles/theme';
 
 interface ApiAuthStatusProps {
   apiStatus: 'online' | 'offline' | 'checking';

@@ -4,7 +4,6 @@ import type { User } from '../core/modules/dao-api';
 import { useEffectOnce } from '../hooks/useEffectOnce';
 import { useParams } from 'react-router-dom';
 import { daosService } from '../services/DaosService';
-import { ui, states } from '../styles/theme';
 
 interface MemberData {
   id: string | number | undefined;
@@ -16,8 +15,8 @@ interface MemberData {
   discordId: string;
   twitter: string;
   telegram: string;
-  lastLogin: string;
-  lastInteraction: string;
+  lastLogin: string | Date;
+  lastInteraction: string | Date;
 }
 
 const Members = () => {
@@ -169,14 +168,14 @@ const Members = () => {
   };
 
   // Format date for display
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+  const formatDate = (dateString: string | Date) => {
+    const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
     return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
   // Format time ago for display
-  const getTimeAgo = (dateString: string) => {
-    const date = new Date(dateString);
+  const getTimeAgo = (dateString: string | Date) => {
+    const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffSec = Math.floor(diffMs / 1000);

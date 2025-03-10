@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { AlertCircle } from 'lucide-react';
-import { ui, states, typography } from '../styles/theme';
 
 interface UserRegistrationFormProps {
   walletAddress: string;

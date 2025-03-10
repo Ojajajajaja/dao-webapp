@@ -4,15 +4,35 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+ * VARIABLES CSS GLOBALES
+ * 
+ * Ces variables correspondent exactement aux couleurs définies dans tailwind.config.js
+ * IMPORTANT: Si vous modifiez une couleur, modifiez-la d'abord dans tailwind.config.js,
+ * puis mettez à jour la variable correspondante ici.
+ */
 :root {
-  --color-background: #1a1a1a;
+  /* Couleurs principales */
+  --color-background: #0c0c0c;
   --color-text: #f0f0f0;
   --color-primary: #577bf2;
+  
+  /* Couleur spécifique à la landing page 
+   * Cette variable permet de modifier la couleur principale de la landing page
+   * indépendamment de la couleur primaire utilisée dans le reste de l'application.
+   * Elle est modifiable via un color picker directement sur la landing page.
+   */
+  --landing-page-color: #ad21ff;
+  
+  /* Surfaces */
   --color-surface-100: rgba(255, 255, 255, 0.05);
   --color-surface-200: rgba(255, 255, 255, 0.08);
   --color-surface-300: rgba(255, 255, 255, 0.12);
   --color-surface-400: rgba(255, 255, 255, 0.16);
   --color-surface-500: rgba(255, 255, 255, 0.24);
+  --color-surface-menu: rgba(37, 37, 37, 1);
+  
+  /* Couleurs d'état */
   --color-success: #4ade80;
   --color-error: #ef4444;
   --color-warning: #f59e0b;
@@ -53,7 +73,7 @@ body {
 
 .wallet-adapter-dropdown-list {
   background-color: var(--color-background) !important;
-  border: 1px solid var(--color-surface-300) !important;
+  border: 2px solid var(--color-surface-300) !important;
   position: absolute !important;
   z-index: 50 !important; /* Ensure dropdown list has high z-index */
 }

@@ -9,7 +9,7 @@ import {
   MessageSquareQuote, 
   FileText
 } from 'lucide-react';
-import { ui, typography } from '../styles/theme';
+import { ui } from '../styles/theme';
 
 interface SidebarProps {
   activeSection: string;

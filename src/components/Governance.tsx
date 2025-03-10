@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PieChart, Vote, Plus, X, Clock, Calendar, Wallet, UserMinus, ArrowUpRight, Check } from 'lucide-react';
 import PopupProposal from './PopupProposal';
-import { ui, states, typography, containers } from '../styles/theme';
+import { containers } from '../styles/theme';
 
 interface Action {
   type: string;
@@ -484,7 +484,7 @@ const Governance = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-medium text-text">Review & Submit</h3>
             
-            <div className="bg-surface-200 p-4 rounded-md">
+            <div className={containers.card}>
               <h4 className="font-medium text-text mb-2">{proposal.title}</h4>
               <p className="text-text opacity-80 text-sm mb-4">{proposal.description}</p>
               

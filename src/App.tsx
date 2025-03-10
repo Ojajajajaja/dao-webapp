@@ -9,7 +9,6 @@ import Members from './components/Members';
 import NotificationsSidebar from './components/NotificationsSidebar';
 import LandingPage from './components/LandingPage';
 import { useEffectOnce } from './hooks/useEffectOnce';
-import { containers } from './styles/theme';
 
 // Dashboard component that handles DAO-specific routing
 const Dashboard = () => {

@@ -4,7 +4,6 @@ import { useAuth } from '../context/AuthContext';
 import { userService } from '../services/UserService';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useEffectOnce } from '../hooks/useEffectOnce';
-import { ui, states } from '../styles/theme';
 
 interface CreateDaoFormProps {
   onSuccess?: (daoId: string) => void;

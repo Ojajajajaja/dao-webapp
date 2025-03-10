@@ -1,28 +1,37 @@
 /** @type {import('tailwindcss').Config} */
+
+/**
+ * SYSTÈME DE COULEURS CENTRALISÉ
+ * 
+ * Toutes les couleurs de l'application sont définies ici.
+ * Pour modifier une couleur, il suffit de changer sa valeur hexadécimale ci-dessous.
+ * Les changements seront automatiquement appliqués partout où cette couleur est utilisée.
+ */
+
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
-        // Couleurs principales
-        'primary': '#577bf2', // Bleu/rouge remplacé par cette couleur
-        'background': '#0c0c0c', // Gris de fond principal
-        'text': '#f0f0f0', // Couleur de texte principale
+        // COULEURS PRINCIPALES
+        'primary': '#577bf2',    // Couleur d'accentuation principale (boutons, liens, etc.)
+        'background': '#0c0c0c', // Couleur de fond de l'application
+        'text': '#f0f0f0',       // Couleur de texte principale
         
-        // Variations de blanc avec opacité pour remplacer les autres gris
+        // SURFACES - Variations de blanc avec opacité pour les éléments d'interface
         'surface': {
-          100: 'rgba(255, 255, 255, 0.05)', // Très subtil, pour les éléments légèrement surélevés
-          200: 'rgba(255, 255, 255, 0.08)', // Pour les cartes, boutons inactifs
-          300: 'rgba(255, 255, 255, 0.12)', // Pour les éléments interactifs, bordures
-          400: 'rgba(255, 255, 255, 0.16)', // Pour les éléments en surbrillance
-          500: 'rgba(255, 255, 255, 0.24)', // Pour les éléments très en évidence
-          menu: 'rgba(37, 37, 37, 1)',      // Menu de navigation (utilisé pour les dropdowns)
+          100: 'rgba(255, 255, 255, 0.05)', // Très subtil (éléments légèrement surélevés)
+          200: 'rgba(255, 255, 255, 0.08)', // Léger (cartes, boutons inactifs)
+          300: 'rgba(255, 255, 255, 0.12)', // Moyen (éléments interactifs, bordures)
+          400: 'rgba(255, 255, 255, 0.16)', // Prononcé (éléments en surbrillance)
+          500: 'rgba(255, 255, 255, 0.24)', // Très prononcé (éléments très en évidence)
+          'menu': 'rgba(37, 37, 37, 1)',    // Menu de navigation (dropdowns)
         },
         
-        // Couleurs d'état
-        'success': '#4ade80', // Vert pour les messages de succès
-        'error': '#ef4444', // Rouge pour les messages d'erreur
-        'warning': '#f59e0b', // Jaune/orange pour les avertissements
+        // COULEURS D'ÉTAT - Pour les messages et indicateurs
+        'success': '#4ade80', // Vert (succès, validation)
+        'error': '#ef4444',   // Rouge (erreur, alerte)
+        'warning': '#f59e0b', // Jaune/orange (avertissement)
       },
     },
   },

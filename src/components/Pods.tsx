@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Users, MessageSquare, Calendar, ExternalLink, Layers, ArrowUpRight, X, Check } from 'lucide-react';
-import { ui, states, typography, containers } from '../styles/theme';
 
 // Définition du type pour les messages du feed
 interface FeedMessage {
