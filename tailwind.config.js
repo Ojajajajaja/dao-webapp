@@ -6,7 +6,7 @@ export default {
       colors: {
         // Couleurs principales
         'primary': '#577bf2', // Bleu/rouge remplacé par cette couleur
-        'background': '#1a1a1a', // Gris de fond principal
+        'background': '#0c0c0c', // Gris de fond principal
         'text': '#f0f0f0', // Couleur de texte principale
         
         // Variations de blanc avec opacité pour remplacer les autres gris
@@ -16,6 +16,7 @@ export default {
           300: 'rgba(255, 255, 255, 0.12)', // Pour les éléments interactifs, bordures
           400: 'rgba(255, 255, 255, 0.16)', // Pour les éléments en surbrillance
           500: 'rgba(255, 255, 255, 0.24)', // Pour les éléments très en évidence
+          menu: 'rgba(37, 37, 37, 1)',      // Menu de navigation (utilisé pour les dropdowns)
         },
         
         // Couleurs d'état

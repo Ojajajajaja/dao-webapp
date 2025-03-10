@@ -7,14 +7,14 @@
 export const containers = {
   page: "flex flex-col min-h-screen bg-background text-text",
   section: "w-full p-4",
-  card: "bg-surface-200 rounded-lg p-4 border border-surface-300",
+  card: "bg-surface-200 rounded-lg p-4 border-2 border-surface-300",
 };
 
 // Classes communes pour les éléments d'interface
 export const ui = {
-  header: "w-full p-2 border-b border-surface-300",
-  sidebar: "bg-background border-r border-surface-300",
-  input: "bg-surface-200 border border-surface-300 rounded-md p-2 text-text focus:outline-none focus:ring-2 focus:ring-primary",
+  header: "w-full p-2 border-b-2 border-surface-300",
+  sidebar: "bg-background border-r-2 border-surface-300",
+  input: "bg-surface-200 border-2 border-surface-300 rounded-md p-2 text-text focus:outline-none focus:ring-2 focus:ring-primary",
   button: {
     primary: "bg-primary hover:bg-opacity-90 text-text font-bold py-2 px-4 rounded-md transition-colors",
     secondary: "bg-surface-300 hover:bg-surface-400 text-text py-2 px-4 rounded-md transition-colors",

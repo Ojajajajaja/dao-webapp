@@ -31,8 +31,8 @@ const Header = ({ activeSection, showNotifications, setShowNotifications }: Head
     <header className={ui.header}>
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <span className="text-surface-400 select-none">DAO</span>
-          <span className="mx-2 text-surface-400">/</span>
+          <span className="text-surface-500 select-none ml-2">DAO</span>
+          <span className="mx-2 text-surface-500">/</span>
           <span className="text-text select-none min-w-[100px]">{getSectionDisplayName()}</span>
         </div>
         

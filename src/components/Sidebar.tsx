@@ -49,11 +49,11 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) =>
       <div className="p-4">
         <div className="flex items-center">
           <div className="mr-2">
-            <svg className="w-6 h-6 text-surface-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <svg className="w-6 h-6 text-surface-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
             </svg>
           </div>
-          <span className="text-surface-400 text-sm font-normal">USERNAME</span>
+          <span className="text-surface-500 text-sm font-normal">USERNAME</span>
         </div>
       </div>
       
@@ -63,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) =>
           <img src="https://i.imgur.com/PeLdfS1.png" alt="DAO Logo" className="w-full h-full object-cover" />
         </div>
         <div className="text-center">
-          <p className="text-sm text-surface-400 font-normal">BABYWEN DAO</p>
+          <p className="text-sm text-text font-normal">BABYWEN DAO</p>
         </div>
       </div>
       

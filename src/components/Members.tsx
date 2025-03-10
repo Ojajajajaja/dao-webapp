@@ -250,7 +250,7 @@ const Members = () => {
                 </button>
                 
                 {activeDropdown === 'sort' && (
-                  <div className="absolute z-10 mt-1 w-36 bg-surface-300 rounded-md shadow-lg">
+                  <div className="absolute z-10 mt-1 w-36 bg-surface-menu rounded-md shadow-lg">
                     <ul className="py-1">
                       {['A-Z', 'Z-A', 'Recent', 'Oldest First'].map((option) => (
                         <li 
@@ -280,7 +280,7 @@ const Members = () => {
                 </button>
                 
                 {activeDropdown === 'pods' && (
-                  <div className="absolute z-10 mt-1 w-48 bg-surface-300 rounded-md shadow-lg">
+                  <div className="absolute z-10 mt-1 w-48 bg-surface-menu rounded-md shadow-lg">
                     <ul className="py-1 max-h-60 overflow-y-auto">
                       {uniquePods.map((pod) => (
                         <li 
@@ -310,7 +310,7 @@ const Members = () => {
                 </button>
                 
                 {activeDropdown === 'activity' && (
-                  <div className="absolute z-10 mt-1 w-80 bg-surface-300 rounded-md shadow-lg p-4">
+                  <div className="absolute z-10 mt-1 w-80 bg-surface-menu  rounded-md shadow-lg p-4">
                     <div className="mb-4">
                       <h3 className="text-text text-sm font-medium mb-2 flex items-center">
                         <Calendar size={16} className="mr-2 text-text" />

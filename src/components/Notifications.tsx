@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layers, Users, Vote, Bell, MessageSquareQuote, Wallet } from 'lucide-react';
-import { ui, states } from '../styles/theme';
+import { ui } from '../styles/theme';
 
 const Notifications = () => {
   const notifications = [
@@ -55,11 +55,11 @@ const Notifications = () => {
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-text">Notifications</h1>
-        <button className="text-sm text-primary hover:text-primary hover:opacity-80">Mark all as read</button>
+        <button className="text-sm text-primary hover:opacity-80">Mark all as read</button>
       </div>
       
       <div className="bg-surface-200 rounded-lg shadow">
-        <div className="p-4 border-b border-surface-300 flex items-center justify-between">
+        <div className="p-4 border-b-2 border-surface-300 flex items-center justify-between">
           <h2 className="text-lg font-medium text-text">Recent Notifications</h2>
           <div className="flex items-center">
             <Bell size={18} className="text-surface-500 mr-2" />
@@ -69,7 +69,7 @@ const Notifications = () => {
           </div>
         </div>
         
-        <div className="divide-y divide-surface-300">
+        <div className="divide-y-2 divide-surface-300">
           {notifications.map((notification) => (
             <div key={notification.id} className="p-4 hover:bg-surface-100 transition-colors">
               <div className="flex">
@@ -85,7 +85,7 @@ const Notifications = () => {
                   </div>
                   <p className="text-sm text-text opacity-80">{notification.description}</p>
                   <div className="mt-2 flex space-x-2">
-                    <button className="text-xs text-primary hover:text-primary hover:opacity-80">View Details</button>
+                    <button className="text-xs text-primary hover:opacity-80">View Details</button>
                     <button className="text-xs text-surface-500 hover:text-surface-400">Dismiss</button>
                   </div>
                 </div>
@@ -94,8 +94,8 @@ const Notifications = () => {
           ))}
         </div>
         
-        <div className="p-4 border-t border-surface-300 text-center">
-          <button className="text-sm text-primary hover:text-primary hover:opacity-80">View All Notifications</button>
+        <div className="p-4 border-t-2 border-surface-300 text-center">
+          <button className="text-sm text-primary hover:opacity-80">View All Notifications</button>
         </div>
       </div>
       
@@ -106,22 +106,22 @@ const Notifications = () => {
             <div className="flex items-center justify-between">
               <span className="text-text">Email notifications</span>
               <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" value="" className="sr-only peer" checked />
-                <div className="w-11 h-6 bg-surface-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary peer-focus:ring-opacity-30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-surface-400 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                <input type="checkbox" value="" className="sr-only peer" defaultChecked />
+                <div className="w-11 h-6 bg-surface-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary peer-focus:ring-opacity-30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-2 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-surface-400 after:border-2 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
               </label>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-text">Push notifications</span>
               <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" value="" className="sr-only peer" checked />
-                <div className="w-11 h-6 bg-surface-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary peer-focus:ring-opacity-30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-surface-400 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                <input type="checkbox" value="" className="sr-only peer" defaultChecked />
+                <div className="w-11 h-6 bg-surface-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary peer-focus:ring-opacity-30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-2 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-surface-400 after:border-2 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
               </label>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-text">Governance alerts</span>
               <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" value="" className="sr-only peer" checked />
-                <div className="w-11 h-6 bg-surface-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary peer-focus:ring-opacity-30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-surface-400 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                <input type="checkbox" value="" className="sr-only peer" defaultChecked />
+                <div className="w-11 h-6 bg-surface-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary peer-focus:ring-opacity-30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-2 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-surface-400 after:border-2 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
               </label>
             </div>
           </div>
