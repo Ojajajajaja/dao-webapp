@@ -25,3 +25,4 @@ dist-ssr
 
 .specstory
 .cursor
+vite.config.ts
