@@ -36,12 +36,62 @@
   --color-success: #4ade80;
   --color-error: #ef4444;
   --color-warning: #f59e0b;
+  
+  /* Scrollbar */
+  --scrollbar-track: rgba(12, 12, 12, 0.95);
+  --scrollbar-thumb: rgba(87, 123, 242, 0.5);
+  --scrollbar-thumb-hover: rgba(87, 123, 242, 0.8);
 }
 
 body {
   font-family: 'Source Code Pro', monospace;
   background-color: var(--color-background);
   color: var(--color-text);
+}
+
+/* Personnalisation de la scrollbar */
+/* Pour Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* Pour Chrome, Edge, et Safari */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Masquer les boutons de défilement sur les navigateurs qui les affichent */
+::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
+/* Masquer également les coins de la scrollbar */
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 /* Custom styles for wallet adapter button */
