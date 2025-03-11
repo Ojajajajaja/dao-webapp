@@ -86,7 +86,7 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-      <div className="bg-surface-200 rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
+      <div className="bg-surface-menu rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
         <div className="flex justify-between items-center p-4 border-b border-gray-600">
           <div className="flex items-center">
             <h2 className="text-xl font-semibold text-text">{proposal.title}</h2>

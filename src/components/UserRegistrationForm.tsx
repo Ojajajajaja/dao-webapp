@@ -87,7 +87,7 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-      <div className="bg-surface-200 rounded-lg shadow-xl p-6 max-w-xl w-full">
+      <div className="bg-surface-menu rounded-lg shadow-xl p-6 max-w-xl w-full">
         <h2 className="text-xl font-semibold text-text mb-4">Complete Your Profile</h2>
         
         <p className="text-surface-500 mb-4">

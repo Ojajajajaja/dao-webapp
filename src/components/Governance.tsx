@@ -640,7 +640,7 @@ const Governance = () => {
       
       {showProposalForm && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-          <div className="bg-surface-200 rounded-lg shadow-xl w-full max-w-md mx-4">
+          <div className="bg-surface-menu rounded-lg shadow-xl w-full max-w-md mx-4">
             <div className="flex justify-between items-center p-4 border-b border-gray-600">
               <h2 className="text-xl font-semibold text-text">Create New Proposal</h2>
               <button 
