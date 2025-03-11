@@ -8,6 +8,8 @@
  * Les changements seront automatiquement appliqués partout où cette couleur est utilisée.
  */
 
+import tailwindScrollbar from 'tailwind-scrollbar';
+
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
@@ -36,7 +38,7 @@ export default {
     },
   },
   plugins: [
-    require('tailwind-scrollbar'),
+    tailwindScrollbar,
   ],
   variants: {
     scrollbar: ['rounded']
