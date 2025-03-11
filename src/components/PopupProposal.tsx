@@ -12,7 +12,6 @@ interface ProposalAction {
 interface ProposalVote {
   for: number;
   against: number;
-  abstain: number;
 }
 
 interface ProposalDetails {
@@ -68,15 +67,13 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose }) => {
   };
 
   const calculateProgress = () => {
-    const total = proposal.votes.for + proposal.votes.against + proposal.votes.abstain;
+    const total = proposal.votes.for + proposal.votes.against;
     const forPercentage = total > 0 ? (proposal.votes.for / total) * 100 : 0;
     const againstPercentage = total > 0 ? (proposal.votes.against / total) * 100 : 0;
-    const abstainPercentage = total > 0 ? (proposal.votes.abstain / total) * 100 : 0;
     
     return {
       for: forPercentage,
       against: againstPercentage,
-      abstain: abstainPercentage,
       quorumMet: total >= proposal.quorum,
       approvalMet: forPercentage >= proposal.minApproval
     };
@@ -187,16 +184,12 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose }) => {
                   style={{ width: `${progress.for}%` }}
                 ></div>
                 <div 
-                  className="bg-primary h-full" 
+                  className="bg-error h-full" 
                   style={{ width: `${progress.against}%` }}
-                ></div>
-                <div 
-                  className="bg-gray-500 h-full" 
-                  style={{ width: `${progress.abstain}%` }}
                 ></div>
               </div>
               
-              <div className="grid grid-cols-3 gap-2 text-center text-sm">
+              <div className="grid grid-cols-2 gap-4 text-center text-sm">
                 <div>
                   <div className="text-primary font-medium">{proposal.votes.for} votes</div>
                   <div className="text-surface-500">For ({progress.for.toFixed(1)}%)</div>
@@ -204,10 +197,6 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose }) => {
                 <div>
                   <div className="text-error font-medium">{proposal.votes.against} votes</div>
                   <div className="text-surface-500">Against ({progress.against.toFixed(1)}%)</div>
-                </div>
-                <div>
-                  <div className="text-text opacity-80 font-medium">{proposal.votes.abstain} votes</div>
-                  <div className="text-surface-500">Abstain ({progress.abstain.toFixed(1)}%)</div>
                 </div>
               </div>
             </div>
@@ -223,7 +212,7 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose }) => {
           ) : (
             <>
               <h3 className="text-lg font-medium text-text mb-3">Cast Your Vote</h3>
-              <div className="grid grid-cols-3 gap-3 mb-4">
+              <div className="grid grid-cols-2 gap-4 mb-4">
                 <button 
                   className={`p-3 rounded-md flex flex-col items-center justify-center ${
                     voteOption === 'for' 
@@ -239,7 +228,7 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose }) => {
                 <button 
                   className={`p-3 rounded-md flex flex-col items-center justify-center ${
                     voteOption === 'against' 
-                      ? 'bg-primary text-text' 
+                      ? 'bg-error text-text' 
                       : 'bg-surface-200 text-text opacity-80 hover:bg-surface-300'
                   }`}
                   onClick={() => setVoteOption('against')}
@@ -247,30 +236,18 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose }) => {
                   <ThumbsDown size={24} className="mb-1" />
                   <span>Against</span>
                 </button>
-                
-                <button 
-                  className={`p-3 rounded-md flex flex-col items-center justify-center ${
-                    voteOption === 'abstain' 
-                      ? 'bg-surface-300 text-text' 
-                      : 'bg-surface-200 text-text opacity-80 hover:bg-surface-300'
-                  }`}
-                  onClick={() => setVoteOption('abstain')}
-                >
-                  <AlertTriangle size={24} className="mb-1" />
-                  <span>Abstain</span>
-                </button>
               </div>
               
-              <button 
+              <button
                 className={`w-full p-3 rounded-md font-medium ${
-                  voteOption 
-                    ? 'bg-primary hover:bg-primary text-text' 
-                    : 'bg-surface-300 text-surface-500 cursor-not-allowed'
+                  voteOption
+                    ? 'bg-primary text-text hover:opacity-90'
+                    : 'bg-surface-200 text-surface-500 cursor-not-allowed'
                 }`}
                 onClick={handleVote}
                 disabled={!voteOption || isVoting}
               >
-                {isVoting ? 'Processing...' : 'Submit Vote'}
+                {isVoting ? 'Submitting vote...' : 'Submit Vote'}
               </button>
             </>
           )}

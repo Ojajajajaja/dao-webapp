@@ -14,9 +14,9 @@ export default {
     extend: {
       colors: {
         // COULEURS PRINCIPALES
-        'primary': '#577bf2',    // Couleur d'accentuation principale (boutons, liens, etc.)
-        'background': '#0c0c0c', // Couleur de fond de l'application
-        'text': '#f0f0f0',       // Couleur de texte principale
+        'primary': 'rgba(87, 123, 242, 1)',    // Couleur d'accentuation principale (boutons, liens, etc.)
+        'background': 'rgba(12, 12, 12, 1)', // Couleur de fond de l'application
+        'text': 'rgba(240, 240, 240, 1)',    // Couleur de texte principale
         
         // SURFACES - Variations de blanc avec opacité pour les éléments d'interface
         'surface': {
@@ -25,7 +25,7 @@ export default {
           300: 'rgba(255, 255, 255, 0.12)', // Moyen (éléments interactifs, bordures)
           400: 'rgba(255, 255, 255, 0.16)', // Prononcé (éléments en surbrillance)
           500: 'rgba(255, 255, 255, 0.24)', // Très prononcé (éléments très en évidence)
-          'menu': 'rgba(37, 37, 37, 1)',    // Menu de navigation (dropdowns)
+          'menu': 'rgba(12, 12, 12, 1)',    // Menu de navigation (dropdowns)
         },
         
         // COULEURS D'ÉTAT - Pour les messages et indicateurs
