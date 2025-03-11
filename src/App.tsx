@@ -6,7 +6,6 @@ import Home from './components/Home';
 import Governance from './components/Governance';
 import Pods from './components/Pods';
 import Members from './components/Members';
-import NotificationsSidebar from './components/NotificationsSidebar';
 import LandingPage from './components/LandingPage';
 import { useEffectOnce } from './hooks/useEffectOnce';
 
@@ -14,7 +13,7 @@ import { useEffectOnce } from './hooks/useEffectOnce';
 const Dashboard = () => {
   const { daoId } = useParams();
   const [activeSection, setActiveSection] = useState('home');
-  const [showNotifications, setShowNotifications] = useState(true);
+  const [showNotifications, setShowNotifications] = useState(false);
   const [fadeIn, setFadeIn] = useState(true);
   const [currentComponent, setCurrentComponent] = useState<React.ReactNode>(null);
 
@@ -68,17 +67,12 @@ const Dashboard = () => {
         />
         
         {/* Main content area */}
-        <div className="flex flex-1 overflow-hidden">
-          <main className="flex-1 overflow-y-auto bg-background">
-            <div 
-              className={`transition-opacity duration-300 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}
-            >
-              {currentComponent}
-            </div>
-          </main>
-          
-          {/* Right Notifications Sidebar */}
-          <NotificationsSidebar />
+        <div className="flex-1 overflow-y-auto bg-background">
+          <div 
+            className={`transition-opacity duration-300 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}
+          >
+            {currentComponent}
+          </div>
         </div>
       </div>
     </div>

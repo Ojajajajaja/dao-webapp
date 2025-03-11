@@ -2,6 +2,7 @@ import React from 'react';
 import { Search } from 'lucide-react';
 import useApiAndWallet from '../hooks/useApiAndWallet';
 import ApiAuthStatus from './common/ApiAuthStatus';
+import NotificationIcon from './common/NotificationIcon';
 import { ui } from '../styles/theme';
 
 interface HeaderProps {
@@ -27,6 +28,24 @@ const Header = ({ activeSection, showNotifications, setShowNotifications }: Head
     }
   };
 
+  // Exemple de notifications (à remplacer par vos vraies données)
+  const mockNotifications = [
+    {
+      id: '1',
+      title: 'Nouvelle proposition',
+      message: 'Une nouvelle proposition a été créée dans la DAO',
+      timestamp: 'Il y a 5 minutes',
+      read: false,
+    },
+    {
+      id: '2',
+      title: 'Vote terminé',
+      message: 'Le vote sur la proposition #123 est terminé',
+      timestamp: 'Il y a 1 heure',
+      read: true,
+    },
+  ];
+
   return (
     <header className={ui.header}>
       <div className="flex items-center justify-between">
@@ -47,11 +66,17 @@ const Header = ({ activeSection, showNotifications, setShowNotifications }: Head
           </div>
         </div>
         
-        {/* Only show the wallet and API status indicators */}
-        <ApiAuthStatus 
-          apiStatus={apiStatus} 
-          userDisplayInfo={userDisplayInfo}
-        />
+        <div className="flex items-center gap-4">
+          <NotificationIcon
+            showNotifications={showNotifications}
+            setShowNotifications={setShowNotifications}
+            notifications={mockNotifications}
+          />
+          <ApiAuthStatus 
+            apiStatus={apiStatus} 
+            userDisplayInfo={userDisplayInfo}
+          />
+        </div>
       </div>
     </header>
   );
