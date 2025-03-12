@@ -8,7 +8,8 @@ import {
   UsersApi, 
   InputUpdateUser, 
   UserResponse, 
-  UserExistResponse 
+  UserExistResponse, 
+  User
 } from '../core/modules/dao-api';
 import { ServerConfiguration } from '../core/modules/dao-api/servers';
 import { walletAuthService } from './WalletAuthService';
@@ -129,7 +130,7 @@ export class UserService {
   /**
    * Get the current authenticated user using the @me endpoint
    */
-  async getMe(): Promise<UserResponse | null> {
+  async getMe(): Promise<User | null> {
     try {
       // Return cached data if available and not expired
       if (this.userCache && (Date.now() - this.userCache.timestamp < this.CACHE_EXPIRY_MS)) {

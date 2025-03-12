@@ -139,7 +139,7 @@ export class DaosService {
 
       const response = await apiClient.createDAO(daoInput);
       console.log(response);
-      return response || null;
+      return response.dao || null;
     } catch (error) {
       console.error('Error creating DAO:', error);
       return null;

@@ -31,9 +31,9 @@ const CreateDaoForm: React.FC<CreateDaoFormProps> = ({ onSuccess, onError }) => 
         const userData = await userService.getMe();
         
         // Check if userData contains user_id (as seen in the console log)
-        if (userData && userData.user?.userId) {
+        if (userData && userData.userId) {
           // Keep as string to preserve full precision of large numbers
-          setUserId(String(userData.user?.userId));
+          setUserId(String(userData.userId));
           setIsLoadingUser(false);
           return;
         }

@@ -110,7 +110,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
       
       if (userData) {
         // Use type assertion to handle unknown properties
-        const user = userData.user as any;
+        const user = userData as any;
         
         // Log what we got from the API for debugging (just once)
         console.log('API returned user data from @me endpoint:', user);
