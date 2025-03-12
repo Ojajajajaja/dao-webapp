@@ -200,7 +200,7 @@ export class AuthApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not logged", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized - Invalid or missing token", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -250,7 +250,14 @@ export class AuthApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Invalid signature", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized or invalid signature", body, response.headers);
+        }
+        if (isCodeInRange("404", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "User not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(

@@ -60,7 +60,7 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **422** | Unprocessable Entity |  -  |
-**200** | Challenge message |  -  |
+**200** | Challenge message generated successfully |  -  |
 **404** | User not found |  -  |
 **0** | Default error response |  -  |
 
@@ -107,8 +107,8 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**201** | Logout the user |  -  |
-**401** | Not logged |  -  |
+**201** | Successfully logged out |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
@@ -165,8 +165,9 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **422** | Unprocessable Entity |  -  |
-**201** | Login successful |  -  |
-**401** | Invalid signature |  -  |
+**201** | Successfully authenticated |  -  |
+**401** | Unauthorized or invalid signature |  -  |
+**404** | User not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)

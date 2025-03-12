@@ -10,9 +10,15 @@ import {SecurityAuthentication} from '../auth/auth';
 
 import { DAO } from '../models/DAO';
 import { DAOMembership } from '../models/DAOMembership';
+import { DAOMembershipResponse } from '../models/DAOMembershipResponse';
+import { DAOSchemaResponse } from '../models/DAOSchemaResponse';
 import { DAOUpdate } from '../models/DAOUpdate';
+import { InputCreateDAO } from '../models/InputCreateDAO';
+import { InputCreatePOD } from '../models/InputCreatePOD';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
+import { PODMembershipResponse } from '../models/PODMembershipResponse';
+import { PODSchemaResponse } from '../models/PODSchemaResponse';
 import { PODUpdate } from '../models/PODUpdate';
 import { PagingError } from '../models/PagingError';
 import { User } from '../models/User';
@@ -143,14 +149,14 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
 
     /**
      * Create a new DAO
-     * @param DAO 
+     * @param inputCreateDAO 
      */
-    public async createDAO(DAO: DAO, _options?: Configuration): Promise<RequestContext> {
+    public async createDAO(inputCreateDAO: InputCreateDAO, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
-        // verify required parameter 'DAO' is not null or undefined
-        if (DAO === null || DAO === undefined) {
-            throw new RequiredError("DaosApi", "createDAO", "DAO");
+        // verify required parameter 'inputCreateDAO' is not null or undefined
+        if (inputCreateDAO === null || inputCreateDAO === undefined) {
+            throw new RequiredError("DaosApi", "createDAO", "inputCreateDAO");
         }
 
 
@@ -168,7 +174,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
         ]);
         requestContext.setHeaderParam("Content-Type", contentType);
         const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(DAO, "DAO", ""),
+            ObjectSerializer.serialize(inputCreateDAO, "InputCreateDAO", ""),
             contentType
         );
         requestContext.setBody(serializedBody);
@@ -185,9 +191,9 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
     /**
      * Create a new POD
      * @param daoId 
-     * @param POD 
+     * @param inputCreatePOD 
      */
-    public async createPOD(daoId: string, POD: POD, _options?: Configuration): Promise<RequestContext> {
+    public async createPOD(daoId: string, inputCreatePOD: InputCreatePOD, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'daoId' is not null or undefined
@@ -196,9 +202,9 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
         }
 
 
-        // verify required parameter 'POD' is not null or undefined
-        if (POD === null || POD === undefined) {
-            throw new RequiredError("DaosApi", "createPOD", "POD");
+        // verify required parameter 'inputCreatePOD' is not null or undefined
+        if (inputCreatePOD === null || inputCreatePOD === undefined) {
+            throw new RequiredError("DaosApi", "createPOD", "inputCreatePOD");
         }
 
 
@@ -217,7 +223,7 @@ export class DaosApiRequestFactory extends BaseAPIRequestFactory {
         ]);
         requestContext.setHeaderParam("Content-Type", contentType);
         const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(POD, "POD", ""),
+            ObjectSerializer.serialize(inputCreatePOD, "InputCreatePOD", ""),
             contentType
         );
         requestContext.setBody(serializedBody);
@@ -736,7 +742,7 @@ export class DaosApiResponseProcessor {
      * @params response Response returned by the server for a request to addAdminToDAO
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async addAdminToDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
+     public async addAdminToDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAOMembershipResponse >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("422", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -746,10 +752,10 @@ export class DaosApiResponseProcessor {
             throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
         }
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: DAO = ObjectSerializer.deserialize(
+            const body: DAOMembershipResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
+                "DAOMembershipResponse", ""
+            ) as DAOMembershipResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
@@ -759,19 +765,19 @@ export class DaosApiResponseProcessor {
             ) as PagingError;
             throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
         }
-        if (isCodeInRange("403", response.httpStatusCode)) {
+        if (isCodeInRange("401", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized", body, response.headers);
         }
         if (isCodeInRange("404", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "User or DAO not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -783,10 +789,10 @@ export class DaosApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: DAO = ObjectSerializer.deserialize(
+            const body: DAOMembershipResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
+                "DAOMembershipResponse", ""
+            ) as DAOMembershipResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -800,13 +806,13 @@ export class DaosApiResponseProcessor {
      * @params response Response returned by the server for a request to addMemberToDAO
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async addMemberToDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
+     public async addMemberToDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAOMembershipResponse >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: DAO = ObjectSerializer.deserialize(
+            const body: DAOMembershipResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
+                "DAOMembershipResponse", ""
+            ) as DAOMembershipResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
@@ -816,19 +822,12 @@ export class DaosApiResponseProcessor {
             ) as PagingError;
             throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
         }
-        if (isCodeInRange("403", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
-        }
         if (isCodeInRange("404", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "User or DAO not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -840,10 +839,10 @@ export class DaosApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: DAO = ObjectSerializer.deserialize(
+            const body: DAOMembershipResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
+                "DAOMembershipResponse", ""
+            ) as DAOMembershipResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -857,13 +856,13 @@ export class DaosApiResponseProcessor {
      * @params response Response returned by the server for a request to addMemberToPOD
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async addMemberToPODWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
+     public async addMemberToPODWithHttpInfo(response: ResponseContext): Promise<HttpInfo<PODMembershipResponse >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: POD = ObjectSerializer.deserialize(
+            const body: PODMembershipResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
+                "PODMembershipResponse", ""
+            ) as PODMembershipResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
@@ -871,21 +870,21 @@ export class DaosApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request - User already in POD", body, response.headers);
         }
-        if (isCodeInRange("403", response.httpStatusCode)) {
+        if (isCodeInRange("401", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized - Invalid or missing token", body, response.headers);
         }
         if (isCodeInRange("404", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "User, DAO or POD not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -897,10 +896,10 @@ export class DaosApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: POD = ObjectSerializer.deserialize(
+            const body: PODMembershipResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
+                "PODMembershipResponse", ""
+            ) as PODMembershipResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -914,7 +913,7 @@ export class DaosApiResponseProcessor {
      * @params response Response returned by the server for a request to createDAO
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async createDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
+     public async createDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAOSchemaResponse >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("422", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -924,10 +923,10 @@ export class DaosApiResponseProcessor {
             throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
         }
         if (isCodeInRange("201", response.httpStatusCode)) {
-            const body: DAO = ObjectSerializer.deserialize(
+            const body: DAOSchemaResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
+                "DAOSchemaResponse", ""
+            ) as DAOSchemaResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
@@ -935,7 +934,21 @@ export class DaosApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request - Invalid data", body, response.headers);
+        }
+        if (isCodeInRange("401", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized - Invalid or missing token", body, response.headers);
+        }
+        if (isCodeInRange("404", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "User not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -947,10 +960,10 @@ export class DaosApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: DAO = ObjectSerializer.deserialize(
+            const body: DAOSchemaResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
+                "DAOSchemaResponse", ""
+            ) as DAOSchemaResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -964,7 +977,7 @@ export class DaosApiResponseProcessor {
      * @params response Response returned by the server for a request to createPOD
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async createPODWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
+     public async createPODWithHttpInfo(response: ResponseContext): Promise<HttpInfo<PODSchemaResponse >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("422", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -974,10 +987,10 @@ export class DaosApiResponseProcessor {
             throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
         }
         if (isCodeInRange("201", response.httpStatusCode)) {
-            const body: POD = ObjectSerializer.deserialize(
+            const body: PODSchemaResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
+                "PODSchemaResponse", ""
+            ) as PODSchemaResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
@@ -985,21 +998,21 @@ export class DaosApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request - Invalid data", body, response.headers);
         }
-        if (isCodeInRange("403", response.httpStatusCode)) {
+        if (isCodeInRange("401", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized - Invalid or missing token", body, response.headers);
         }
         if (isCodeInRange("404", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "User or DAO not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1011,10 +1024,10 @@ export class DaosApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: POD = ObjectSerializer.deserialize(
+            const body: PODSchemaResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
+                "PODSchemaResponse", ""
+            ) as PODSchemaResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -1028,31 +1041,35 @@ export class DaosApiResponseProcessor {
      * @params response Response returned by the server for a request to deleteDAO
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async deleteDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<void >> {
+     public async deleteDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAOSchemaResponse >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            return new HttpInfo(response.httpStatusCode, response.headers, response.body, undefined);
+            const body: DAOSchemaResponse = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "DAOSchemaResponse", ""
+            ) as DAOSchemaResponse;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request - Error deleting DAO", body, response.headers);
         }
-        if (isCodeInRange("403", response.httpStatusCode)) {
+        if (isCodeInRange("401", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized - Invalid or missing token", body, response.headers);
         }
         if (isCodeInRange("404", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "DAO not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1064,10 +1081,10 @@ export class DaosApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: void = ObjectSerializer.deserialize(
+            const body: DAOSchemaResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "void", ""
-            ) as void;
+                "DAOSchemaResponse", ""
+            ) as DAOSchemaResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -1081,13 +1098,13 @@ export class DaosApiResponseProcessor {
      * @params response Response returned by the server for a request to deletePOD
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async deletePODWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
+     public async deletePODWithHttpInfo(response: ResponseContext): Promise<HttpInfo<PODSchemaResponse >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: POD = ObjectSerializer.deserialize(
+            const body: PODSchemaResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
+                "PODSchemaResponse", ""
+            ) as PODSchemaResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
@@ -1095,21 +1112,21 @@ export class DaosApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request - Error deleting POD", body, response.headers);
         }
-        if (isCodeInRange("403", response.httpStatusCode)) {
+        if (isCodeInRange("401", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized - Invalid or missing token", body, response.headers);
         }
         if (isCodeInRange("404", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "User, DAO or POD not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1121,10 +1138,10 @@ export class DaosApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: POD = ObjectSerializer.deserialize(
+            const body: PODSchemaResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
+                "PODSchemaResponse", ""
+            ) as PODSchemaResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -1188,7 +1205,7 @@ export class DaosApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "DAO or POD not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1226,12 +1243,19 @@ export class DaosApiResponseProcessor {
             ) as Array<POD>;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
+        if (isCodeInRange("401", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized - Invalid or missing token", body, response.headers);
+        }
         if (isCodeInRange("404", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "User or DAO not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1274,7 +1298,7 @@ export class DaosApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "DAO not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1317,7 +1341,7 @@ export class DaosApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "DAO or POD not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1346,7 +1370,7 @@ export class DaosApiResponseProcessor {
      * @params response Response returned by the server for a request to removeAdminFromDAO
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async removeAdminFromDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
+     public async removeAdminFromDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAOMembershipResponse >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("422", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1356,10 +1380,10 @@ export class DaosApiResponseProcessor {
             throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
         }
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: DAO = ObjectSerializer.deserialize(
+            const body: DAOMembershipResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
+                "DAOMembershipResponse", ""
+            ) as DAOMembershipResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
@@ -1369,19 +1393,19 @@ export class DaosApiResponseProcessor {
             ) as PagingError;
             throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
         }
-        if (isCodeInRange("403", response.httpStatusCode)) {
+        if (isCodeInRange("401", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized", body, response.headers);
         }
         if (isCodeInRange("404", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "User or DAO not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1393,10 +1417,10 @@ export class DaosApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: DAO = ObjectSerializer.deserialize(
+            const body: DAOMembershipResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
+                "DAOMembershipResponse", ""
+            ) as DAOMembershipResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -1410,7 +1434,7 @@ export class DaosApiResponseProcessor {
      * @params response Response returned by the server for a request to removeMemberFromDAO
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async removeMemberFromDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
+     public async removeMemberFromDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAOMembershipResponse >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("422", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1420,10 +1444,10 @@ export class DaosApiResponseProcessor {
             throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
         }
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: DAO = ObjectSerializer.deserialize(
+            const body: DAOMembershipResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
+                "DAOMembershipResponse", ""
+            ) as DAOMembershipResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
@@ -1433,19 +1457,19 @@ export class DaosApiResponseProcessor {
             ) as PagingError;
             throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
         }
-        if (isCodeInRange("403", response.httpStatusCode)) {
+        if (isCodeInRange("401", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized", body, response.headers);
         }
         if (isCodeInRange("404", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "User or DAO not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1457,10 +1481,10 @@ export class DaosApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: DAO = ObjectSerializer.deserialize(
+            const body: DAOMembershipResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
+                "DAOMembershipResponse", ""
+            ) as DAOMembershipResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -1474,7 +1498,7 @@ export class DaosApiResponseProcessor {
      * @params response Response returned by the server for a request to removeMemberFromPOD
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async removeMemberFromPODWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
+     public async removeMemberFromPODWithHttpInfo(response: ResponseContext): Promise<HttpInfo<PODMembershipResponse >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("422", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1484,10 +1508,10 @@ export class DaosApiResponseProcessor {
             throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
         }
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: POD = ObjectSerializer.deserialize(
+            const body: PODMembershipResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
+                "PODMembershipResponse", ""
+            ) as PODMembershipResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
@@ -1495,21 +1519,21 @@ export class DaosApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request - User not in POD", body, response.headers);
         }
-        if (isCodeInRange("403", response.httpStatusCode)) {
+        if (isCodeInRange("401", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized - Invalid or missing token", body, response.headers);
         }
         if (isCodeInRange("404", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "User, DAO or POD not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1521,10 +1545,10 @@ export class DaosApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: POD = ObjectSerializer.deserialize(
+            const body: PODMembershipResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
+                "PODMembershipResponse", ""
+            ) as PODMembershipResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -1538,7 +1562,7 @@ export class DaosApiResponseProcessor {
      * @params response Response returned by the server for a request to updateDAO
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async updateDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAO >> {
+     public async updateDAOWithHttpInfo(response: ResponseContext): Promise<HttpInfo<DAOSchemaResponse >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("422", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1548,10 +1572,10 @@ export class DaosApiResponseProcessor {
             throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
         }
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: DAO = ObjectSerializer.deserialize(
+            const body: DAOSchemaResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
+                "DAOSchemaResponse", ""
+            ) as DAOSchemaResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
@@ -1559,21 +1583,21 @@ export class DaosApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request - Invalid data", body, response.headers);
         }
-        if (isCodeInRange("403", response.httpStatusCode)) {
+        if (isCodeInRange("401", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized - Invalid or missing token", body, response.headers);
         }
         if (isCodeInRange("404", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "DAO not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1585,10 +1609,10 @@ export class DaosApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: DAO = ObjectSerializer.deserialize(
+            const body: DAOSchemaResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "DAO", ""
-            ) as DAO;
+                "DAOSchemaResponse", ""
+            ) as DAOSchemaResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -1602,7 +1626,7 @@ export class DaosApiResponseProcessor {
      * @params response Response returned by the server for a request to updatePOD
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async updatePODWithHttpInfo(response: ResponseContext): Promise<HttpInfo<POD >> {
+     public async updatePODWithHttpInfo(response: ResponseContext): Promise<HttpInfo<PODSchemaResponse >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("422", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1612,10 +1636,10 @@ export class DaosApiResponseProcessor {
             throw new ApiException<Error>(response.httpStatusCode, "Unprocessable Entity", body, response.headers);
         }
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: POD = ObjectSerializer.deserialize(
+            const body: PODSchemaResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
+                "PODSchemaResponse", ""
+            ) as PODSchemaResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
@@ -1623,21 +1647,21 @@ export class DaosApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request - Invalid data", body, response.headers);
         }
-        if (isCodeInRange("403", response.httpStatusCode)) {
+        if (isCodeInRange("401", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Forbidden", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized - Invalid or missing token", body, response.headers);
         }
         if (isCodeInRange("404", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "Not Found", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "User, DAO or POD not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -1649,10 +1673,10 @@ export class DaosApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: POD = ObjectSerializer.deserialize(
+            const body: PODSchemaResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "POD", ""
-            ) as POD;
+                "PODSchemaResponse", ""
+            ) as PODSchemaResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 

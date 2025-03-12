@@ -6,20 +6,30 @@ import { ChallengeRequest } from '../models/ChallengeRequest';
 import { ChallengeResponse } from '../models/ChallengeResponse';
 import { DAO } from '../models/DAO';
 import { DAOMembership } from '../models/DAOMembership';
+import { DAOMembershipResponse } from '../models/DAOMembershipResponse';
+import { DAOSchemaResponse } from '../models/DAOSchemaResponse';
 import { DAOUpdate } from '../models/DAOUpdate';
+import { InputCreateDAO } from '../models/InputCreateDAO';
+import { InputCreatePOD } from '../models/InputCreatePOD';
 import { InputCreateUser } from '../models/InputCreateUser';
 import { InputUpdateUser } from '../models/InputUpdateUser';
-import { Item } from '../models/Item';
-import { ItemsResponse } from '../models/ItemsResponse';
 import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
+import { PODMembershipResponse } from '../models/PODMembershipResponse';
+import { PODSchemaResponse } from '../models/PODSchemaResponse';
 import { PODUpdate } from '../models/PODUpdate';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
-import { SummaryResponse } from '../models/SummaryResponse';
+import { Token } from '../models/Token';
+import { TokenCreate } from '../models/TokenCreate';
+import { TokenSchemaResponse } from '../models/TokenSchemaResponse';
+import { Transfer } from '../models/Transfer';
+import { TransferCreate } from '../models/TransferCreate';
+import { TransferSchemaResponse } from '../models/TransferSchemaResponse';
+import { Treasury } from '../models/Treasury';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
 import { UserExistResponse } from '../models/UserExistResponse';
@@ -187,7 +197,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public addAdminToDAOWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public addAdminToDAOWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAOMembershipResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -209,7 +219,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public addAdminToDAO(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
+    public addAdminToDAO(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAOMembershipResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -230,7 +240,7 @@ export class PromiseDaosApi {
      * Add a member to a DAO
      * @param daoId
      */
-    public addMemberToDAOWithHttpInfo(daoId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public addMemberToDAOWithHttpInfo(daoId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAOMembershipResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -251,7 +261,7 @@ export class PromiseDaosApi {
      * Add a member to a DAO
      * @param daoId
      */
-    public addMemberToDAO(daoId: string, _options?: PromiseConfigurationOptions): Promise<DAO> {
+    public addMemberToDAO(daoId: string, _options?: PromiseConfigurationOptions): Promise<DAOMembershipResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -273,7 +283,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param podId
      */
-    public addMemberToPODWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
+    public addMemberToPODWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<PODMembershipResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -295,7 +305,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param podId
      */
-    public addMemberToPOD(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<POD> {
+    public addMemberToPOD(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<PODMembershipResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -314,9 +324,9 @@ export class PromiseDaosApi {
 
     /**
      * Create a new DAO
-     * @param DAO
+     * @param inputCreateDAO
      */
-    public createDAOWithHttpInfo(DAO: DAO, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public createDAOWithHttpInfo(inputCreateDAO: InputCreateDAO, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAOSchemaResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -329,15 +339,15 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.createDAOWithHttpInfo(DAO, observableOptions);
+        const result = this.api.createDAOWithHttpInfo(inputCreateDAO, observableOptions);
         return result.toPromise();
     }
 
     /**
      * Create a new DAO
-     * @param DAO
+     * @param inputCreateDAO
      */
-    public createDAO(DAO: DAO, _options?: PromiseConfigurationOptions): Promise<DAO> {
+    public createDAO(inputCreateDAO: InputCreateDAO, _options?: PromiseConfigurationOptions): Promise<DAOSchemaResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -350,16 +360,16 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.createDAO(DAO, observableOptions);
+        const result = this.api.createDAO(inputCreateDAO, observableOptions);
         return result.toPromise();
     }
 
     /**
      * Create a new POD
      * @param daoId
-     * @param POD
+     * @param inputCreatePOD
      */
-    public createPODWithHttpInfo(daoId: string, POD: POD, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
+    public createPODWithHttpInfo(daoId: string, inputCreatePOD: InputCreatePOD, _options?: PromiseConfigurationOptions): Promise<HttpInfo<PODSchemaResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -372,16 +382,16 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.createPODWithHttpInfo(daoId, POD, observableOptions);
+        const result = this.api.createPODWithHttpInfo(daoId, inputCreatePOD, observableOptions);
         return result.toPromise();
     }
 
     /**
      * Create a new POD
      * @param daoId
-     * @param POD
+     * @param inputCreatePOD
      */
-    public createPOD(daoId: string, POD: POD, _options?: PromiseConfigurationOptions): Promise<POD> {
+    public createPOD(daoId: string, inputCreatePOD: InputCreatePOD, _options?: PromiseConfigurationOptions): Promise<PODSchemaResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -394,7 +404,7 @@ export class PromiseDaosApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.createPOD(daoId, POD, observableOptions);
+        const result = this.api.createPOD(daoId, inputCreatePOD, observableOptions);
         return result.toPromise();
     }
 
@@ -402,7 +412,7 @@ export class PromiseDaosApi {
      * Delete a DAO
      * @param daoId
      */
-    public deleteDAOWithHttpInfo(daoId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<void>> {
+    public deleteDAOWithHttpInfo(daoId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAOSchemaResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -423,7 +433,7 @@ export class PromiseDaosApi {
      * Delete a DAO
      * @param daoId
      */
-    public deleteDAO(daoId: string, _options?: PromiseConfigurationOptions): Promise<void> {
+    public deleteDAO(daoId: string, _options?: PromiseConfigurationOptions): Promise<DAOSchemaResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -445,7 +455,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param podId
      */
-    public deletePODWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
+    public deletePODWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<PODSchemaResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -467,7 +477,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param podId
      */
-    public deletePOD(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<POD> {
+    public deletePOD(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<PODSchemaResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -701,7 +711,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public removeAdminFromDAOWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public removeAdminFromDAOWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAOMembershipResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -723,7 +733,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public removeAdminFromDAO(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
+    public removeAdminFromDAO(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAOMembershipResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -745,7 +755,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public removeMemberFromDAOWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public removeMemberFromDAOWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAOMembershipResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -767,7 +777,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public removeMemberFromDAO(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAO> {
+    public removeMemberFromDAO(daoId: string, dAOMembership: DAOMembership, _options?: PromiseConfigurationOptions): Promise<DAOMembershipResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -790,7 +800,7 @@ export class PromiseDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public removeMemberFromPODWithHttpInfo(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
+    public removeMemberFromPODWithHttpInfo(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<HttpInfo<PODMembershipResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -813,7 +823,7 @@ export class PromiseDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public removeMemberFromPOD(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<POD> {
+    public removeMemberFromPOD(daoId: string, podId: string, pODMembership: PODMembership, _options?: PromiseConfigurationOptions): Promise<PODMembershipResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -835,7 +845,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOUpdate
      */
-    public updateDAOWithHttpInfo(daoId: string, dAOUpdate: DAOUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public updateDAOWithHttpInfo(daoId: string, dAOUpdate: DAOUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DAOSchemaResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -857,7 +867,7 @@ export class PromiseDaosApi {
      * @param daoId
      * @param dAOUpdate
      */
-    public updateDAO(daoId: string, dAOUpdate: DAOUpdate, _options?: PromiseConfigurationOptions): Promise<DAO> {
+    public updateDAO(daoId: string, dAOUpdate: DAOUpdate, _options?: PromiseConfigurationOptions): Promise<DAOSchemaResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -880,7 +890,7 @@ export class PromiseDaosApi {
      * @param podId
      * @param pODUpdate
      */
-    public updatePODWithHttpInfo(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<POD>> {
+    public updatePODWithHttpInfo(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<PODSchemaResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -903,7 +913,7 @@ export class PromiseDaosApi {
      * @param podId
      * @param pODUpdate
      */
-    public updatePOD(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: PromiseConfigurationOptions): Promise<POD> {
+    public updatePOD(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: PromiseConfigurationOptions): Promise<PODSchemaResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -925,27 +935,26 @@ export class PromiseDaosApi {
 
 
 
-import { ObservableDataApi } from './ObservableAPI';
+import { ObservableTreasuryApi } from './ObservableAPI';
 
-import { DataApiRequestFactory, DataApiResponseProcessor} from "../apis/DataApi";
-export class PromiseDataApi {
-    private api: ObservableDataApi
+import { TreasuryApiRequestFactory, TreasuryApiResponseProcessor} from "../apis/TreasuryApi";
+export class PromiseTreasuryApi {
+    private api: ObservableTreasuryApi
 
     public constructor(
         configuration: Configuration,
-        requestFactory?: DataApiRequestFactory,
-        responseProcessor?: DataApiResponseProcessor
+        requestFactory?: TreasuryApiRequestFactory,
+        responseProcessor?: TreasuryApiResponseProcessor
     ) {
-        this.api = new ObservableDataApi(configuration, requestFactory, responseProcessor);
+        this.api = new ObservableTreasuryApi(configuration, requestFactory, responseProcessor);
     }
 
     /**
-     * Get data
-     * @param dateStart
-     * @param dateEnd
-     * @param [source]
+     * Create a new transfer for a specific DAO
+     * @param daoId
+     * @param transferCreate
      */
-    public getItemsWithHttpInfo(dateStart: string, dateEnd: string, source?: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ItemsResponse>> {
+    public createDAOTransferWithHttpInfo(daoId: string, transferCreate: TransferCreate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<TransferSchemaResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -958,17 +967,16 @@ export class PromiseDataApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.getItemsWithHttpInfo(dateStart, dateEnd, source, observableOptions);
+        const result = this.api.createDAOTransferWithHttpInfo(daoId, transferCreate, observableOptions);
         return result.toPromise();
     }
 
     /**
-     * Get data
-     * @param dateStart
-     * @param dateEnd
-     * @param [source]
+     * Create a new transfer for a specific DAO
+     * @param daoId
+     * @param transferCreate
      */
-    public getItems(dateStart: string, dateEnd: string, source?: string, _options?: PromiseConfigurationOptions): Promise<ItemsResponse> {
+    public createDAOTransfer(daoId: string, transferCreate: TransferCreate, _options?: PromiseConfigurationOptions): Promise<TransferSchemaResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -981,17 +989,16 @@ export class PromiseDataApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.getItems(dateStart, dateEnd, source, observableOptions);
+        const result = this.api.createDAOTransfer(daoId, transferCreate, observableOptions);
         return result.toPromise();
     }
 
     /**
-     * Get data
-     * @param dateStart
-     * @param dateEnd
-     * @param [source]
+     * Create a new token for a specific DAO
+     * @param daoId
+     * @param tokenCreate
      */
-    public getSummaryWithHttpInfo(dateStart: string, dateEnd: string, source?: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<SummaryResponse>> {
+    public createTokenWithHttpInfo(daoId: string, tokenCreate: TokenCreate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<TokenSchemaResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1004,17 +1011,16 @@ export class PromiseDataApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.getSummaryWithHttpInfo(dateStart, dateEnd, source, observableOptions);
+        const result = this.api.createTokenWithHttpInfo(daoId, tokenCreate, observableOptions);
         return result.toPromise();
     }
 
     /**
-     * Get data
-     * @param dateStart
-     * @param dateEnd
-     * @param [source]
+     * Create a new token for a specific DAO
+     * @param daoId
+     * @param tokenCreate
      */
-    public getSummary(dateStart: string, dateEnd: string, source?: string, _options?: PromiseConfigurationOptions): Promise<SummaryResponse> {
+    public createToken(daoId: string, tokenCreate: TokenCreate, _options?: PromiseConfigurationOptions): Promise<TokenSchemaResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1027,7 +1033,133 @@ export class PromiseDataApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.getSummary(dateStart, dateEnd, source, observableOptions);
+        const result = this.api.createToken(daoId, tokenCreate, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all tokens for a specific DAO
+     * @param daoId
+     */
+    public getDAOTokensWithHttpInfo(daoId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Array<Token>>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getDAOTokensWithHttpInfo(daoId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all tokens for a specific DAO
+     * @param daoId
+     */
+    public getDAOTokens(daoId: string, _options?: PromiseConfigurationOptions): Promise<Array<Token>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getDAOTokens(daoId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all transfers for a specific DAO
+     * @param daoId
+     */
+    public getDAOTransfersWithHttpInfo(daoId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Array<Transfer>>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getDAOTransfersWithHttpInfo(daoId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all transfers for a specific DAO
+     * @param daoId
+     */
+    public getDAOTransfers(daoId: string, _options?: PromiseConfigurationOptions): Promise<Array<Transfer>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getDAOTransfers(daoId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get Treasury information for a specific DAO
+     * @param daoId
+     */
+    public getDAOTreasuryWithHttpInfo(daoId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Treasury>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getDAOTreasuryWithHttpInfo(daoId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get Treasury information for a specific DAO
+     * @param daoId
+     */
+    public getDAOTreasury(daoId: string, _options?: PromiseConfigurationOptions): Promise<Treasury> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getDAOTreasury(daoId, observableOptions);
         return result.toPromise();
     }
 
@@ -1095,7 +1227,7 @@ export class PromiseUsersApi {
     /**
      * Get authenticated user informations
      */
-    public getAuthUserInfosWithHttpInfo(_options?: PromiseConfigurationOptions): Promise<HttpInfo<UserResponse>> {
+    public getAuthUserInfosWithHttpInfo(_options?: PromiseConfigurationOptions): Promise<HttpInfo<User>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1115,7 +1247,7 @@ export class PromiseUsersApi {
     /**
      * Get authenticated user informations
      */
-    public getAuthUserInfos(_options?: PromiseConfigurationOptions): Promise<UserResponse> {
+    public getAuthUserInfos(_options?: PromiseConfigurationOptions): Promise<User> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {

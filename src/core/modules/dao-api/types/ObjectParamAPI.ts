@@ -6,20 +6,30 @@ import { ChallengeRequest } from '../models/ChallengeRequest';
 import { ChallengeResponse } from '../models/ChallengeResponse';
 import { DAO } from '../models/DAO';
 import { DAOMembership } from '../models/DAOMembership';
+import { DAOMembershipResponse } from '../models/DAOMembershipResponse';
+import { DAOSchemaResponse } from '../models/DAOSchemaResponse';
 import { DAOUpdate } from '../models/DAOUpdate';
+import { InputCreateDAO } from '../models/InputCreateDAO';
+import { InputCreatePOD } from '../models/InputCreatePOD';
 import { InputCreateUser } from '../models/InputCreateUser';
 import { InputUpdateUser } from '../models/InputUpdateUser';
-import { Item } from '../models/Item';
-import { ItemsResponse } from '../models/ItemsResponse';
 import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
+import { PODMembershipResponse } from '../models/PODMembershipResponse';
+import { PODSchemaResponse } from '../models/PODSchemaResponse';
 import { PODUpdate } from '../models/PODUpdate';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
-import { SummaryResponse } from '../models/SummaryResponse';
+import { Token } from '../models/Token';
+import { TokenCreate } from '../models/TokenCreate';
+import { TokenSchemaResponse } from '../models/TokenSchemaResponse';
+import { Transfer } from '../models/Transfer';
+import { TransferCreate } from '../models/TransferCreate';
+import { TransferSchemaResponse } from '../models/TransferSchemaResponse';
+import { Treasury } from '../models/Treasury';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
 import { UserExistResponse } from '../models/UserExistResponse';
@@ -156,10 +166,10 @@ export interface DaosApiAddMemberToPODRequest {
 export interface DaosApiCreateDAORequest {
     /**
      * 
-     * @type DAO
+     * @type InputCreateDAO
      * @memberof DaosApicreateDAO
      */
-    DAO: DAO
+    inputCreateDAO: InputCreateDAO
 }
 
 export interface DaosApiCreatePODRequest {
@@ -172,10 +182,10 @@ export interface DaosApiCreatePODRequest {
     daoId: string
     /**
      * 
-     * @type POD
+     * @type InputCreatePOD
      * @memberof DaosApicreatePOD
      */
-    POD: POD
+    inputCreatePOD: InputCreatePOD
 }
 
 export interface DaosApiDeleteDAORequest {
@@ -367,7 +377,7 @@ export class ObjectDaosApi {
      * Add an admin to a DAO
      * @param param the request object
      */
-    public addAdminToDAOWithHttpInfo(param: DaosApiAddAdminToDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public addAdminToDAOWithHttpInfo(param: DaosApiAddAdminToDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAOMembershipResponse>> {
         return this.api.addAdminToDAOWithHttpInfo(param.daoId, param.dAOMembership,  options).toPromise();
     }
 
@@ -375,7 +385,7 @@ export class ObjectDaosApi {
      * Add an admin to a DAO
      * @param param the request object
      */
-    public addAdminToDAO(param: DaosApiAddAdminToDAORequest, options?: ConfigurationOptions): Promise<DAO> {
+    public addAdminToDAO(param: DaosApiAddAdminToDAORequest, options?: ConfigurationOptions): Promise<DAOMembershipResponse> {
         return this.api.addAdminToDAO(param.daoId, param.dAOMembership,  options).toPromise();
     }
 
@@ -383,7 +393,7 @@ export class ObjectDaosApi {
      * Add a member to a DAO
      * @param param the request object
      */
-    public addMemberToDAOWithHttpInfo(param: DaosApiAddMemberToDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public addMemberToDAOWithHttpInfo(param: DaosApiAddMemberToDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAOMembershipResponse>> {
         return this.api.addMemberToDAOWithHttpInfo(param.daoId,  options).toPromise();
     }
 
@@ -391,7 +401,7 @@ export class ObjectDaosApi {
      * Add a member to a DAO
      * @param param the request object
      */
-    public addMemberToDAO(param: DaosApiAddMemberToDAORequest, options?: ConfigurationOptions): Promise<DAO> {
+    public addMemberToDAO(param: DaosApiAddMemberToDAORequest, options?: ConfigurationOptions): Promise<DAOMembershipResponse> {
         return this.api.addMemberToDAO(param.daoId,  options).toPromise();
     }
 
@@ -399,7 +409,7 @@ export class ObjectDaosApi {
      * Add a member to a POD
      * @param param the request object
      */
-    public addMemberToPODWithHttpInfo(param: DaosApiAddMemberToPODRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
+    public addMemberToPODWithHttpInfo(param: DaosApiAddMemberToPODRequest, options?: ConfigurationOptions): Promise<HttpInfo<PODMembershipResponse>> {
         return this.api.addMemberToPODWithHttpInfo(param.daoId, param.podId,  options).toPromise();
     }
 
@@ -407,7 +417,7 @@ export class ObjectDaosApi {
      * Add a member to a POD
      * @param param the request object
      */
-    public addMemberToPOD(param: DaosApiAddMemberToPODRequest, options?: ConfigurationOptions): Promise<POD> {
+    public addMemberToPOD(param: DaosApiAddMemberToPODRequest, options?: ConfigurationOptions): Promise<PODMembershipResponse> {
         return this.api.addMemberToPOD(param.daoId, param.podId,  options).toPromise();
     }
 
@@ -415,39 +425,39 @@ export class ObjectDaosApi {
      * Create a new DAO
      * @param param the request object
      */
-    public createDAOWithHttpInfo(param: DaosApiCreateDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
-        return this.api.createDAOWithHttpInfo(param.DAO,  options).toPromise();
+    public createDAOWithHttpInfo(param: DaosApiCreateDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAOSchemaResponse>> {
+        return this.api.createDAOWithHttpInfo(param.inputCreateDAO,  options).toPromise();
     }
 
     /**
      * Create a new DAO
      * @param param the request object
      */
-    public createDAO(param: DaosApiCreateDAORequest, options?: ConfigurationOptions): Promise<DAO> {
-        return this.api.createDAO(param.DAO,  options).toPromise();
+    public createDAO(param: DaosApiCreateDAORequest, options?: ConfigurationOptions): Promise<DAOSchemaResponse> {
+        return this.api.createDAO(param.inputCreateDAO,  options).toPromise();
     }
 
     /**
      * Create a new POD
      * @param param the request object
      */
-    public createPODWithHttpInfo(param: DaosApiCreatePODRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
-        return this.api.createPODWithHttpInfo(param.daoId, param.POD,  options).toPromise();
+    public createPODWithHttpInfo(param: DaosApiCreatePODRequest, options?: ConfigurationOptions): Promise<HttpInfo<PODSchemaResponse>> {
+        return this.api.createPODWithHttpInfo(param.daoId, param.inputCreatePOD,  options).toPromise();
     }
 
     /**
      * Create a new POD
      * @param param the request object
      */
-    public createPOD(param: DaosApiCreatePODRequest, options?: ConfigurationOptions): Promise<POD> {
-        return this.api.createPOD(param.daoId, param.POD,  options).toPromise();
+    public createPOD(param: DaosApiCreatePODRequest, options?: ConfigurationOptions): Promise<PODSchemaResponse> {
+        return this.api.createPOD(param.daoId, param.inputCreatePOD,  options).toPromise();
     }
 
     /**
      * Delete a DAO
      * @param param the request object
      */
-    public deleteDAOWithHttpInfo(param: DaosApiDeleteDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<void>> {
+    public deleteDAOWithHttpInfo(param: DaosApiDeleteDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAOSchemaResponse>> {
         return this.api.deleteDAOWithHttpInfo(param.daoId,  options).toPromise();
     }
 
@@ -455,7 +465,7 @@ export class ObjectDaosApi {
      * Delete a DAO
      * @param param the request object
      */
-    public deleteDAO(param: DaosApiDeleteDAORequest, options?: ConfigurationOptions): Promise<void> {
+    public deleteDAO(param: DaosApiDeleteDAORequest, options?: ConfigurationOptions): Promise<DAOSchemaResponse> {
         return this.api.deleteDAO(param.daoId,  options).toPromise();
     }
 
@@ -463,7 +473,7 @@ export class ObjectDaosApi {
      * Delete a POD
      * @param param the request object
      */
-    public deletePODWithHttpInfo(param: DaosApiDeletePODRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
+    public deletePODWithHttpInfo(param: DaosApiDeletePODRequest, options?: ConfigurationOptions): Promise<HttpInfo<PODSchemaResponse>> {
         return this.api.deletePODWithHttpInfo(param.daoId, param.podId,  options).toPromise();
     }
 
@@ -471,7 +481,7 @@ export class ObjectDaosApi {
      * Delete a POD
      * @param param the request object
      */
-    public deletePOD(param: DaosApiDeletePODRequest, options?: ConfigurationOptions): Promise<POD> {
+    public deletePOD(param: DaosApiDeletePODRequest, options?: ConfigurationOptions): Promise<PODSchemaResponse> {
         return this.api.deletePOD(param.daoId, param.podId,  options).toPromise();
     }
 
@@ -559,7 +569,7 @@ export class ObjectDaosApi {
      * Remove an admin from a DAO
      * @param param the request object
      */
-    public removeAdminFromDAOWithHttpInfo(param: DaosApiRemoveAdminFromDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public removeAdminFromDAOWithHttpInfo(param: DaosApiRemoveAdminFromDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAOMembershipResponse>> {
         return this.api.removeAdminFromDAOWithHttpInfo(param.daoId, param.dAOMembership,  options).toPromise();
     }
 
@@ -567,7 +577,7 @@ export class ObjectDaosApi {
      * Remove an admin from a DAO
      * @param param the request object
      */
-    public removeAdminFromDAO(param: DaosApiRemoveAdminFromDAORequest, options?: ConfigurationOptions): Promise<DAO> {
+    public removeAdminFromDAO(param: DaosApiRemoveAdminFromDAORequest, options?: ConfigurationOptions): Promise<DAOMembershipResponse> {
         return this.api.removeAdminFromDAO(param.daoId, param.dAOMembership,  options).toPromise();
     }
 
@@ -575,7 +585,7 @@ export class ObjectDaosApi {
      * Remove a member from a DAO
      * @param param the request object
      */
-    public removeMemberFromDAOWithHttpInfo(param: DaosApiRemoveMemberFromDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public removeMemberFromDAOWithHttpInfo(param: DaosApiRemoveMemberFromDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAOMembershipResponse>> {
         return this.api.removeMemberFromDAOWithHttpInfo(param.daoId, param.dAOMembership,  options).toPromise();
     }
 
@@ -583,7 +593,7 @@ export class ObjectDaosApi {
      * Remove a member from a DAO
      * @param param the request object
      */
-    public removeMemberFromDAO(param: DaosApiRemoveMemberFromDAORequest, options?: ConfigurationOptions): Promise<DAO> {
+    public removeMemberFromDAO(param: DaosApiRemoveMemberFromDAORequest, options?: ConfigurationOptions): Promise<DAOMembershipResponse> {
         return this.api.removeMemberFromDAO(param.daoId, param.dAOMembership,  options).toPromise();
     }
 
@@ -591,7 +601,7 @@ export class ObjectDaosApi {
      * Remove a member from a POD
      * @param param the request object
      */
-    public removeMemberFromPODWithHttpInfo(param: DaosApiRemoveMemberFromPODRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
+    public removeMemberFromPODWithHttpInfo(param: DaosApiRemoveMemberFromPODRequest, options?: ConfigurationOptions): Promise<HttpInfo<PODMembershipResponse>> {
         return this.api.removeMemberFromPODWithHttpInfo(param.daoId, param.podId, param.pODMembership,  options).toPromise();
     }
 
@@ -599,7 +609,7 @@ export class ObjectDaosApi {
      * Remove a member from a POD
      * @param param the request object
      */
-    public removeMemberFromPOD(param: DaosApiRemoveMemberFromPODRequest, options?: ConfigurationOptions): Promise<POD> {
+    public removeMemberFromPOD(param: DaosApiRemoveMemberFromPODRequest, options?: ConfigurationOptions): Promise<PODMembershipResponse> {
         return this.api.removeMemberFromPOD(param.daoId, param.podId, param.pODMembership,  options).toPromise();
     }
 
@@ -607,7 +617,7 @@ export class ObjectDaosApi {
      * Update a DAO
      * @param param the request object
      */
-    public updateDAOWithHttpInfo(param: DaosApiUpdateDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAO>> {
+    public updateDAOWithHttpInfo(param: DaosApiUpdateDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<DAOSchemaResponse>> {
         return this.api.updateDAOWithHttpInfo(param.daoId, param.dAOUpdate,  options).toPromise();
     }
 
@@ -615,7 +625,7 @@ export class ObjectDaosApi {
      * Update a DAO
      * @param param the request object
      */
-    public updateDAO(param: DaosApiUpdateDAORequest, options?: ConfigurationOptions): Promise<DAO> {
+    public updateDAO(param: DaosApiUpdateDAORequest, options?: ConfigurationOptions): Promise<DAOSchemaResponse> {
         return this.api.updateDAO(param.daoId, param.dAOUpdate,  options).toPromise();
     }
 
@@ -623,7 +633,7 @@ export class ObjectDaosApi {
      * Update a POD
      * @param param the request object
      */
-    public updatePODWithHttpInfo(param: DaosApiUpdatePODRequest, options?: ConfigurationOptions): Promise<HttpInfo<POD>> {
+    public updatePODWithHttpInfo(param: DaosApiUpdatePODRequest, options?: ConfigurationOptions): Promise<HttpInfo<PODSchemaResponse>> {
         return this.api.updatePODWithHttpInfo(param.daoId, param.podId, param.pODUpdate,  options).toPromise();
     }
 
@@ -631,100 +641,162 @@ export class ObjectDaosApi {
      * Update a POD
      * @param param the request object
      */
-    public updatePOD(param: DaosApiUpdatePODRequest, options?: ConfigurationOptions): Promise<POD> {
+    public updatePOD(param: DaosApiUpdatePODRequest, options?: ConfigurationOptions): Promise<PODSchemaResponse> {
         return this.api.updatePOD(param.daoId, param.podId, param.pODUpdate,  options).toPromise();
     }
 
 }
 
-import { ObservableDataApi } from "./ObservableAPI";
-import { DataApiRequestFactory, DataApiResponseProcessor} from "../apis/DataApi";
+import { ObservableTreasuryApi } from "./ObservableAPI";
+import { TreasuryApiRequestFactory, TreasuryApiResponseProcessor} from "../apis/TreasuryApi";
 
-export interface DataApiGetItemsRequest {
+export interface TreasuryApiCreateDAOTransferRequest {
     /**
      * 
      * Defaults to: undefined
      * @type string
-     * @memberof DataApigetItems
+     * @memberof TreasuryApicreateDAOTransfer
      */
-    dateStart: string
+    daoId: string
     /**
      * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DataApigetItems
+     * @type TransferCreate
+     * @memberof TreasuryApicreateDAOTransfer
      */
-    dateEnd: string
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DataApigetItems
-     */
-    source?: string
+    transferCreate: TransferCreate
 }
 
-export interface DataApiGetSummaryRequest {
+export interface TreasuryApiCreateTokenRequest {
     /**
      * 
      * Defaults to: undefined
      * @type string
-     * @memberof DataApigetSummary
+     * @memberof TreasuryApicreateToken
      */
-    dateStart: string
+    daoId: string
     /**
      * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DataApigetSummary
+     * @type TokenCreate
+     * @memberof TreasuryApicreateToken
      */
-    dateEnd: string
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DataApigetSummary
-     */
-    source?: string
+    tokenCreate: TokenCreate
 }
 
-export class ObjectDataApi {
-    private api: ObservableDataApi
+export interface TreasuryApiGetDAOTokensRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof TreasuryApigetDAOTokens
+     */
+    daoId: string
+}
 
-    public constructor(configuration: Configuration, requestFactory?: DataApiRequestFactory, responseProcessor?: DataApiResponseProcessor) {
-        this.api = new ObservableDataApi(configuration, requestFactory, responseProcessor);
+export interface TreasuryApiGetDAOTransfersRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof TreasuryApigetDAOTransfers
+     */
+    daoId: string
+}
+
+export interface TreasuryApiGetDAOTreasuryRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof TreasuryApigetDAOTreasury
+     */
+    daoId: string
+}
+
+export class ObjectTreasuryApi {
+    private api: ObservableTreasuryApi
+
+    public constructor(configuration: Configuration, requestFactory?: TreasuryApiRequestFactory, responseProcessor?: TreasuryApiResponseProcessor) {
+        this.api = new ObservableTreasuryApi(configuration, requestFactory, responseProcessor);
     }
 
     /**
-     * Get data
+     * Create a new transfer for a specific DAO
      * @param param the request object
      */
-    public getItemsWithHttpInfo(param: DataApiGetItemsRequest, options?: ConfigurationOptions): Promise<HttpInfo<ItemsResponse>> {
-        return this.api.getItemsWithHttpInfo(param.dateStart, param.dateEnd, param.source,  options).toPromise();
+    public createDAOTransferWithHttpInfo(param: TreasuryApiCreateDAOTransferRequest, options?: ConfigurationOptions): Promise<HttpInfo<TransferSchemaResponse>> {
+        return this.api.createDAOTransferWithHttpInfo(param.daoId, param.transferCreate,  options).toPromise();
     }
 
     /**
-     * Get data
+     * Create a new transfer for a specific DAO
      * @param param the request object
      */
-    public getItems(param: DataApiGetItemsRequest, options?: ConfigurationOptions): Promise<ItemsResponse> {
-        return this.api.getItems(param.dateStart, param.dateEnd, param.source,  options).toPromise();
+    public createDAOTransfer(param: TreasuryApiCreateDAOTransferRequest, options?: ConfigurationOptions): Promise<TransferSchemaResponse> {
+        return this.api.createDAOTransfer(param.daoId, param.transferCreate,  options).toPromise();
     }
 
     /**
-     * Get data
+     * Create a new token for a specific DAO
      * @param param the request object
      */
-    public getSummaryWithHttpInfo(param: DataApiGetSummaryRequest, options?: ConfigurationOptions): Promise<HttpInfo<SummaryResponse>> {
-        return this.api.getSummaryWithHttpInfo(param.dateStart, param.dateEnd, param.source,  options).toPromise();
+    public createTokenWithHttpInfo(param: TreasuryApiCreateTokenRequest, options?: ConfigurationOptions): Promise<HttpInfo<TokenSchemaResponse>> {
+        return this.api.createTokenWithHttpInfo(param.daoId, param.tokenCreate,  options).toPromise();
     }
 
     /**
-     * Get data
+     * Create a new token for a specific DAO
      * @param param the request object
      */
-    public getSummary(param: DataApiGetSummaryRequest, options?: ConfigurationOptions): Promise<SummaryResponse> {
-        return this.api.getSummary(param.dateStart, param.dateEnd, param.source,  options).toPromise();
+    public createToken(param: TreasuryApiCreateTokenRequest, options?: ConfigurationOptions): Promise<TokenSchemaResponse> {
+        return this.api.createToken(param.daoId, param.tokenCreate,  options).toPromise();
+    }
+
+    /**
+     * Get all tokens for a specific DAO
+     * @param param the request object
+     */
+    public getDAOTokensWithHttpInfo(param: TreasuryApiGetDAOTokensRequest, options?: ConfigurationOptions): Promise<HttpInfo<Array<Token>>> {
+        return this.api.getDAOTokensWithHttpInfo(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Get all tokens for a specific DAO
+     * @param param the request object
+     */
+    public getDAOTokens(param: TreasuryApiGetDAOTokensRequest, options?: ConfigurationOptions): Promise<Array<Token>> {
+        return this.api.getDAOTokens(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Get all transfers for a specific DAO
+     * @param param the request object
+     */
+    public getDAOTransfersWithHttpInfo(param: TreasuryApiGetDAOTransfersRequest, options?: ConfigurationOptions): Promise<HttpInfo<Array<Transfer>>> {
+        return this.api.getDAOTransfersWithHttpInfo(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Get all transfers for a specific DAO
+     * @param param the request object
+     */
+    public getDAOTransfers(param: TreasuryApiGetDAOTransfersRequest, options?: ConfigurationOptions): Promise<Array<Transfer>> {
+        return this.api.getDAOTransfers(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Get Treasury information for a specific DAO
+     * @param param the request object
+     */
+    public getDAOTreasuryWithHttpInfo(param: TreasuryApiGetDAOTreasuryRequest, options?: ConfigurationOptions): Promise<HttpInfo<Treasury>> {
+        return this.api.getDAOTreasuryWithHttpInfo(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Get Treasury information for a specific DAO
+     * @param param the request object
+     */
+    public getDAOTreasury(param: TreasuryApiGetDAOTreasuryRequest, options?: ConfigurationOptions): Promise<Treasury> {
+        return this.api.getDAOTreasury(param.daoId,  options).toPromise();
     }
 
 }
@@ -797,7 +869,7 @@ export class ObjectUsersApi {
      * Get authenticated user informations
      * @param param the request object
      */
-    public getAuthUserInfosWithHttpInfo(param: UsersApiGetAuthUserInfosRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<UserResponse>> {
+    public getAuthUserInfosWithHttpInfo(param: UsersApiGetAuthUserInfosRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<User>> {
         return this.api.getAuthUserInfosWithHttpInfo( options).toPromise();
     }
 
@@ -805,7 +877,7 @@ export class ObjectUsersApi {
      * Get authenticated user informations
      * @param param the request object
      */
-    public getAuthUserInfos(param: UsersApiGetAuthUserInfosRequest = {}, options?: ConfigurationOptions): Promise<UserResponse> {
+    public getAuthUserInfos(param: UsersApiGetAuthUserInfosRequest = {}, options?: ConfigurationOptions): Promise<User> {
         return this.api.getAuthUserInfos( options).toPromise();
     }
 

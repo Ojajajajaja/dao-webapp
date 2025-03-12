@@ -24,7 +24,7 @@ Method | HTTP request | Description
 
 
 # **addAdminToDAO**
-> DAO addAdminToDAO(dAOMembership)
+> DAOMembershipResponse addAdminToDAO(dAOMembership)
 
 
 ### Example
@@ -61,7 +61,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**DAO**
+**DAOMembershipResponse**
 
 ### Authorization
 
@@ -77,16 +77,16 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **422** | Unprocessable Entity |  -  |
-**200** | OK |  -  |
+**200** | User added to DAO successfully |  -  |
 **400** | Bad Request |  -  |
-**403** | Forbidden |  -  |
-**404** | Not Found |  -  |
+**401** | Unauthorized |  -  |
+**404** | User or DAO not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
 # **addMemberToDAO**
-> DAO addMemberToDAO()
+> DAOMembershipResponse addMemberToDAO()
 
 
 ### Example
@@ -118,7 +118,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**DAO**
+**DAOMembershipResponse**
 
 ### Authorization
 
@@ -133,16 +133,15 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
+**200** | User added to DAO successfully |  -  |
 **400** | Bad Request |  -  |
-**403** | Forbidden |  -  |
-**404** | Not Found |  -  |
+**404** | User or DAO not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
 # **addMemberToPOD**
-> POD addMemberToPOD()
+> PODMembershipResponse addMemberToPOD()
 
 
 ### Example
@@ -177,7 +176,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**POD**
+**PODMembershipResponse**
 
 ### Authorization
 
@@ -192,16 +191,16 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
-**400** | Bad Request |  -  |
-**403** | Forbidden |  -  |
-**404** | Not Found |  -  |
+**200** | User added to POD successfully |  -  |
+**400** | Bad Request - User already in POD |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
+**404** | User, DAO or POD not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
 # **createDAO**
-> DAO createDAO(DAO)
+> DAOSchemaResponse createDAO(inputCreateDAO)
 
 
 ### Example
@@ -216,11 +215,10 @@ const apiInstance = new DaosApi(configuration);
 
 const request: DaosApiCreateDAORequest = {
   
-  DAO: {
+  inputCreateDAO: {
     name: "name_example",
     description: "description_example",
     ownerId: "ownerId_example",
-    isActive: true,
   },
 };
 
@@ -233,12 +231,12 @@ console.log('API called successfully. Returned data:', data);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **DAO** | **DAO**|  |
+ **inputCreateDAO** | **InputCreateDAO**|  |
 
 
 ### Return type
 
-**DAO**
+**DAOSchemaResponse**
 
 ### Authorization
 
@@ -254,14 +252,16 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **422** | Unprocessable Entity |  -  |
-**201** | Created |  -  |
-**400** | Bad Request |  -  |
+**201** | DAO created successfully |  -  |
+**400** | Bad Request - Invalid data |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
+**404** | User not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
 # **createPOD**
-> POD createPOD(POD)
+> PODSchemaResponse createPOD(inputCreatePOD)
 
 
 ### Example
@@ -278,10 +278,10 @@ const request: DaosApiCreatePODRequest = {
   
   daoId: "dao_id_example",
   
-  POD: {
-    daoId: "daoId_example",
+  inputCreatePOD: {
     name: "name_example",
     description: "description_example",
+    daoId: "daoId_example",
   },
 };
 
@@ -294,13 +294,13 @@ console.log('API called successfully. Returned data:', data);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **POD** | **POD**|  |
+ **inputCreatePOD** | **InputCreatePOD**|  |
  **daoId** | [**string**] |  | defaults to undefined
 
 
 ### Return type
 
-**POD**
+**PODSchemaResponse**
 
 ### Authorization
 
@@ -316,16 +316,16 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **422** | Unprocessable Entity |  -  |
-**201** | Created |  -  |
-**400** | Bad Request |  -  |
-**403** | Forbidden |  -  |
-**404** | Not Found |  -  |
+**201** | POD created successfully |  -  |
+**400** | Bad Request - Invalid data |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
+**404** | User or DAO not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
 # **deleteDAO**
-> void deleteDAO()
+> DAOSchemaResponse deleteDAO()
 
 
 ### Example
@@ -357,7 +357,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**void**
+**DAOSchemaResponse**
 
 ### Authorization
 
@@ -372,16 +372,16 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
-**400** | Bad Request |  -  |
-**403** | Forbidden |  -  |
-**404** | Not Found |  -  |
+**200** | DAO deleted successfully |  -  |
+**400** | Bad Request - Error deleting DAO |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
+**404** | DAO not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
 # **deletePOD**
-> POD deletePOD()
+> PODSchemaResponse deletePOD()
 
 
 ### Example
@@ -416,7 +416,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**POD**
+**PODSchemaResponse**
 
 ### Authorization
 
@@ -431,10 +431,10 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
-**400** | Bad Request |  -  |
-**403** | Forbidden |  -  |
-**404** | Not Found |  -  |
+**200** | POD deleted successfully |  -  |
+**400** | Bad Request - Error deleting POD |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
+**404** | User, DAO or POD not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
@@ -480,7 +480,7 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
+**200** | List of all DAOs |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
@@ -536,8 +536,8 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
-**404** | Not Found |  -  |
+**200** | List of all members in the POD |  -  |
+**404** | DAO or POD not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
@@ -590,8 +590,9 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
-**404** | Not Found |  -  |
+**200** | List of all PODs for the DAO |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
+**404** | User or DAO not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
@@ -644,8 +645,8 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
-**404** | Not Found |  -  |
+**200** | DAO retrieved successfully |  -  |
+**404** | DAO not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
@@ -701,14 +702,14 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
-**404** | Not Found |  -  |
+**200** | POD retrieved successfully |  -  |
+**404** | DAO or POD not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
 # **removeAdminFromDAO**
-> DAO removeAdminFromDAO(dAOMembership)
+> DAOMembershipResponse removeAdminFromDAO(dAOMembership)
 
 
 ### Example
@@ -745,7 +746,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**DAO**
+**DAOMembershipResponse**
 
 ### Authorization
 
@@ -761,16 +762,16 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **422** | Unprocessable Entity |  -  |
-**200** | OK |  -  |
+**200** | User removed from DAO successfully |  -  |
 **400** | Bad Request |  -  |
-**403** | Forbidden |  -  |
-**404** | Not Found |  -  |
+**401** | Unauthorized |  -  |
+**404** | User or DAO not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
 # **removeMemberFromDAO**
-> DAO removeMemberFromDAO(dAOMembership)
+> DAOMembershipResponse removeMemberFromDAO(dAOMembership)
 
 
 ### Example
@@ -807,7 +808,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**DAO**
+**DAOMembershipResponse**
 
 ### Authorization
 
@@ -823,16 +824,16 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **422** | Unprocessable Entity |  -  |
-**200** | OK |  -  |
+**200** | User removed from DAO successfully |  -  |
 **400** | Bad Request |  -  |
-**403** | Forbidden |  -  |
-**404** | Not Found |  -  |
+**401** | Unauthorized |  -  |
+**404** | User or DAO not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
 # **removeMemberFromPOD**
-> POD removeMemberFromPOD(pODMembership)
+> PODMembershipResponse removeMemberFromPOD(pODMembership)
 
 
 ### Example
@@ -872,7 +873,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**POD**
+**PODMembershipResponse**
 
 ### Authorization
 
@@ -888,16 +889,16 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **422** | Unprocessable Entity |  -  |
-**200** | OK |  -  |
-**400** | Bad Request |  -  |
-**403** | Forbidden |  -  |
-**404** | Not Found |  -  |
+**200** | User removed from POD successfully |  -  |
+**400** | Bad Request - User not in POD |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
+**404** | User, DAO or POD not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
 # **updateDAO**
-> DAO updateDAO(dAOUpdate)
+> DAOSchemaResponse updateDAO(dAOUpdate)
 
 
 ### Example
@@ -936,7 +937,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**DAO**
+**DAOSchemaResponse**
 
 ### Authorization
 
@@ -952,16 +953,16 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **422** | Unprocessable Entity |  -  |
-**200** | OK |  -  |
-**400** | Bad Request |  -  |
-**403** | Forbidden |  -  |
-**404** | Not Found |  -  |
+**200** | DAO updated successfully |  -  |
+**400** | Bad Request - Invalid data |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
+**404** | DAO not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
 # **updatePOD**
-> POD updatePOD(pODUpdate)
+> PODSchemaResponse updatePOD(pODUpdate)
 
 
 ### Example
@@ -1003,7 +1004,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**POD**
+**PODSchemaResponse**
 
 ### Authorization
 
@@ -1019,10 +1020,10 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **422** | Unprocessable Entity |  -  |
-**200** | OK |  -  |
-**400** | Bad Request |  -  |
-**403** | Forbidden |  -  |
-**404** | Not Found |  -  |
+**200** | POD updated successfully |  -  |
+**400** | Bad Request - Invalid data |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
+**404** | User, DAO or POD not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)

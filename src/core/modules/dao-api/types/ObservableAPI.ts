@@ -7,20 +7,30 @@ import { ChallengeRequest } from '../models/ChallengeRequest';
 import { ChallengeResponse } from '../models/ChallengeResponse';
 import { DAO } from '../models/DAO';
 import { DAOMembership } from '../models/DAOMembership';
+import { DAOMembershipResponse } from '../models/DAOMembershipResponse';
+import { DAOSchemaResponse } from '../models/DAOSchemaResponse';
 import { DAOUpdate } from '../models/DAOUpdate';
+import { InputCreateDAO } from '../models/InputCreateDAO';
+import { InputCreatePOD } from '../models/InputCreatePOD';
 import { InputCreateUser } from '../models/InputCreateUser';
 import { InputUpdateUser } from '../models/InputUpdateUser';
-import { Item } from '../models/Item';
-import { ItemsResponse } from '../models/ItemsResponse';
 import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
+import { PODMembershipResponse } from '../models/PODMembershipResponse';
+import { PODSchemaResponse } from '../models/PODSchemaResponse';
 import { PODUpdate } from '../models/PODUpdate';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
-import { SummaryResponse } from '../models/SummaryResponse';
+import { Token } from '../models/Token';
+import { TokenCreate } from '../models/TokenCreate';
+import { TokenSchemaResponse } from '../models/TokenSchemaResponse';
+import { Transfer } from '../models/Transfer';
+import { TransferCreate } from '../models/TransferCreate';
+import { TransferSchemaResponse } from '../models/TransferSchemaResponse';
+import { Treasury } from '../models/Treasury';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
 import { UserExistResponse } from '../models/UserExistResponse';
@@ -244,7 +254,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public addAdminToDAOWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
+    public addAdminToDAOWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<HttpInfo<DAOMembershipResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -297,15 +307,15 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public addAdminToDAO(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<DAO> {
-        return this.addAdminToDAOWithHttpInfo(daoId, dAOMembership, _options).pipe(map((apiResponse: HttpInfo<DAO>) => apiResponse.data));
+    public addAdminToDAO(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<DAOMembershipResponse> {
+        return this.addAdminToDAOWithHttpInfo(daoId, dAOMembership, _options).pipe(map((apiResponse: HttpInfo<DAOMembershipResponse>) => apiResponse.data));
     }
 
     /**
      * Add a member to a DAO
      * @param daoId
      */
-    public addMemberToDAOWithHttpInfo(daoId: string, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
+    public addMemberToDAOWithHttpInfo(daoId: string, _options?: ConfigurationOptions): Observable<HttpInfo<DAOMembershipResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -357,8 +367,8 @@ export class ObservableDaosApi {
      * Add a member to a DAO
      * @param daoId
      */
-    public addMemberToDAO(daoId: string, _options?: ConfigurationOptions): Observable<DAO> {
-        return this.addMemberToDAOWithHttpInfo(daoId, _options).pipe(map((apiResponse: HttpInfo<DAO>) => apiResponse.data));
+    public addMemberToDAO(daoId: string, _options?: ConfigurationOptions): Observable<DAOMembershipResponse> {
+        return this.addMemberToDAOWithHttpInfo(daoId, _options).pipe(map((apiResponse: HttpInfo<DAOMembershipResponse>) => apiResponse.data));
     }
 
     /**
@@ -366,7 +376,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param podId
      */
-    public addMemberToPODWithHttpInfo(daoId: string, podId: string, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
+    public addMemberToPODWithHttpInfo(daoId: string, podId: string, _options?: ConfigurationOptions): Observable<HttpInfo<PODMembershipResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -419,15 +429,15 @@ export class ObservableDaosApi {
      * @param daoId
      * @param podId
      */
-    public addMemberToPOD(daoId: string, podId: string, _options?: ConfigurationOptions): Observable<POD> {
-        return this.addMemberToPODWithHttpInfo(daoId, podId, _options).pipe(map((apiResponse: HttpInfo<POD>) => apiResponse.data));
+    public addMemberToPOD(daoId: string, podId: string, _options?: ConfigurationOptions): Observable<PODMembershipResponse> {
+        return this.addMemberToPODWithHttpInfo(daoId, podId, _options).pipe(map((apiResponse: HttpInfo<PODMembershipResponse>) => apiResponse.data));
     }
 
     /**
      * Create a new DAO
-     * @param DAO
+     * @param inputCreateDAO
      */
-    public createDAOWithHttpInfo(DAO: DAO, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
+    public createDAOWithHttpInfo(inputCreateDAO: InputCreateDAO, _options?: ConfigurationOptions): Observable<HttpInfo<DAOSchemaResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -458,7 +468,7 @@ export class ObservableDaosApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.createDAO(DAO, _config);
+        const requestContextPromise = this.requestFactory.createDAO(inputCreateDAO, _config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -477,18 +487,18 @@ export class ObservableDaosApi {
 
     /**
      * Create a new DAO
-     * @param DAO
+     * @param inputCreateDAO
      */
-    public createDAO(DAO: DAO, _options?: ConfigurationOptions): Observable<DAO> {
-        return this.createDAOWithHttpInfo(DAO, _options).pipe(map((apiResponse: HttpInfo<DAO>) => apiResponse.data));
+    public createDAO(inputCreateDAO: InputCreateDAO, _options?: ConfigurationOptions): Observable<DAOSchemaResponse> {
+        return this.createDAOWithHttpInfo(inputCreateDAO, _options).pipe(map((apiResponse: HttpInfo<DAOSchemaResponse>) => apiResponse.data));
     }
 
     /**
      * Create a new POD
      * @param daoId
-     * @param POD
+     * @param inputCreatePOD
      */
-    public createPODWithHttpInfo(daoId: string, POD: POD, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
+    public createPODWithHttpInfo(daoId: string, inputCreatePOD: InputCreatePOD, _options?: ConfigurationOptions): Observable<HttpInfo<PODSchemaResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -519,7 +529,7 @@ export class ObservableDaosApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.createPOD(daoId, POD, _config);
+        const requestContextPromise = this.requestFactory.createPOD(daoId, inputCreatePOD, _config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -539,17 +549,17 @@ export class ObservableDaosApi {
     /**
      * Create a new POD
      * @param daoId
-     * @param POD
+     * @param inputCreatePOD
      */
-    public createPOD(daoId: string, POD: POD, _options?: ConfigurationOptions): Observable<POD> {
-        return this.createPODWithHttpInfo(daoId, POD, _options).pipe(map((apiResponse: HttpInfo<POD>) => apiResponse.data));
+    public createPOD(daoId: string, inputCreatePOD: InputCreatePOD, _options?: ConfigurationOptions): Observable<PODSchemaResponse> {
+        return this.createPODWithHttpInfo(daoId, inputCreatePOD, _options).pipe(map((apiResponse: HttpInfo<PODSchemaResponse>) => apiResponse.data));
     }
 
     /**
      * Delete a DAO
      * @param daoId
      */
-    public deleteDAOWithHttpInfo(daoId: string, _options?: ConfigurationOptions): Observable<HttpInfo<void>> {
+    public deleteDAOWithHttpInfo(daoId: string, _options?: ConfigurationOptions): Observable<HttpInfo<DAOSchemaResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -601,8 +611,8 @@ export class ObservableDaosApi {
      * Delete a DAO
      * @param daoId
      */
-    public deleteDAO(daoId: string, _options?: ConfigurationOptions): Observable<void> {
-        return this.deleteDAOWithHttpInfo(daoId, _options).pipe(map((apiResponse: HttpInfo<void>) => apiResponse.data));
+    public deleteDAO(daoId: string, _options?: ConfigurationOptions): Observable<DAOSchemaResponse> {
+        return this.deleteDAOWithHttpInfo(daoId, _options).pipe(map((apiResponse: HttpInfo<DAOSchemaResponse>) => apiResponse.data));
     }
 
     /**
@@ -610,7 +620,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param podId
      */
-    public deletePODWithHttpInfo(daoId: string, podId: string, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
+    public deletePODWithHttpInfo(daoId: string, podId: string, _options?: ConfigurationOptions): Observable<HttpInfo<PODSchemaResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -663,8 +673,8 @@ export class ObservableDaosApi {
      * @param daoId
      * @param podId
      */
-    public deletePOD(daoId: string, podId: string, _options?: ConfigurationOptions): Observable<POD> {
-        return this.deletePODWithHttpInfo(daoId, podId, _options).pipe(map((apiResponse: HttpInfo<POD>) => apiResponse.data));
+    public deletePOD(daoId: string, podId: string, _options?: ConfigurationOptions): Observable<PODSchemaResponse> {
+        return this.deletePODWithHttpInfo(daoId, podId, _options).pipe(map((apiResponse: HttpInfo<PODSchemaResponse>) => apiResponse.data));
     }
 
     /**
@@ -974,7 +984,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public removeAdminFromDAOWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
+    public removeAdminFromDAOWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<HttpInfo<DAOMembershipResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1027,8 +1037,8 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public removeAdminFromDAO(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<DAO> {
-        return this.removeAdminFromDAOWithHttpInfo(daoId, dAOMembership, _options).pipe(map((apiResponse: HttpInfo<DAO>) => apiResponse.data));
+    public removeAdminFromDAO(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<DAOMembershipResponse> {
+        return this.removeAdminFromDAOWithHttpInfo(daoId, dAOMembership, _options).pipe(map((apiResponse: HttpInfo<DAOMembershipResponse>) => apiResponse.data));
     }
 
     /**
@@ -1036,7 +1046,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public removeMemberFromDAOWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
+    public removeMemberFromDAOWithHttpInfo(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<HttpInfo<DAOMembershipResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1089,8 +1099,8 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOMembership
      */
-    public removeMemberFromDAO(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<DAO> {
-        return this.removeMemberFromDAOWithHttpInfo(daoId, dAOMembership, _options).pipe(map((apiResponse: HttpInfo<DAO>) => apiResponse.data));
+    public removeMemberFromDAO(daoId: string, dAOMembership: DAOMembership, _options?: ConfigurationOptions): Observable<DAOMembershipResponse> {
+        return this.removeMemberFromDAOWithHttpInfo(daoId, dAOMembership, _options).pipe(map((apiResponse: HttpInfo<DAOMembershipResponse>) => apiResponse.data));
     }
 
     /**
@@ -1099,7 +1109,7 @@ export class ObservableDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public removeMemberFromPODWithHttpInfo(daoId: string, podId: string, pODMembership: PODMembership, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
+    public removeMemberFromPODWithHttpInfo(daoId: string, podId: string, pODMembership: PODMembership, _options?: ConfigurationOptions): Observable<HttpInfo<PODMembershipResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1153,8 +1163,8 @@ export class ObservableDaosApi {
      * @param podId
      * @param pODMembership
      */
-    public removeMemberFromPOD(daoId: string, podId: string, pODMembership: PODMembership, _options?: ConfigurationOptions): Observable<POD> {
-        return this.removeMemberFromPODWithHttpInfo(daoId, podId, pODMembership, _options).pipe(map((apiResponse: HttpInfo<POD>) => apiResponse.data));
+    public removeMemberFromPOD(daoId: string, podId: string, pODMembership: PODMembership, _options?: ConfigurationOptions): Observable<PODMembershipResponse> {
+        return this.removeMemberFromPODWithHttpInfo(daoId, podId, pODMembership, _options).pipe(map((apiResponse: HttpInfo<PODMembershipResponse>) => apiResponse.data));
     }
 
     /**
@@ -1162,7 +1172,7 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOUpdate
      */
-    public updateDAOWithHttpInfo(daoId: string, dAOUpdate: DAOUpdate, _options?: ConfigurationOptions): Observable<HttpInfo<DAO>> {
+    public updateDAOWithHttpInfo(daoId: string, dAOUpdate: DAOUpdate, _options?: ConfigurationOptions): Observable<HttpInfo<DAOSchemaResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1215,8 +1225,8 @@ export class ObservableDaosApi {
      * @param daoId
      * @param dAOUpdate
      */
-    public updateDAO(daoId: string, dAOUpdate: DAOUpdate, _options?: ConfigurationOptions): Observable<DAO> {
-        return this.updateDAOWithHttpInfo(daoId, dAOUpdate, _options).pipe(map((apiResponse: HttpInfo<DAO>) => apiResponse.data));
+    public updateDAO(daoId: string, dAOUpdate: DAOUpdate, _options?: ConfigurationOptions): Observable<DAOSchemaResponse> {
+        return this.updateDAOWithHttpInfo(daoId, dAOUpdate, _options).pipe(map((apiResponse: HttpInfo<DAOSchemaResponse>) => apiResponse.data));
     }
 
     /**
@@ -1225,7 +1235,7 @@ export class ObservableDaosApi {
      * @param podId
      * @param pODUpdate
      */
-    public updatePODWithHttpInfo(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: ConfigurationOptions): Observable<HttpInfo<POD>> {
+    public updatePODWithHttpInfo(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: ConfigurationOptions): Observable<HttpInfo<PODSchemaResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1279,35 +1289,34 @@ export class ObservableDaosApi {
      * @param podId
      * @param pODUpdate
      */
-    public updatePOD(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: ConfigurationOptions): Observable<POD> {
-        return this.updatePODWithHttpInfo(daoId, podId, pODUpdate, _options).pipe(map((apiResponse: HttpInfo<POD>) => apiResponse.data));
+    public updatePOD(daoId: string, podId: string, pODUpdate: PODUpdate, _options?: ConfigurationOptions): Observable<PODSchemaResponse> {
+        return this.updatePODWithHttpInfo(daoId, podId, pODUpdate, _options).pipe(map((apiResponse: HttpInfo<PODSchemaResponse>) => apiResponse.data));
     }
 
 }
 
-import { DataApiRequestFactory, DataApiResponseProcessor} from "../apis/DataApi";
-export class ObservableDataApi {
-    private requestFactory: DataApiRequestFactory;
-    private responseProcessor: DataApiResponseProcessor;
+import { TreasuryApiRequestFactory, TreasuryApiResponseProcessor} from "../apis/TreasuryApi";
+export class ObservableTreasuryApi {
+    private requestFactory: TreasuryApiRequestFactory;
+    private responseProcessor: TreasuryApiResponseProcessor;
     private configuration: Configuration;
 
     public constructor(
         configuration: Configuration,
-        requestFactory?: DataApiRequestFactory,
-        responseProcessor?: DataApiResponseProcessor
+        requestFactory?: TreasuryApiRequestFactory,
+        responseProcessor?: TreasuryApiResponseProcessor
     ) {
         this.configuration = configuration;
-        this.requestFactory = requestFactory || new DataApiRequestFactory(configuration);
-        this.responseProcessor = responseProcessor || new DataApiResponseProcessor();
+        this.requestFactory = requestFactory || new TreasuryApiRequestFactory(configuration);
+        this.responseProcessor = responseProcessor || new TreasuryApiResponseProcessor();
     }
 
     /**
-     * Get data
-     * @param dateStart
-     * @param dateEnd
-     * @param [source]
+     * Create a new transfer for a specific DAO
+     * @param daoId
+     * @param transferCreate
      */
-    public getItemsWithHttpInfo(dateStart: string, dateEnd: string, source?: string, _options?: ConfigurationOptions): Observable<HttpInfo<ItemsResponse>> {
+    public createDAOTransferWithHttpInfo(daoId: string, transferCreate: TransferCreate, _options?: ConfigurationOptions): Observable<HttpInfo<TransferSchemaResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1338,7 +1347,7 @@ export class ObservableDataApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.getItems(dateStart, dateEnd, source, _config);
+        const requestContextPromise = this.requestFactory.createDAOTransfer(daoId, transferCreate, _config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -1351,27 +1360,25 @@ export class ObservableDataApi {
                 for (const middleware of allMiddleware.reverse()) {
                     middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
                 }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getItemsWithHttpInfo(rsp)));
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.createDAOTransferWithHttpInfo(rsp)));
             }));
     }
 
     /**
-     * Get data
-     * @param dateStart
-     * @param dateEnd
-     * @param [source]
+     * Create a new transfer for a specific DAO
+     * @param daoId
+     * @param transferCreate
      */
-    public getItems(dateStart: string, dateEnd: string, source?: string, _options?: ConfigurationOptions): Observable<ItemsResponse> {
-        return this.getItemsWithHttpInfo(dateStart, dateEnd, source, _options).pipe(map((apiResponse: HttpInfo<ItemsResponse>) => apiResponse.data));
+    public createDAOTransfer(daoId: string, transferCreate: TransferCreate, _options?: ConfigurationOptions): Observable<TransferSchemaResponse> {
+        return this.createDAOTransferWithHttpInfo(daoId, transferCreate, _options).pipe(map((apiResponse: HttpInfo<TransferSchemaResponse>) => apiResponse.data));
     }
 
     /**
-     * Get data
-     * @param dateStart
-     * @param dateEnd
-     * @param [source]
+     * Create a new token for a specific DAO
+     * @param daoId
+     * @param tokenCreate
      */
-    public getSummaryWithHttpInfo(dateStart: string, dateEnd: string, source?: string, _options?: ConfigurationOptions): Observable<HttpInfo<SummaryResponse>> {
+    public createTokenWithHttpInfo(daoId: string, tokenCreate: TokenCreate, _options?: ConfigurationOptions): Observable<HttpInfo<TokenSchemaResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1402,7 +1409,7 @@ export class ObservableDataApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.getSummary(dateStart, dateEnd, source, _config);
+        const requestContextPromise = this.requestFactory.createToken(daoId, tokenCreate, _config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -1415,18 +1422,197 @@ export class ObservableDataApi {
                 for (const middleware of allMiddleware.reverse()) {
                     middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
                 }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getSummaryWithHttpInfo(rsp)));
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.createTokenWithHttpInfo(rsp)));
             }));
     }
 
     /**
-     * Get data
-     * @param dateStart
-     * @param dateEnd
-     * @param [source]
+     * Create a new token for a specific DAO
+     * @param daoId
+     * @param tokenCreate
      */
-    public getSummary(dateStart: string, dateEnd: string, source?: string, _options?: ConfigurationOptions): Observable<SummaryResponse> {
-        return this.getSummaryWithHttpInfo(dateStart, dateEnd, source, _options).pipe(map((apiResponse: HttpInfo<SummaryResponse>) => apiResponse.data));
+    public createToken(daoId: string, tokenCreate: TokenCreate, _options?: ConfigurationOptions): Observable<TokenSchemaResponse> {
+        return this.createTokenWithHttpInfo(daoId, tokenCreate, _options).pipe(map((apiResponse: HttpInfo<TokenSchemaResponse>) => apiResponse.data));
+    }
+
+    /**
+     * Get all tokens for a specific DAO
+     * @param daoId
+     */
+    public getDAOTokensWithHttpInfo(daoId: string, _options?: ConfigurationOptions): Observable<HttpInfo<Array<Token>>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.getDAOTokens(daoId, _config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getDAOTokensWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Get all tokens for a specific DAO
+     * @param daoId
+     */
+    public getDAOTokens(daoId: string, _options?: ConfigurationOptions): Observable<Array<Token>> {
+        return this.getDAOTokensWithHttpInfo(daoId, _options).pipe(map((apiResponse: HttpInfo<Array<Token>>) => apiResponse.data));
+    }
+
+    /**
+     * Get all transfers for a specific DAO
+     * @param daoId
+     */
+    public getDAOTransfersWithHttpInfo(daoId: string, _options?: ConfigurationOptions): Observable<HttpInfo<Array<Transfer>>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.getDAOTransfers(daoId, _config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getDAOTransfersWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Get all transfers for a specific DAO
+     * @param daoId
+     */
+    public getDAOTransfers(daoId: string, _options?: ConfigurationOptions): Observable<Array<Transfer>> {
+        return this.getDAOTransfersWithHttpInfo(daoId, _options).pipe(map((apiResponse: HttpInfo<Array<Transfer>>) => apiResponse.data));
+    }
+
+    /**
+     * Get Treasury information for a specific DAO
+     * @param daoId
+     */
+    public getDAOTreasuryWithHttpInfo(daoId: string, _options?: ConfigurationOptions): Observable<HttpInfo<Treasury>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.getDAOTreasury(daoId, _config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getDAOTreasuryWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Get Treasury information for a specific DAO
+     * @param daoId
+     */
+    public getDAOTreasury(daoId: string, _options?: ConfigurationOptions): Observable<Treasury> {
+        return this.getDAOTreasuryWithHttpInfo(daoId, _options).pipe(map((apiResponse: HttpInfo<Treasury>) => apiResponse.data));
     }
 
 }
@@ -1510,7 +1696,7 @@ export class ObservableUsersApi {
     /**
      * Get authenticated user informations
      */
-    public getAuthUserInfosWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<UserResponse>> {
+    public getAuthUserInfosWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<User>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1561,8 +1747,8 @@ export class ObservableUsersApi {
     /**
      * Get authenticated user informations
      */
-    public getAuthUserInfos(_options?: ConfigurationOptions): Observable<UserResponse> {
-        return this.getAuthUserInfosWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<UserResponse>) => apiResponse.data));
+    public getAuthUserInfos(_options?: ConfigurationOptions): Observable<User> {
+        return this.getAuthUserInfosWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<User>) => apiResponse.data));
     }
 
     /**

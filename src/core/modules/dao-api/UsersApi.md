@@ -67,14 +67,14 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **422** | Unprocessable Entity |  -  |
-**201** | Infos of new user |  -  |
-**400** | BadRequest |  -  |
+**201** | User successfully created |  -  |
+**400** | Bad Request |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
 # **getAuthUserInfos**
-> UserResponse getAuthUserInfos()
+> User getAuthUserInfos()
 
 
 ### Example
@@ -99,7 +99,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**UserResponse**
+**User**
 
 ### Authorization
 
@@ -114,8 +114,8 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | Get authenticated user informations |  -  |
-**404** | NotFound |  -  |
+**200** | User information retrieved successfully |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
@@ -168,8 +168,7 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | Check if user with the wallet address exists |  -  |
-**404** | NotFound |  -  |
+**200** | Check if user exists completed successfully |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
@@ -233,9 +232,10 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **422** | Unprocessable Entity |  -  |
-**200** | Update one user |  -  |
-**404** | NotFound |  -  |
-**400** | BadRequest |  -  |
+**200** | User updated successfully |  -  |
+**400** | Bad Request - Error updating user |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
+**404** | User not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)

@@ -2,20 +2,30 @@ export * from '../models/ChallengeRequest';
 export * from '../models/ChallengeResponse';
 export * from '../models/DAO';
 export * from '../models/DAOMembership';
+export * from '../models/DAOMembershipResponse';
+export * from '../models/DAOSchemaResponse';
 export * from '../models/DAOUpdate';
+export * from '../models/InputCreateDAO';
+export * from '../models/InputCreatePOD';
 export * from '../models/InputCreateUser';
 export * from '../models/InputUpdateUser';
-export * from '../models/Item';
-export * from '../models/ItemsResponse';
 export * from '../models/LoginResponse';
 export * from '../models/LogoutResponse';
 export * from '../models/ModelError';
 export * from '../models/POD';
 export * from '../models/PODMembership';
+export * from '../models/PODMembershipResponse';
+export * from '../models/PODSchemaResponse';
 export * from '../models/PODUpdate';
 export * from '../models/PaginationMetadata';
 export * from '../models/PagingError';
-export * from '../models/SummaryResponse';
+export * from '../models/Token';
+export * from '../models/TokenCreate';
+export * from '../models/TokenSchemaResponse';
+export * from '../models/Transfer';
+export * from '../models/TransferCreate';
+export * from '../models/TransferSchemaResponse';
+export * from '../models/Treasury';
 export * from '../models/User';
 export * from '../models/UserBasic';
 export * from '../models/UserExistResponse';
@@ -26,20 +36,30 @@ import { ChallengeRequest } from '../models/ChallengeRequest';
 import { ChallengeResponse } from '../models/ChallengeResponse';
 import { DAO } from '../models/DAO';
 import { DAOMembership } from '../models/DAOMembership';
+import { DAOMembershipResponse } from '../models/DAOMembershipResponse';
+import { DAOSchemaResponse } from '../models/DAOSchemaResponse';
 import { DAOUpdate } from '../models/DAOUpdate';
+import { InputCreateDAO } from '../models/InputCreateDAO';
+import { InputCreatePOD } from '../models/InputCreatePOD';
 import { InputCreateUser } from '../models/InputCreateUser';
 import { InputUpdateUser } from '../models/InputUpdateUser';
-import { Item } from '../models/Item';
-import { ItemsResponse } from '../models/ItemsResponse';
 import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
+import { PODMembershipResponse } from '../models/PODMembershipResponse';
+import { PODSchemaResponse } from '../models/PODSchemaResponse';
 import { PODUpdate } from '../models/PODUpdate';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
-import { SummaryResponse } from '../models/SummaryResponse';
+import { Token } from '../models/Token';
+import { TokenCreate } from '../models/TokenCreate';
+import { TokenSchemaResponse } from '../models/TokenSchemaResponse';
+import { Transfer } from '../models/Transfer';
+import { TransferCreate } from '../models/TransferCreate';
+import { TransferSchemaResponse } from '../models/TransferSchemaResponse';
+import { Treasury } from '../models/Treasury';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
 import { UserExistResponse } from '../models/UserExistResponse';
@@ -66,20 +86,30 @@ let typeMap: {[index: string]: any} = {
     "ChallengeResponse": ChallengeResponse,
     "DAO": DAO,
     "DAOMembership": DAOMembership,
+    "DAOMembershipResponse": DAOMembershipResponse,
+    "DAOSchemaResponse": DAOSchemaResponse,
     "DAOUpdate": DAOUpdate,
+    "InputCreateDAO": InputCreateDAO,
+    "InputCreatePOD": InputCreatePOD,
     "InputCreateUser": InputCreateUser,
     "InputUpdateUser": InputUpdateUser,
-    "Item": Item,
-    "ItemsResponse": ItemsResponse,
     "LoginResponse": LoginResponse,
     "LogoutResponse": LogoutResponse,
     "ModelError": ModelError,
     "POD": POD,
     "PODMembership": PODMembership,
+    "PODMembershipResponse": PODMembershipResponse,
+    "PODSchemaResponse": PODSchemaResponse,
     "PODUpdate": PODUpdate,
     "PaginationMetadata": PaginationMetadata,
     "PagingError": PagingError,
-    "SummaryResponse": SummaryResponse,
+    "Token": Token,
+    "TokenCreate": TokenCreate,
+    "TokenSchemaResponse": TokenSchemaResponse,
+    "Transfer": Transfer,
+    "TransferCreate": TransferCreate,
+    "TransferSchemaResponse": TransferSchemaResponse,
+    "Treasury": Treasury,
     "User": User,
     "UserBasic": UserBasic,
     "UserExistResponse": UserExistResponse,

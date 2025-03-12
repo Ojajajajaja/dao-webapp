@@ -11,6 +11,7 @@ import {SecurityAuthentication} from '../auth/auth';
 import { InputCreateUser } from '../models/InputCreateUser';
 import { InputUpdateUser } from '../models/InputUpdateUser';
 import { PagingError } from '../models/PagingError';
+import { User } from '../models/User';
 import { UserExistResponse } from '../models/UserExistResponse';
 import { UserResponse } from '../models/UserResponse';
 
@@ -195,7 +196,7 @@ export class UsersApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "BadRequest", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -224,21 +225,21 @@ export class UsersApiResponseProcessor {
      * @params response Response returned by the server for a request to getAuthUserInfos
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async getAuthUserInfosWithHttpInfo(response: ResponseContext): Promise<HttpInfo<UserResponse >> {
+     public async getAuthUserInfosWithHttpInfo(response: ResponseContext): Promise<HttpInfo<User >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: UserResponse = ObjectSerializer.deserialize(
+            const body: User = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "UserResponse", ""
-            ) as UserResponse;
+                "User", ""
+            ) as User;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
-        if (isCodeInRange("404", response.httpStatusCode)) {
+        if (isCodeInRange("401", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "NotFound", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized - Invalid or missing token", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -250,10 +251,10 @@ export class UsersApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: UserResponse = ObjectSerializer.deserialize(
+            const body: User = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "UserResponse", ""
-            ) as UserResponse;
+                "User", ""
+            ) as User;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
@@ -275,13 +276,6 @@ export class UsersApiResponseProcessor {
                 "UserExistResponse", ""
             ) as UserExistResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
-        }
-        if (isCodeInRange("404", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "NotFound", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -326,19 +320,26 @@ export class UsersApiResponseProcessor {
             ) as UserResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
-        if (isCodeInRange("404", response.httpStatusCode)) {
-            const body: PagingError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "PagingError", ""
-            ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "NotFound", body, response.headers);
-        }
         if (isCodeInRange("400", response.httpStatusCode)) {
             const body: PagingError = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "PagingError", ""
             ) as PagingError;
-            throw new ApiException<PagingError>(response.httpStatusCode, "BadRequest", body, response.headers);
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request - Error updating user", body, response.headers);
+        }
+        if (isCodeInRange("401", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized - Invalid or missing token", body, response.headers);
+        }
+        if (isCodeInRange("404", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "User not found", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
