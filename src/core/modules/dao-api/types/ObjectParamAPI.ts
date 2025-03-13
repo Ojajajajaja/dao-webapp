@@ -30,6 +30,7 @@ import { Transfer } from '../models/Transfer';
 import { TransferCreate } from '../models/TransferCreate';
 import { TransferSchemaResponse } from '../models/TransferSchemaResponse';
 import { Treasury } from '../models/Treasury';
+import { TreasuryUpdatePercentages } from '../models/TreasuryUpdatePercentages';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
 import { UserExistResponse } from '../models/UserExistResponse';
@@ -712,6 +713,16 @@ export interface TreasuryApiGetDAOTreasuryRequest {
     daoId: string
 }
 
+export interface TreasuryApiUpdateDAOTokenPercentagesRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof TreasuryApiupdateDAOTokenPercentages
+     */
+    daoId: string
+}
+
 export class ObjectTreasuryApi {
     private api: ObservableTreasuryApi
 
@@ -797,6 +808,22 @@ export class ObjectTreasuryApi {
      */
     public getDAOTreasury(param: TreasuryApiGetDAOTreasuryRequest, options?: ConfigurationOptions): Promise<Treasury> {
         return this.api.getDAOTreasury(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Update the percentages of tokens in the DAO\'s treasury without changing prices
+     * @param param the request object
+     */
+    public updateDAOTokenPercentagesWithHttpInfo(param: TreasuryApiUpdateDAOTokenPercentagesRequest, options?: ConfigurationOptions): Promise<HttpInfo<TreasuryUpdatePercentages>> {
+        return this.api.updateDAOTokenPercentagesWithHttpInfo(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Update the percentages of tokens in the DAO\'s treasury without changing prices
+     * @param param the request object
+     */
+    public updateDAOTokenPercentages(param: TreasuryApiUpdateDAOTokenPercentagesRequest, options?: ConfigurationOptions): Promise<TreasuryUpdatePercentages> {
+        return this.api.updateDAOTokenPercentages(param.daoId,  options).toPromise();
     }
 
 }

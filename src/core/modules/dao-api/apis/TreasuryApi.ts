@@ -16,6 +16,7 @@ import { Transfer } from '../models/Transfer';
 import { TransferCreate } from '../models/TransferCreate';
 import { TransferSchemaResponse } from '../models/TransferSchemaResponse';
 import { Treasury } from '../models/Treasury';
+import { TreasuryUpdatePercentages } from '../models/TreasuryUpdatePercentages';
 
 /**
  * no description
@@ -201,6 +202,37 @@ export class TreasuryApiRequestFactory extends BaseAPIRequestFactory {
 
         // Make Request Context
         const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+
+        
+        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
+        if (defaultAuth?.applySecurityAuthentication) {
+            await defaultAuth?.applySecurityAuthentication(requestContext);
+        }
+
+        return requestContext;
+    }
+
+    /**
+     * Update the percentages of tokens in the DAO\'s treasury without changing prices
+     * @param daoId 
+     */
+    public async updateDAOTokenPercentages(daoId: string, _options?: Configuration): Promise<RequestContext> {
+        let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("TreasuryApi", "updateDAOTokenPercentages", "daoId");
+        }
+
+
+        // Path Params
+        const localVarPath = '/treasury/daos/{dao_id}/update-percentages'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)));
+
+        // Make Request Context
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.PUT);
         requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
 
@@ -454,6 +486,63 @@ export class TreasuryApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "Treasury", ""
             ) as Treasury;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+
+        throw new ApiException<string | Blob | undefined>(response.httpStatusCode, "Unknown API Status Code!", await response.getBodyAsAny(), response.headers);
+    }
+
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to updateDAOTokenPercentages
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+     public async updateDAOTokenPercentagesWithHttpInfo(response: ResponseContext): Promise<HttpInfo<TreasuryUpdatePercentages >> {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
+        if (isCodeInRange("200", response.httpStatusCode)) {
+            const body: TreasuryUpdatePercentages = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "TreasuryUpdatePercentages", ""
+            ) as TreasuryUpdatePercentages;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+        if (isCodeInRange("400", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request - Error updating token percentages", body, response.headers);
+        }
+        if (isCodeInRange("401", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized - Invalid or missing token", body, response.headers);
+        }
+        if (isCodeInRange("404", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "DAO not found", body, response.headers);
+        }
+        if (isCodeInRange("0", response.httpStatusCode)) {
+            const body: Error = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "Default error response", body, response.headers);
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: TreasuryUpdatePercentages = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "TreasuryUpdatePercentages", ""
+            ) as TreasuryUpdatePercentages;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 

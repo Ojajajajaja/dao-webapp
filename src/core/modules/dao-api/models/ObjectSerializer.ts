@@ -26,6 +26,7 @@ export * from '../models/Transfer';
 export * from '../models/TransferCreate';
 export * from '../models/TransferSchemaResponse';
 export * from '../models/Treasury';
+export * from '../models/TreasuryUpdatePercentages';
 export * from '../models/User';
 export * from '../models/UserBasic';
 export * from '../models/UserExistResponse';
@@ -60,6 +61,7 @@ import { Transfer } from '../models/Transfer';
 import { TransferCreate } from '../models/TransferCreate';
 import { TransferSchemaResponse } from '../models/TransferSchemaResponse';
 import { Treasury } from '../models/Treasury';
+import { TreasuryUpdatePercentages } from '../models/TreasuryUpdatePercentages';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
 import { UserExistResponse } from '../models/UserExistResponse';
@@ -110,6 +112,7 @@ let typeMap: {[index: string]: any} = {
     "TransferCreate": TransferCreate,
     "TransferSchemaResponse": TransferSchemaResponse,
     "Treasury": Treasury,
+    "TreasuryUpdatePercentages": TreasuryUpdatePercentages,
     "User": User,
     "UserBasic": UserBasic,
     "UserExistResponse": UserExistResponse,

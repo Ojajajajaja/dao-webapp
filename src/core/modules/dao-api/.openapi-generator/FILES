@@ -47,6 +47,7 @@ models/Transfer.ts
 models/TransferCreate.ts
 models/TransferSchemaResponse.ts
 models/Treasury.ts
+models/TreasuryUpdatePercentages.ts
 models/User.ts
 models/UserBasic.ts
 models/UserExistResponse.ts

@@ -30,6 +30,7 @@ import { Transfer } from '../models/Transfer';
 import { TransferCreate } from '../models/TransferCreate';
 import { TransferSchemaResponse } from '../models/TransferSchemaResponse';
 import { Treasury } from '../models/Treasury';
+import { TreasuryUpdatePercentages } from '../models/TreasuryUpdatePercentages';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
 import { UserExistResponse } from '../models/UserExistResponse';
@@ -1160,6 +1161,48 @@ export class PromiseTreasuryApi {
 	    }
 	}
         const result = this.api.getDAOTreasury(daoId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Update the percentages of tokens in the DAO\'s treasury without changing prices
+     * @param daoId
+     */
+    public updateDAOTokenPercentagesWithHttpInfo(daoId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<TreasuryUpdatePercentages>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.updateDAOTokenPercentagesWithHttpInfo(daoId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Update the percentages of tokens in the DAO\'s treasury without changing prices
+     * @param daoId
+     */
+    public updateDAOTokenPercentages(daoId: string, _options?: PromiseConfigurationOptions): Promise<TreasuryUpdatePercentages> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.updateDAOTokenPercentages(daoId, observableOptions);
         return result.toPromise();
     }
 
