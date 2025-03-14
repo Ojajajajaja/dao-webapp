@@ -12,11 +12,9 @@
 
 import { HttpFile } from '../http/http';
 
-export class InputCreatePOD {
-    'name': string;
-    'description': string;
-    'daoId': string;
-    'discordChannelId'?: string;
+export class LinkDiscordChannel {
+    'channelId': string;
+    'podId': string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -24,32 +22,20 @@ export class InputCreatePOD {
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "name",
-            "baseName": "name",
+            "name": "channelId",
+            "baseName": "channel_id",
             "type": "string",
             "format": ""
         },
         {
-            "name": "description",
-            "baseName": "description",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "daoId",
-            "baseName": "dao_id",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "discordChannelId",
-            "baseName": "discord_channel_id",
+            "name": "podId",
+            "baseName": "pod_id",
             "type": "string",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return InputCreatePOD.attributeTypeMap;
+        return LinkDiscordChannel.attributeTypeMap;
     }
 
     public constructor() {

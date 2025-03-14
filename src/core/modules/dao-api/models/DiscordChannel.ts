@@ -10,17 +10,15 @@
  * Do not edit the class manually.
  */
 
-import { DiscordChannel } from '../models/DiscordChannel';
 import { HttpFile } from '../http/http';
 
-export class POD {
-    'podId'?: string;
-    'daoId': string;
+export class DiscordChannel {
+    'channelId'?: string;
     'name': string;
-    'description': string;
-    'isActive'?: boolean;
+    'podId'?: string | null;
     'createdAt'?: Date;
-    'discordChannels'?: Array<DiscordChannel>;
+    'lastSyncedAt'?: Date;
+    'messageCount'?: number;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -28,14 +26,8 @@ export class POD {
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "podId",
-            "baseName": "pod_id",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "daoId",
-            "baseName": "dao_id",
+            "name": "channelId",
+            "baseName": "channel_id",
             "type": "string",
             "format": ""
         },
@@ -46,15 +38,9 @@ export class POD {
             "format": ""
         },
         {
-            "name": "description",
-            "baseName": "description",
+            "name": "podId",
+            "baseName": "pod_id",
             "type": "string",
-            "format": ""
-        },
-        {
-            "name": "isActive",
-            "baseName": "is_active",
-            "type": "boolean",
             "format": ""
         },
         {
@@ -64,14 +50,20 @@ export class POD {
             "format": "date-time"
         },
         {
-            "name": "discordChannels",
-            "baseName": "discord_channels",
-            "type": "Array<DiscordChannel>",
+            "name": "lastSyncedAt",
+            "baseName": "last_synced_at",
+            "type": "Date",
+            "format": "date-time"
+        },
+        {
+            "name": "messageCount",
+            "baseName": "message_count",
+            "type": "number",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return POD.attributeTypeMap;
+        return DiscordChannel.attributeTypeMap;
     }
 
     public constructor() {

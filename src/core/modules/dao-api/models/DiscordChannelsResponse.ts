@@ -10,13 +10,12 @@
  * Do not edit the class manually.
  */
 
+import { DiscordChannel } from '../models/DiscordChannel';
 import { HttpFile } from '../http/http';
 
-export class InputCreatePOD {
-    'name': string;
-    'description': string;
-    'daoId': string;
-    'discordChannelId'?: string;
+export class DiscordChannelsResponse {
+    'action': string;
+    'channels': Array<DiscordChannel>;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -24,32 +23,20 @@ export class InputCreatePOD {
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "name",
-            "baseName": "name",
+            "name": "action",
+            "baseName": "action",
             "type": "string",
             "format": ""
         },
         {
-            "name": "description",
-            "baseName": "description",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "daoId",
-            "baseName": "dao_id",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "discordChannelId",
-            "baseName": "discord_channel_id",
-            "type": "string",
+            "name": "channels",
+            "baseName": "channels",
+            "type": "Array<DiscordChannel>",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return InputCreatePOD.attributeTypeMap;
+        return DiscordChannelsResponse.attributeTypeMap;
     }
 
     public constructor() {

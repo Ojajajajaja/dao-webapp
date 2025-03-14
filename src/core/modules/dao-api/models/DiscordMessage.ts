@@ -10,17 +10,18 @@
  * Do not edit the class manually.
  */
 
-import { DiscordChannel } from '../models/DiscordChannel';
 import { HttpFile } from '../http/http';
 
-export class POD {
-    'podId'?: string;
-    'daoId': string;
-    'name': string;
-    'description': string;
-    'isActive'?: boolean;
-    'createdAt'?: Date;
-    'discordChannels'?: Array<DiscordChannel>;
+export class DiscordMessage {
+    'messageId'?: string;
+    'channelId': string;
+    'username': string;
+    'userId': string;
+    'text'?: string | null;
+    'hasMedia'?: boolean;
+    'mediaUrls'?: any | null;
+    'createdAt': Date;
+    'indexedAt'?: Date;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -28,33 +29,45 @@ export class POD {
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "podId",
-            "baseName": "pod_id",
+            "name": "messageId",
+            "baseName": "message_id",
             "type": "string",
             "format": ""
         },
         {
-            "name": "daoId",
-            "baseName": "dao_id",
+            "name": "channelId",
+            "baseName": "channel_id",
             "type": "string",
             "format": ""
         },
         {
-            "name": "name",
-            "baseName": "name",
+            "name": "username",
+            "baseName": "username",
             "type": "string",
             "format": ""
         },
         {
-            "name": "description",
-            "baseName": "description",
+            "name": "userId",
+            "baseName": "user_id",
             "type": "string",
             "format": ""
         },
         {
-            "name": "isActive",
-            "baseName": "is_active",
+            "name": "text",
+            "baseName": "text",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "hasMedia",
+            "baseName": "has_media",
             "type": "boolean",
+            "format": ""
+        },
+        {
+            "name": "mediaUrls",
+            "baseName": "media_urls",
+            "type": "any",
             "format": ""
         },
         {
@@ -64,14 +77,14 @@ export class POD {
             "format": "date-time"
         },
         {
-            "name": "discordChannels",
-            "baseName": "discord_channels",
-            "type": "Array<DiscordChannel>",
-            "format": ""
+            "name": "indexedAt",
+            "baseName": "indexed_at",
+            "type": "Date",
+            "format": "date-time"
         }    ];
 
     static getAttributeTypeMap() {
-        return POD.attributeTypeMap;
+        return DiscordMessage.attributeTypeMap;
     }
 
     public constructor() {

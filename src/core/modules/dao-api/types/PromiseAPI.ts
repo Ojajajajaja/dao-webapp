@@ -4,15 +4,22 @@ import { PromiseMiddleware, Middleware, PromiseMiddlewareWrapper } from '../midd
 
 import { ChallengeRequest } from '../models/ChallengeRequest';
 import { ChallengeResponse } from '../models/ChallengeResponse';
+import { CreateDiscordChannel } from '../models/CreateDiscordChannel';
 import { DAO } from '../models/DAO';
 import { DAOMembership } from '../models/DAOMembership';
 import { DAOMembershipResponse } from '../models/DAOMembershipResponse';
 import { DAOSchemaResponse } from '../models/DAOSchemaResponse';
 import { DAOUpdate } from '../models/DAOUpdate';
+import { DiscordChannel } from '../models/DiscordChannel';
+import { DiscordChannelResponse } from '../models/DiscordChannelResponse';
+import { DiscordChannelsResponse } from '../models/DiscordChannelsResponse';
+import { DiscordMessage } from '../models/DiscordMessage';
+import { DiscordMessagesResponse } from '../models/DiscordMessagesResponse';
 import { InputCreateDAO } from '../models/InputCreateDAO';
 import { InputCreatePOD } from '../models/InputCreatePOD';
 import { InputCreateUser } from '../models/InputCreateUser';
 import { InputUpdateUser } from '../models/InputUpdateUser';
+import { LinkDiscordChannel } from '../models/LinkDiscordChannel';
 import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
@@ -31,6 +38,7 @@ import { TransferCreate } from '../models/TransferCreate';
 import { TransferSchemaResponse } from '../models/TransferSchemaResponse';
 import { Treasury } from '../models/Treasury';
 import { TreasuryUpdatePercentages } from '../models/TreasuryUpdatePercentages';
+import { UpdateDiscordChannel } from '../models/UpdateDiscordChannel';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
 import { UserExistResponse } from '../models/UserExistResponse';
@@ -622,6 +630,52 @@ export class PromiseDaosApi {
     }
 
     /**
+     * Get messages from a specific Discord channel
+     * @param daoId
+     * @param podId
+     * @param channelId
+     */
+    public getChannelMessagesWithHttpInfo(daoId: string, podId: string, channelId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DiscordMessagesResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getChannelMessagesWithHttpInfo(daoId, podId, channelId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get messages from a specific Discord channel
+     * @param daoId
+     * @param podId
+     * @param channelId
+     */
+    public getChannelMessages(daoId: string, podId: string, channelId: string, _options?: PromiseConfigurationOptions): Promise<DiscordMessagesResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getChannelMessages(daoId, podId, channelId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
      * Get a DAO by ID
      * @param daoId
      */
@@ -704,6 +758,140 @@ export class PromiseDaosApi {
 	    }
 	}
         const result = this.api.getPODById(daoId, podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all Discord channels for a POD
+     * @param daoId
+     * @param podId
+     */
+    public getPODDiscordChannelsWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DiscordChannelsResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getPODDiscordChannelsWithHttpInfo(daoId, podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all Discord channels for a POD
+     * @param daoId
+     * @param podId
+     */
+    public getPODDiscordChannels(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<DiscordChannelsResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getPODDiscordChannels(daoId, podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get Discord feed for a POD
+     * @param daoId
+     * @param podId
+     */
+    public getPODFeedWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DiscordMessagesResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getPODFeedWithHttpInfo(daoId, podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get Discord feed for a POD
+     * @param daoId
+     * @param podId
+     */
+    public getPODFeed(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<DiscordMessagesResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getPODFeed(daoId, podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Link a Discord channel to a POD
+     * @param daoId
+     * @param podId
+     * @param linkDiscordChannel
+     */
+    public linkDiscordChannelToPODWithHttpInfo(daoId: string, podId: string, linkDiscordChannel: LinkDiscordChannel, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DiscordChannelResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.linkDiscordChannelToPODWithHttpInfo(daoId, podId, linkDiscordChannel, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Link a Discord channel to a POD
+     * @param daoId
+     * @param podId
+     * @param linkDiscordChannel
+     */
+    public linkDiscordChannelToPOD(daoId: string, podId: string, linkDiscordChannel: LinkDiscordChannel, _options?: PromiseConfigurationOptions): Promise<DiscordChannelResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.linkDiscordChannelToPOD(daoId, podId, linkDiscordChannel, observableOptions);
         return result.toPromise();
     }
 
@@ -842,6 +1030,52 @@ export class PromiseDaosApi {
     }
 
     /**
+     * Unlink a Discord channel from a POD
+     * @param daoId
+     * @param podId
+     * @param channelId
+     */
+    public unlinkDiscordChannelFromPODWithHttpInfo(daoId: string, podId: string, channelId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DiscordChannelResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.unlinkDiscordChannelFromPODWithHttpInfo(daoId, podId, channelId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Unlink a Discord channel from a POD
+     * @param daoId
+     * @param podId
+     * @param channelId
+     */
+    public unlinkDiscordChannelFromPOD(daoId: string, podId: string, channelId: string, _options?: PromiseConfigurationOptions): Promise<DiscordChannelResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.unlinkDiscordChannelFromPOD(daoId, podId, channelId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
      * Update a DAO
      * @param daoId
      * @param dAOUpdate
@@ -928,6 +1162,275 @@ export class PromiseDaosApi {
 	    }
 	}
         const result = this.api.updatePOD(daoId, podId, pODUpdate, observableOptions);
+        return result.toPromise();
+    }
+
+
+}
+
+
+
+import { ObservableDiscordApi } from './ObservableAPI';
+
+import { DiscordApiRequestFactory, DiscordApiResponseProcessor} from "../apis/DiscordApi";
+export class PromiseDiscordApi {
+    private api: ObservableDiscordApi
+
+    public constructor(
+        configuration: Configuration,
+        requestFactory?: DiscordApiRequestFactory,
+        responseProcessor?: DiscordApiResponseProcessor
+    ) {
+        this.api = new ObservableDiscordApi(configuration, requestFactory, responseProcessor);
+    }
+
+    /**
+     * Create a new Discord channel in the system
+     * @param createDiscordChannel
+     */
+    public createDiscordChannelWithHttpInfo(createDiscordChannel: CreateDiscordChannel, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DiscordChannelResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.createDiscordChannelWithHttpInfo(createDiscordChannel, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Create a new Discord channel in the system
+     * @param createDiscordChannel
+     */
+    public createDiscordChannel(createDiscordChannel: CreateDiscordChannel, _options?: PromiseConfigurationOptions): Promise<DiscordChannelResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.createDiscordChannel(createDiscordChannel, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Delete a Discord channel
+     * @param channelId
+     */
+    public deleteDiscordChannelWithHttpInfo(channelId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DiscordChannelResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.deleteDiscordChannelWithHttpInfo(channelId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Delete a Discord channel
+     * @param channelId
+     */
+    public deleteDiscordChannel(channelId: string, _options?: PromiseConfigurationOptions): Promise<DiscordChannelResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.deleteDiscordChannel(channelId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all Discord channels
+     */
+    public getAllDiscordChannelsWithHttpInfo(_options?: PromiseConfigurationOptions): Promise<HttpInfo<DiscordChannelsResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getAllDiscordChannelsWithHttpInfo(observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all Discord channels
+     */
+    public getAllDiscordChannels(_options?: PromiseConfigurationOptions): Promise<DiscordChannelsResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getAllDiscordChannels(observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get a specific Discord channel
+     * @param channelId
+     */
+    public getDiscordChannelWithHttpInfo(channelId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DiscordChannelResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getDiscordChannelWithHttpInfo(channelId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get a specific Discord channel
+     * @param channelId
+     */
+    public getDiscordChannel(channelId: string, _options?: PromiseConfigurationOptions): Promise<DiscordChannelResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getDiscordChannel(channelId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all Discord channels that are not linked to any POD
+     */
+    public getUnlinkedDiscordChannelsWithHttpInfo(_options?: PromiseConfigurationOptions): Promise<HttpInfo<DiscordChannelsResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getUnlinkedDiscordChannelsWithHttpInfo(observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all Discord channels that are not linked to any POD
+     */
+    public getUnlinkedDiscordChannels(_options?: PromiseConfigurationOptions): Promise<DiscordChannelsResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getUnlinkedDiscordChannels(observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Update a Discord channel
+     * @param channelId
+     * @param updateDiscordChannel
+     */
+    public updateDiscordChannelWithHttpInfo(channelId: string, updateDiscordChannel: UpdateDiscordChannel, _options?: PromiseConfigurationOptions): Promise<HttpInfo<DiscordChannelResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.updateDiscordChannelWithHttpInfo(channelId, updateDiscordChannel, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Update a Discord channel
+     * @param channelId
+     * @param updateDiscordChannel
+     */
+    public updateDiscordChannel(channelId: string, updateDiscordChannel: UpdateDiscordChannel, _options?: PromiseConfigurationOptions): Promise<DiscordChannelResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.updateDiscordChannel(channelId, updateDiscordChannel, observableOptions);
         return result.toPromise();
     }
 

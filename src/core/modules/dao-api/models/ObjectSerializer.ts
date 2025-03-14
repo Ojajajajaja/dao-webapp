@@ -1,14 +1,21 @@
 export * from '../models/ChallengeRequest';
 export * from '../models/ChallengeResponse';
+export * from '../models/CreateDiscordChannel';
 export * from '../models/DAO';
 export * from '../models/DAOMembership';
 export * from '../models/DAOMembershipResponse';
 export * from '../models/DAOSchemaResponse';
 export * from '../models/DAOUpdate';
+export * from '../models/DiscordChannel';
+export * from '../models/DiscordChannelResponse';
+export * from '../models/DiscordChannelsResponse';
+export * from '../models/DiscordMessage';
+export * from '../models/DiscordMessagesResponse';
 export * from '../models/InputCreateDAO';
 export * from '../models/InputCreatePOD';
 export * from '../models/InputCreateUser';
 export * from '../models/InputUpdateUser';
+export * from '../models/LinkDiscordChannel';
 export * from '../models/LoginResponse';
 export * from '../models/LogoutResponse';
 export * from '../models/ModelError';
@@ -27,6 +34,7 @@ export * from '../models/TransferCreate';
 export * from '../models/TransferSchemaResponse';
 export * from '../models/Treasury';
 export * from '../models/TreasuryUpdatePercentages';
+export * from '../models/UpdateDiscordChannel';
 export * from '../models/User';
 export * from '../models/UserBasic';
 export * from '../models/UserExistResponse';
@@ -35,15 +43,22 @@ export * from '../models/VerifySignature';
 
 import { ChallengeRequest } from '../models/ChallengeRequest';
 import { ChallengeResponse } from '../models/ChallengeResponse';
+import { CreateDiscordChannel } from '../models/CreateDiscordChannel';
 import { DAO } from '../models/DAO';
 import { DAOMembership } from '../models/DAOMembership';
 import { DAOMembershipResponse } from '../models/DAOMembershipResponse';
 import { DAOSchemaResponse } from '../models/DAOSchemaResponse';
 import { DAOUpdate } from '../models/DAOUpdate';
+import { DiscordChannel } from '../models/DiscordChannel';
+import { DiscordChannelResponse } from '../models/DiscordChannelResponse';
+import { DiscordChannelsResponse } from '../models/DiscordChannelsResponse';
+import { DiscordMessage } from '../models/DiscordMessage';
+import { DiscordMessagesResponse } from '../models/DiscordMessagesResponse';
 import { InputCreateDAO } from '../models/InputCreateDAO';
 import { InputCreatePOD } from '../models/InputCreatePOD';
 import { InputCreateUser } from '../models/InputCreateUser';
 import { InputUpdateUser } from '../models/InputUpdateUser';
+import { LinkDiscordChannel } from '../models/LinkDiscordChannel';
 import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
@@ -62,6 +77,7 @@ import { TransferCreate } from '../models/TransferCreate';
 import { TransferSchemaResponse } from '../models/TransferSchemaResponse';
 import { Treasury } from '../models/Treasury';
 import { TreasuryUpdatePercentages } from '../models/TreasuryUpdatePercentages';
+import { UpdateDiscordChannel } from '../models/UpdateDiscordChannel';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
 import { UserExistResponse } from '../models/UserExistResponse';
@@ -86,15 +102,22 @@ let enumsMap: Set<string> = new Set<string>([
 let typeMap: {[index: string]: any} = {
     "ChallengeRequest": ChallengeRequest,
     "ChallengeResponse": ChallengeResponse,
+    "CreateDiscordChannel": CreateDiscordChannel,
     "DAO": DAO,
     "DAOMembership": DAOMembership,
     "DAOMembershipResponse": DAOMembershipResponse,
     "DAOSchemaResponse": DAOSchemaResponse,
     "DAOUpdate": DAOUpdate,
+    "DiscordChannel": DiscordChannel,
+    "DiscordChannelResponse": DiscordChannelResponse,
+    "DiscordChannelsResponse": DiscordChannelsResponse,
+    "DiscordMessage": DiscordMessage,
+    "DiscordMessagesResponse": DiscordMessagesResponse,
     "InputCreateDAO": InputCreateDAO,
     "InputCreatePOD": InputCreatePOD,
     "InputCreateUser": InputCreateUser,
     "InputUpdateUser": InputUpdateUser,
+    "LinkDiscordChannel": LinkDiscordChannel,
     "LoginResponse": LoginResponse,
     "LogoutResponse": LogoutResponse,
     "ModelError": ModelError,
@@ -113,6 +136,7 @@ let typeMap: {[index: string]: any} = {
     "TransferSchemaResponse": TransferSchemaResponse,
     "Treasury": Treasury,
     "TreasuryUpdatePercentages": TreasuryUpdatePercentages,
+    "UpdateDiscordChannel": UpdateDiscordChannel,
     "User": User,
     "UserBasic": UserBasic,
     "UserExistResponse": UserExistResponse,

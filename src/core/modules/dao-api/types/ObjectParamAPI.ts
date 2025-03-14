@@ -4,15 +4,22 @@ import type { Middleware } from '../middleware';
 
 import { ChallengeRequest } from '../models/ChallengeRequest';
 import { ChallengeResponse } from '../models/ChallengeResponse';
+import { CreateDiscordChannel } from '../models/CreateDiscordChannel';
 import { DAO } from '../models/DAO';
 import { DAOMembership } from '../models/DAOMembership';
 import { DAOMembershipResponse } from '../models/DAOMembershipResponse';
 import { DAOSchemaResponse } from '../models/DAOSchemaResponse';
 import { DAOUpdate } from '../models/DAOUpdate';
+import { DiscordChannel } from '../models/DiscordChannel';
+import { DiscordChannelResponse } from '../models/DiscordChannelResponse';
+import { DiscordChannelsResponse } from '../models/DiscordChannelsResponse';
+import { DiscordMessage } from '../models/DiscordMessage';
+import { DiscordMessagesResponse } from '../models/DiscordMessagesResponse';
 import { InputCreateDAO } from '../models/InputCreateDAO';
 import { InputCreatePOD } from '../models/InputCreatePOD';
 import { InputCreateUser } from '../models/InputCreateUser';
 import { InputUpdateUser } from '../models/InputUpdateUser';
+import { LinkDiscordChannel } from '../models/LinkDiscordChannel';
 import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
@@ -31,6 +38,7 @@ import { TransferCreate } from '../models/TransferCreate';
 import { TransferSchemaResponse } from '../models/TransferSchemaResponse';
 import { Treasury } from '../models/Treasury';
 import { TreasuryUpdatePercentages } from '../models/TreasuryUpdatePercentages';
+import { UpdateDiscordChannel } from '../models/UpdateDiscordChannel';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
 import { UserExistResponse } from '../models/UserExistResponse';
@@ -246,6 +254,30 @@ export interface DaosApiGetAllPODsForDAORequest {
     daoId: string
 }
 
+export interface DaosApiGetChannelMessagesRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApigetChannelMessages
+     */
+    daoId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApigetChannelMessages
+     */
+    podId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApigetChannelMessages
+     */
+    channelId: string
+}
+
 export interface DaosApiGetDAOByIdRequest {
     /**
      * 
@@ -271,6 +303,63 @@ export interface DaosApiGetPODByIdRequest {
      * @memberof DaosApigetPODById
      */
     podId: string
+}
+
+export interface DaosApiGetPODDiscordChannelsRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApigetPODDiscordChannels
+     */
+    daoId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApigetPODDiscordChannels
+     */
+    podId: string
+}
+
+export interface DaosApiGetPODFeedRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApigetPODFeed
+     */
+    daoId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApigetPODFeed
+     */
+    podId: string
+}
+
+export interface DaosApiLinkDiscordChannelToPODRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApilinkDiscordChannelToPOD
+     */
+    daoId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApilinkDiscordChannelToPOD
+     */
+    podId: string
+    /**
+     * 
+     * @type LinkDiscordChannel
+     * @memberof DaosApilinkDiscordChannelToPOD
+     */
+    linkDiscordChannel: LinkDiscordChannel
 }
 
 export interface DaosApiRemoveAdminFromDAORequest {
@@ -326,6 +415,30 @@ export interface DaosApiRemoveMemberFromPODRequest {
      * @memberof DaosApiremoveMemberFromPOD
      */
     pODMembership: PODMembership
+}
+
+export interface DaosApiUnlinkDiscordChannelFromPODRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApiunlinkDiscordChannelFromPOD
+     */
+    daoId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApiunlinkDiscordChannelFromPOD
+     */
+    podId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DaosApiunlinkDiscordChannelFromPOD
+     */
+    channelId: string
 }
 
 export interface DaosApiUpdateDAORequest {
@@ -535,6 +648,22 @@ export class ObjectDaosApi {
     }
 
     /**
+     * Get messages from a specific Discord channel
+     * @param param the request object
+     */
+    public getChannelMessagesWithHttpInfo(param: DaosApiGetChannelMessagesRequest, options?: ConfigurationOptions): Promise<HttpInfo<DiscordMessagesResponse>> {
+        return this.api.getChannelMessagesWithHttpInfo(param.daoId, param.podId, param.channelId,  options).toPromise();
+    }
+
+    /**
+     * Get messages from a specific Discord channel
+     * @param param the request object
+     */
+    public getChannelMessages(param: DaosApiGetChannelMessagesRequest, options?: ConfigurationOptions): Promise<DiscordMessagesResponse> {
+        return this.api.getChannelMessages(param.daoId, param.podId, param.channelId,  options).toPromise();
+    }
+
+    /**
      * Get a DAO by ID
      * @param param the request object
      */
@@ -564,6 +693,54 @@ export class ObjectDaosApi {
      */
     public getPODById(param: DaosApiGetPODByIdRequest, options?: ConfigurationOptions): Promise<POD> {
         return this.api.getPODById(param.daoId, param.podId,  options).toPromise();
+    }
+
+    /**
+     * Get all Discord channels for a POD
+     * @param param the request object
+     */
+    public getPODDiscordChannelsWithHttpInfo(param: DaosApiGetPODDiscordChannelsRequest, options?: ConfigurationOptions): Promise<HttpInfo<DiscordChannelsResponse>> {
+        return this.api.getPODDiscordChannelsWithHttpInfo(param.daoId, param.podId,  options).toPromise();
+    }
+
+    /**
+     * Get all Discord channels for a POD
+     * @param param the request object
+     */
+    public getPODDiscordChannels(param: DaosApiGetPODDiscordChannelsRequest, options?: ConfigurationOptions): Promise<DiscordChannelsResponse> {
+        return this.api.getPODDiscordChannels(param.daoId, param.podId,  options).toPromise();
+    }
+
+    /**
+     * Get Discord feed for a POD
+     * @param param the request object
+     */
+    public getPODFeedWithHttpInfo(param: DaosApiGetPODFeedRequest, options?: ConfigurationOptions): Promise<HttpInfo<DiscordMessagesResponse>> {
+        return this.api.getPODFeedWithHttpInfo(param.daoId, param.podId,  options).toPromise();
+    }
+
+    /**
+     * Get Discord feed for a POD
+     * @param param the request object
+     */
+    public getPODFeed(param: DaosApiGetPODFeedRequest, options?: ConfigurationOptions): Promise<DiscordMessagesResponse> {
+        return this.api.getPODFeed(param.daoId, param.podId,  options).toPromise();
+    }
+
+    /**
+     * Link a Discord channel to a POD
+     * @param param the request object
+     */
+    public linkDiscordChannelToPODWithHttpInfo(param: DaosApiLinkDiscordChannelToPODRequest, options?: ConfigurationOptions): Promise<HttpInfo<DiscordChannelResponse>> {
+        return this.api.linkDiscordChannelToPODWithHttpInfo(param.daoId, param.podId, param.linkDiscordChannel,  options).toPromise();
+    }
+
+    /**
+     * Link a Discord channel to a POD
+     * @param param the request object
+     */
+    public linkDiscordChannelToPOD(param: DaosApiLinkDiscordChannelToPODRequest, options?: ConfigurationOptions): Promise<DiscordChannelResponse> {
+        return this.api.linkDiscordChannelToPOD(param.daoId, param.podId, param.linkDiscordChannel,  options).toPromise();
     }
 
     /**
@@ -615,6 +792,22 @@ export class ObjectDaosApi {
     }
 
     /**
+     * Unlink a Discord channel from a POD
+     * @param param the request object
+     */
+    public unlinkDiscordChannelFromPODWithHttpInfo(param: DaosApiUnlinkDiscordChannelFromPODRequest, options?: ConfigurationOptions): Promise<HttpInfo<DiscordChannelResponse>> {
+        return this.api.unlinkDiscordChannelFromPODWithHttpInfo(param.daoId, param.podId, param.channelId,  options).toPromise();
+    }
+
+    /**
+     * Unlink a Discord channel from a POD
+     * @param param the request object
+     */
+    public unlinkDiscordChannelFromPOD(param: DaosApiUnlinkDiscordChannelFromPODRequest, options?: ConfigurationOptions): Promise<DiscordChannelResponse> {
+        return this.api.unlinkDiscordChannelFromPOD(param.daoId, param.podId, param.channelId,  options).toPromise();
+    }
+
+    /**
      * Update a DAO
      * @param param the request object
      */
@@ -644,6 +837,165 @@ export class ObjectDaosApi {
      */
     public updatePOD(param: DaosApiUpdatePODRequest, options?: ConfigurationOptions): Promise<PODSchemaResponse> {
         return this.api.updatePOD(param.daoId, param.podId, param.pODUpdate,  options).toPromise();
+    }
+
+}
+
+import { ObservableDiscordApi } from "./ObservableAPI";
+import { DiscordApiRequestFactory, DiscordApiResponseProcessor} from "../apis/DiscordApi";
+
+export interface DiscordApiCreateDiscordChannelRequest {
+    /**
+     * 
+     * @type CreateDiscordChannel
+     * @memberof DiscordApicreateDiscordChannel
+     */
+    createDiscordChannel: CreateDiscordChannel
+}
+
+export interface DiscordApiDeleteDiscordChannelRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DiscordApideleteDiscordChannel
+     */
+    channelId: string
+}
+
+export interface DiscordApiGetAllDiscordChannelsRequest {
+}
+
+export interface DiscordApiGetDiscordChannelRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DiscordApigetDiscordChannel
+     */
+    channelId: string
+}
+
+export interface DiscordApiGetUnlinkedDiscordChannelsRequest {
+}
+
+export interface DiscordApiUpdateDiscordChannelRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof DiscordApiupdateDiscordChannel
+     */
+    channelId: string
+    /**
+     * 
+     * @type UpdateDiscordChannel
+     * @memberof DiscordApiupdateDiscordChannel
+     */
+    updateDiscordChannel: UpdateDiscordChannel
+}
+
+export class ObjectDiscordApi {
+    private api: ObservableDiscordApi
+
+    public constructor(configuration: Configuration, requestFactory?: DiscordApiRequestFactory, responseProcessor?: DiscordApiResponseProcessor) {
+        this.api = new ObservableDiscordApi(configuration, requestFactory, responseProcessor);
+    }
+
+    /**
+     * Create a new Discord channel in the system
+     * @param param the request object
+     */
+    public createDiscordChannelWithHttpInfo(param: DiscordApiCreateDiscordChannelRequest, options?: ConfigurationOptions): Promise<HttpInfo<DiscordChannelResponse>> {
+        return this.api.createDiscordChannelWithHttpInfo(param.createDiscordChannel,  options).toPromise();
+    }
+
+    /**
+     * Create a new Discord channel in the system
+     * @param param the request object
+     */
+    public createDiscordChannel(param: DiscordApiCreateDiscordChannelRequest, options?: ConfigurationOptions): Promise<DiscordChannelResponse> {
+        return this.api.createDiscordChannel(param.createDiscordChannel,  options).toPromise();
+    }
+
+    /**
+     * Delete a Discord channel
+     * @param param the request object
+     */
+    public deleteDiscordChannelWithHttpInfo(param: DiscordApiDeleteDiscordChannelRequest, options?: ConfigurationOptions): Promise<HttpInfo<DiscordChannelResponse>> {
+        return this.api.deleteDiscordChannelWithHttpInfo(param.channelId,  options).toPromise();
+    }
+
+    /**
+     * Delete a Discord channel
+     * @param param the request object
+     */
+    public deleteDiscordChannel(param: DiscordApiDeleteDiscordChannelRequest, options?: ConfigurationOptions): Promise<DiscordChannelResponse> {
+        return this.api.deleteDiscordChannel(param.channelId,  options).toPromise();
+    }
+
+    /**
+     * Get all Discord channels
+     * @param param the request object
+     */
+    public getAllDiscordChannelsWithHttpInfo(param: DiscordApiGetAllDiscordChannelsRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<DiscordChannelsResponse>> {
+        return this.api.getAllDiscordChannelsWithHttpInfo( options).toPromise();
+    }
+
+    /**
+     * Get all Discord channels
+     * @param param the request object
+     */
+    public getAllDiscordChannels(param: DiscordApiGetAllDiscordChannelsRequest = {}, options?: ConfigurationOptions): Promise<DiscordChannelsResponse> {
+        return this.api.getAllDiscordChannels( options).toPromise();
+    }
+
+    /**
+     * Get a specific Discord channel
+     * @param param the request object
+     */
+    public getDiscordChannelWithHttpInfo(param: DiscordApiGetDiscordChannelRequest, options?: ConfigurationOptions): Promise<HttpInfo<DiscordChannelResponse>> {
+        return this.api.getDiscordChannelWithHttpInfo(param.channelId,  options).toPromise();
+    }
+
+    /**
+     * Get a specific Discord channel
+     * @param param the request object
+     */
+    public getDiscordChannel(param: DiscordApiGetDiscordChannelRequest, options?: ConfigurationOptions): Promise<DiscordChannelResponse> {
+        return this.api.getDiscordChannel(param.channelId,  options).toPromise();
+    }
+
+    /**
+     * Get all Discord channels that are not linked to any POD
+     * @param param the request object
+     */
+    public getUnlinkedDiscordChannelsWithHttpInfo(param: DiscordApiGetUnlinkedDiscordChannelsRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<DiscordChannelsResponse>> {
+        return this.api.getUnlinkedDiscordChannelsWithHttpInfo( options).toPromise();
+    }
+
+    /**
+     * Get all Discord channels that are not linked to any POD
+     * @param param the request object
+     */
+    public getUnlinkedDiscordChannels(param: DiscordApiGetUnlinkedDiscordChannelsRequest = {}, options?: ConfigurationOptions): Promise<DiscordChannelsResponse> {
+        return this.api.getUnlinkedDiscordChannels( options).toPromise();
+    }
+
+    /**
+     * Update a Discord channel
+     * @param param the request object
+     */
+    public updateDiscordChannelWithHttpInfo(param: DiscordApiUpdateDiscordChannelRequest, options?: ConfigurationOptions): Promise<HttpInfo<DiscordChannelResponse>> {
+        return this.api.updateDiscordChannelWithHttpInfo(param.channelId, param.updateDiscordChannel,  options).toPromise();
+    }
+
+    /**
+     * Update a Discord channel
+     * @param param the request object
+     */
+    public updateDiscordChannel(param: DiscordApiUpdateDiscordChannelRequest, options?: ConfigurationOptions): Promise<DiscordChannelResponse> {
+        return this.api.updateDiscordChannel(param.channelId, param.updateDiscordChannel,  options).toPromise();
     }
 
 }

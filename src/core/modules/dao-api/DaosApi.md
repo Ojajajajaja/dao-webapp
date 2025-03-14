@@ -14,11 +14,16 @@ Method | HTTP request | Description
 [**getAllDAOs**](DaosApi.md#getAllDAOs) | **GET** /daos/ | List all DAOs
 [**getAllMembersOfPOD**](DaosApi.md#getAllMembersOfPOD) | **GET** /daos/{dao_id}/pods/{pod_id}/members | Get all members of a POD
 [**getAllPODsForDAO**](DaosApi.md#getAllPODsForDAO) | **GET** /daos/{dao_id}/pods | Get all PODs for a DAO
+[**getChannelMessages**](DaosApi.md#getChannelMessages) | **GET** /daos/{dao_id}/pods/{pod_id}/discord-channels/{channel_id}/messages | Get messages from a specific Discord channel
 [**getDAOById**](DaosApi.md#getDAOById) | **GET** /daos/{dao_id} | Get a DAO by ID
 [**getPODById**](DaosApi.md#getPODById) | **GET** /daos/{dao_id}/pods/{pod_id} | Get a POD by ID
+[**getPODDiscordChannels**](DaosApi.md#getPODDiscordChannels) | **GET** /daos/{dao_id}/pods/{pod_id}/discord-channels | Get all Discord channels for a POD
+[**getPODFeed**](DaosApi.md#getPODFeed) | **GET** /daos/{dao_id}/pods/{pod_id}/feed | Get Discord feed for a POD
+[**linkDiscordChannelToPOD**](DaosApi.md#linkDiscordChannelToPOD) | **POST** /daos/{dao_id}/pods/{pod_id}/discord-channels | Link a Discord channel to a POD
 [**removeAdminFromDAO**](DaosApi.md#removeAdminFromDAO) | **DELETE** /daos/{dao_id}/admins | Remove an admin from a DAO
 [**removeMemberFromDAO**](DaosApi.md#removeMemberFromDAO) | **DELETE** /daos/{dao_id}/members | Remove a member from a DAO
 [**removeMemberFromPOD**](DaosApi.md#removeMemberFromPOD) | **DELETE** /daos/{dao_id}/pods/{pod_id}/members | Remove a member from a POD
+[**unlinkDiscordChannelFromPOD**](DaosApi.md#unlinkDiscordChannelFromPOD) | **DELETE** /daos/{dao_id}/pods/{pod_id}/discord-channels/{channel_id} | Unlink a Discord channel from a POD
 [**updateDAO**](DaosApi.md#updateDAO) | **PUT** /daos/{dao_id} | Update a DAO
 [**updatePOD**](DaosApi.md#updatePOD) | **PUT** /daos/{dao_id}/pods/{pod_id} | Update a POD
 
@@ -282,6 +287,7 @@ const request: DaosApiCreatePODRequest = {
     name: "name_example",
     description: "description_example",
     daoId: "daoId_example",
+    discordChannelId: "discordChannelId_example",
   },
 };
 
@@ -597,6 +603,68 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
+# **getChannelMessages**
+> DiscordMessagesResponse getChannelMessages()
+
+
+### Example
+
+
+```typescript
+import { createConfiguration, DaosApi } from '';
+import type { DaosApiGetChannelMessagesRequest } from '';
+
+const configuration = createConfiguration();
+const apiInstance = new DaosApi(configuration);
+
+const request: DaosApiGetChannelMessagesRequest = {
+  
+  daoId: "dao_id_example",
+  
+  podId: "pod_id_example",
+  
+  channelId: "channel_id_example",
+};
+
+const data = await apiInstance.getChannelMessages(request);
+console.log('API called successfully. Returned data:', data);
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **daoId** | [**string**] |  | defaults to undefined
+ **podId** | [**string**] |  | defaults to undefined
+ **channelId** | [**string**] |  | defaults to undefined
+
+
+### Return type
+
+**DiscordMessagesResponse**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Discord messages retrieved successfully |  -  |
+**400** | Bad Request - Channel not linked to this POD |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
+**404** | DAO, POD or Discord channel not found |  -  |
+**0** | Default error response |  -  |
+
+[[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
+
 # **getDAOById**
 > DAO getDAOById()
 
@@ -704,6 +772,188 @@ No authorization required
 |-------------|-------------|------------------|
 **200** | POD retrieved successfully |  -  |
 **404** | DAO or POD not found |  -  |
+**0** | Default error response |  -  |
+
+[[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
+
+# **getPODDiscordChannels**
+> DiscordChannelsResponse getPODDiscordChannels()
+
+
+### Example
+
+
+```typescript
+import { createConfiguration, DaosApi } from '';
+import type { DaosApiGetPODDiscordChannelsRequest } from '';
+
+const configuration = createConfiguration();
+const apiInstance = new DaosApi(configuration);
+
+const request: DaosApiGetPODDiscordChannelsRequest = {
+  
+  daoId: "dao_id_example",
+  
+  podId: "pod_id_example",
+};
+
+const data = await apiInstance.getPODDiscordChannels(request);
+console.log('API called successfully. Returned data:', data);
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **daoId** | [**string**] |  | defaults to undefined
+ **podId** | [**string**] |  | defaults to undefined
+
+
+### Return type
+
+**DiscordChannelsResponse**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Discord channels retrieved successfully |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
+**404** | DAO or POD not found |  -  |
+**0** | Default error response |  -  |
+
+[[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
+
+# **getPODFeed**
+> DiscordMessagesResponse getPODFeed()
+
+
+### Example
+
+
+```typescript
+import { createConfiguration, DaosApi } from '';
+import type { DaosApiGetPODFeedRequest } from '';
+
+const configuration = createConfiguration();
+const apiInstance = new DaosApi(configuration);
+
+const request: DaosApiGetPODFeedRequest = {
+  
+  daoId: "dao_id_example",
+  
+  podId: "pod_id_example",
+};
+
+const data = await apiInstance.getPODFeed(request);
+console.log('API called successfully. Returned data:', data);
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **daoId** | [**string**] |  | defaults to undefined
+ **podId** | [**string**] |  | defaults to undefined
+
+
+### Return type
+
+**DiscordMessagesResponse**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Discord feed retrieved successfully |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
+**404** | DAO or POD not found |  -  |
+**0** | Default error response |  -  |
+
+[[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
+
+# **linkDiscordChannelToPOD**
+> DiscordChannelResponse linkDiscordChannelToPOD(linkDiscordChannel)
+
+
+### Example
+
+
+```typescript
+import { createConfiguration, DaosApi } from '';
+import type { DaosApiLinkDiscordChannelToPODRequest } from '';
+
+const configuration = createConfiguration();
+const apiInstance = new DaosApi(configuration);
+
+const request: DaosApiLinkDiscordChannelToPODRequest = {
+  
+  daoId: "dao_id_example",
+  
+  podId: "pod_id_example",
+  
+  linkDiscordChannel: {
+    channelId: "channelId_example",
+    podId: "podId_example",
+  },
+};
+
+const data = await apiInstance.linkDiscordChannelToPOD(request);
+console.log('API called successfully. Returned data:', data);
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **linkDiscordChannel** | **LinkDiscordChannel**|  |
+ **daoId** | [**string**] |  | defaults to undefined
+ **podId** | [**string**] |  | defaults to undefined
+
+
+### Return type
+
+**DiscordChannelResponse**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**422** | Unprocessable Entity |  -  |
+**201** | Discord channel linked successfully |  -  |
+**400** | Bad Request - Invalid data |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
+**404** | DAO, POD or Discord channel not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
@@ -893,6 +1143,68 @@ No authorization required
 **400** | Bad Request - User not in POD |  -  |
 **401** | Unauthorized - Invalid or missing token |  -  |
 **404** | User, DAO or POD not found |  -  |
+**0** | Default error response |  -  |
+
+[[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
+
+# **unlinkDiscordChannelFromPOD**
+> DiscordChannelResponse unlinkDiscordChannelFromPOD()
+
+
+### Example
+
+
+```typescript
+import { createConfiguration, DaosApi } from '';
+import type { DaosApiUnlinkDiscordChannelFromPODRequest } from '';
+
+const configuration = createConfiguration();
+const apiInstance = new DaosApi(configuration);
+
+const request: DaosApiUnlinkDiscordChannelFromPODRequest = {
+  
+  daoId: "dao_id_example",
+  
+  podId: "pod_id_example",
+  
+  channelId: "channel_id_example",
+};
+
+const data = await apiInstance.unlinkDiscordChannelFromPOD(request);
+console.log('API called successfully. Returned data:', data);
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **daoId** | [**string**] |  | defaults to undefined
+ **podId** | [**string**] |  | defaults to undefined
+ **channelId** | [**string**] |  | defaults to undefined
+
+
+### Return type
+
+**DiscordChannelResponse**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Discord channel unlinked successfully |  -  |
+**400** | Bad Request - Channel not linked to this POD |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
+**404** | DAO, POD or Discord channel not found |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
