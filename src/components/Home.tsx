@@ -260,8 +260,8 @@ const Dashboard = () => {
               )}
               <button 
                 onClick={updateTokenPercentages}
-                //disabled={refreshing || loading}
-                disabled={true}
+                disabled={refreshing || loading}
+                //disabled={true}
                 className="bg-primary text-text py-1 px-3 rounded-md text-sm flex items-center hover:bg-opacity-90 disabled:opacity-50"
               >
                 <RefreshCw size={14} className="mr-1" />
