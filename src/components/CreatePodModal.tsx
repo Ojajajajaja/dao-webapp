@@ -12,6 +12,7 @@ interface CreatePodModalProps {
 const CreatePodModal: React.FC<CreatePodModalProps> = ({ isOpen, onClose, onSuccess, daoId }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [discordChannelId, setDiscordChannelId] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -39,7 +40,23 @@ const CreatePodModal: React.FC<CreatePodModalProps> = ({ isOpen, onClose, onSucc
         description: description.trim()
       });
 
+      console.log('Created POD:', result);
+
       if (result) {
+        // If discord channel ID is provided, link it to the POD
+        if (discordChannelId.trim() && result.podId) {
+          console.log('Linking Discord channel to POD:', result.podId, discordChannelId.trim());
+          const linkResult = await podsService.linkDiscordChannelToPOD(
+            daoId, 
+            result.podId, 
+            discordChannelId.trim()
+          );
+          
+          if (!linkResult) {
+            console.warn('Created POD successfully but failed to link Discord channel.');
+          }
+        }
+        
         onSuccess();
         onClose();
       } else {
@@ -93,6 +110,23 @@ const CreatePodModal: React.FC<CreatePodModalProps> = ({ isOpen, onClose, onSucc
               className="w-full bg-surface-200 border border-surface-300 rounded-md p-2 text-text h-24"
               placeholder="Enter POD description"
             />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="discord-channel-id" className="block text-text mb-1">
+              Discord Channel ID (optional)
+            </label>
+            <input
+              id="discord-channel-id"
+              type="text"
+              value={discordChannelId}
+              onChange={(e) => setDiscordChannelId(e.target.value)}
+              className="w-full bg-surface-200 border border-surface-300 rounded-md p-2 text-text"
+              placeholder="Enter Discord channel ID"
+            />
+            <p className="text-surface-500 text-xs mt-1">
+              If provided, this POD will be linked to the specified Discord channel.
+            </p>
           </div>
 
           {error && (

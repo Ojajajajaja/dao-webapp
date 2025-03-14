@@ -8,7 +8,9 @@ import {
   DaosApi, 
   POD, 
   PODUpdate, 
-  PODMembership 
+  PODMembership,
+  LinkDiscordChannel,
+  DiscordMessage
 } from '../core/modules/dao-api';
 import { ServerConfiguration } from '../core/modules/dao-api/servers';
 import { walletAuthService } from './WalletAuthService';
@@ -132,7 +134,7 @@ export class PodsService {
       pod.daoId = daoId;
 
       const response = await apiClient.createPOD(daoId, pod);
-      return response || null;
+      return response.pod || null;
     } catch (error) {
       console.error(`Error creating pod in DAO ${daoId}:`, error);
       return null;
@@ -227,6 +229,42 @@ export class PodsService {
     } catch (error) {
       console.error(`Error deleting pod ${podId} in DAO ${daoId}:`, error);
       return null;
+    }
+  }
+
+  /**
+   * Link a Discord channel to a POD
+   */
+  async linkDiscordChannelToPOD(daoId: string, podId: string, channelId: string): Promise<boolean> {
+    try {
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return false;
+
+      const linkDiscordChannel = new LinkDiscordChannel();
+      linkDiscordChannel.channelId = channelId;
+      linkDiscordChannel.podId = podId;
+
+      const response = await apiClient.linkDiscordChannelToPOD(daoId, podId, linkDiscordChannel);
+      return !!response;
+    } catch (error) {
+      console.error(`Error linking Discord channel ${channelId} to pod ${podId} in DAO ${daoId}:`, error);
+      return false;
+    }
+  }
+
+  /**
+   * Get Discord feed messages for a POD
+   */
+  async getPodFeed(daoId: string, podId: string): Promise<DiscordMessage[]> {
+    try {
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return [];
+
+      const response = await apiClient.getPODFeed(daoId, podId);
+      return response?.messages || [];
+    } catch (error) {
+      console.error(`Error getting feed for pod ${podId} in DAO ${daoId}:`, error);
+      return [];
     }
   }
 }
