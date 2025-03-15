@@ -5,12 +5,14 @@ import { Observable, of, from } from '../rxjsStub';
 import {mergeMap, map} from  '../rxjsStub';
 import { ChallengeRequest } from '../models/ChallengeRequest';
 import { ChallengeResponse } from '../models/ChallengeResponse';
-import { CreateDiscordChannel } from '../models/CreateDiscordChannel';
+import { ConnectionResponse } from '../models/ConnectionResponse';
+import { ConnectionsList } from '../models/ConnectionsList';
 import { DAO } from '../models/DAO';
 import { DAOMembership } from '../models/DAOMembership';
 import { DAOMembershipResponse } from '../models/DAOMembershipResponse';
 import { DAOSchemaResponse } from '../models/DAOSchemaResponse';
 import { DAOUpdate } from '../models/DAOUpdate';
+import { DisconnectResponse } from '../models/DisconnectResponse';
 import { DiscordChannel } from '../models/DiscordChannel';
 import { DiscordChannelResponse } from '../models/DiscordChannelResponse';
 import { DiscordChannelsResponse } from '../models/DiscordChannelsResponse';
@@ -24,6 +26,7 @@ import { LinkDiscordChannel } from '../models/LinkDiscordChannel';
 import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
+import { OAuthError } from '../models/OAuthError';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
 import { PODMembershipResponse } from '../models/PODMembershipResponse';
@@ -31,6 +34,8 @@ import { PODSchemaResponse } from '../models/PODSchemaResponse';
 import { PODUpdate } from '../models/PODUpdate';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
+import { SocialConnection } from '../models/SocialConnection';
+import { TelegramAuth } from '../models/TelegramAuth';
 import { Token } from '../models/Token';
 import { TokenCreate } from '../models/TokenCreate';
 import { TokenSchemaResponse } from '../models/TokenSchemaResponse';
@@ -39,10 +44,10 @@ import { TransferCreate } from '../models/TransferCreate';
 import { TransferSchemaResponse } from '../models/TransferSchemaResponse';
 import { Treasury } from '../models/Treasury';
 import { TreasuryUpdatePercentages } from '../models/TreasuryUpdatePercentages';
-import { UpdateDiscordChannel } from '../models/UpdateDiscordChannel';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
 import { UserExistResponse } from '../models/UserExistResponse';
+import { UserInfoError } from '../models/UserInfoError';
 import { UserResponse } from '../models/UserResponse';
 import { VerifySignature } from '../models/VerifySignature';
 
@@ -1620,27 +1625,27 @@ export class ObservableDaosApi {
 
 }
 
-import { DiscordApiRequestFactory, DiscordApiResponseProcessor} from "../apis/DiscordApi";
-export class ObservableDiscordApi {
-    private requestFactory: DiscordApiRequestFactory;
-    private responseProcessor: DiscordApiResponseProcessor;
+import { DiscordOauthApiRequestFactory, DiscordOauthApiResponseProcessor} from "../apis/DiscordOauthApi";
+export class ObservableDiscordOauthApi {
+    private requestFactory: DiscordOauthApiRequestFactory;
+    private responseProcessor: DiscordOauthApiResponseProcessor;
     private configuration: Configuration;
 
     public constructor(
         configuration: Configuration,
-        requestFactory?: DiscordApiRequestFactory,
-        responseProcessor?: DiscordApiResponseProcessor
+        requestFactory?: DiscordOauthApiRequestFactory,
+        responseProcessor?: DiscordOauthApiResponseProcessor
     ) {
         this.configuration = configuration;
-        this.requestFactory = requestFactory || new DiscordApiRequestFactory(configuration);
-        this.responseProcessor = responseProcessor || new DiscordApiResponseProcessor();
+        this.requestFactory = requestFactory || new DiscordOauthApiRequestFactory(configuration);
+        this.responseProcessor = responseProcessor || new DiscordOauthApiResponseProcessor();
     }
 
     /**
-     * Create a new Discord channel in the system
-     * @param createDiscordChannel
+     * Redirects the user to Discord\'s authorization page to begin the OAuth flow.
+     * Initiate Discord OAuth flow
      */
-    public createDiscordChannelWithHttpInfo(createDiscordChannel: CreateDiscordChannel, _options?: ConfigurationOptions): Observable<HttpInfo<DiscordChannelResponse>> {
+    public connectDiscordWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<void>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1671,7 +1676,7 @@ export class ObservableDiscordApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.createDiscordChannel(createDiscordChannel, _config);
+        const requestContextPromise = this.requestFactory.connectDiscord(_config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -1684,23 +1689,23 @@ export class ObservableDiscordApi {
                 for (const middleware of allMiddleware.reverse()) {
                     middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
                 }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.createDiscordChannelWithHttpInfo(rsp)));
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.connectDiscordWithHttpInfo(rsp)));
             }));
     }
 
     /**
-     * Create a new Discord channel in the system
-     * @param createDiscordChannel
+     * Redirects the user to Discord\'s authorization page to begin the OAuth flow.
+     * Initiate Discord OAuth flow
      */
-    public createDiscordChannel(createDiscordChannel: CreateDiscordChannel, _options?: ConfigurationOptions): Observable<DiscordChannelResponse> {
-        return this.createDiscordChannelWithHttpInfo(createDiscordChannel, _options).pipe(map((apiResponse: HttpInfo<DiscordChannelResponse>) => apiResponse.data));
+    public connectDiscord(_options?: ConfigurationOptions): Observable<void> {
+        return this.connectDiscordWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<void>) => apiResponse.data));
     }
 
     /**
-     * Delete a Discord channel
-     * @param channelId
+     * Removes the connection between the user\'s account and their Discord account.
+     * Disconnect Discord account
      */
-    public deleteDiscordChannelWithHttpInfo(channelId: string, _options?: ConfigurationOptions): Observable<HttpInfo<DiscordChannelResponse>> {
+    public disconnectDiscordWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<DisconnectResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1731,7 +1736,7 @@ export class ObservableDiscordApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.deleteDiscordChannel(channelId, _config);
+        const requestContextPromise = this.requestFactory.disconnectDiscord(_config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -1744,22 +1749,23 @@ export class ObservableDiscordApi {
                 for (const middleware of allMiddleware.reverse()) {
                     middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
                 }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.deleteDiscordChannelWithHttpInfo(rsp)));
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.disconnectDiscordWithHttpInfo(rsp)));
             }));
     }
 
     /**
-     * Delete a Discord channel
-     * @param channelId
+     * Removes the connection between the user\'s account and their Discord account.
+     * Disconnect Discord account
      */
-    public deleteDiscordChannel(channelId: string, _options?: ConfigurationOptions): Observable<DiscordChannelResponse> {
-        return this.deleteDiscordChannelWithHttpInfo(channelId, _options).pipe(map((apiResponse: HttpInfo<DiscordChannelResponse>) => apiResponse.data));
+    public disconnectDiscord(_options?: ConfigurationOptions): Observable<DisconnectResponse> {
+        return this.disconnectDiscordWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<DisconnectResponse>) => apiResponse.data));
     }
 
     /**
-     * Get all Discord channels
+     * Processes the callback from Discord after user authorization.
+     * Handle Discord OAuth callback
      */
-    public getAllDiscordChannelsWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<DiscordChannelsResponse>> {
+    public discordCallbackWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<void>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1790,7 +1796,7 @@ export class ObservableDiscordApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.getAllDiscordChannels(_config);
+        const requestContextPromise = this.requestFactory.discordCallback(_config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -1803,22 +1809,41 @@ export class ObservableDiscordApi {
                 for (const middleware of allMiddleware.reverse()) {
                     middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
                 }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getAllDiscordChannelsWithHttpInfo(rsp)));
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.discordCallbackWithHttpInfo(rsp)));
             }));
     }
 
     /**
-     * Get all Discord channels
+     * Processes the callback from Discord after user authorization.
+     * Handle Discord OAuth callback
      */
-    public getAllDiscordChannels(_options?: ConfigurationOptions): Observable<DiscordChannelsResponse> {
-        return this.getAllDiscordChannelsWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<DiscordChannelsResponse>) => apiResponse.data));
+    public discordCallback(_options?: ConfigurationOptions): Observable<void> {
+        return this.discordCallbackWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<void>) => apiResponse.data));
+    }
+
+}
+
+import { SocialConnectionsApiRequestFactory, SocialConnectionsApiResponseProcessor} from "../apis/SocialConnectionsApi";
+export class ObservableSocialConnectionsApi {
+    private requestFactory: SocialConnectionsApiRequestFactory;
+    private responseProcessor: SocialConnectionsApiResponseProcessor;
+    private configuration: Configuration;
+
+    public constructor(
+        configuration: Configuration,
+        requestFactory?: SocialConnectionsApiRequestFactory,
+        responseProcessor?: SocialConnectionsApiResponseProcessor
+    ) {
+        this.configuration = configuration;
+        this.requestFactory = requestFactory || new SocialConnectionsApiRequestFactory(configuration);
+        this.responseProcessor = responseProcessor || new SocialConnectionsApiResponseProcessor();
     }
 
     /**
-     * Get a specific Discord channel
-     * @param channelId
+     * Returns all social connections for the authenticated user.
+     * Get user\'s social connections
      */
-    public getDiscordChannelWithHttpInfo(channelId: string, _options?: ConfigurationOptions): Observable<HttpInfo<DiscordChannelResponse>> {
+    public getSocialConnectionsWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<ConnectionsList>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1849,7 +1874,7 @@ export class ObservableDiscordApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.getDiscordChannel(channelId, _config);
+        const requestContextPromise = this.requestFactory.getSocialConnections(_config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -1862,22 +1887,41 @@ export class ObservableDiscordApi {
                 for (const middleware of allMiddleware.reverse()) {
                     middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
                 }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getDiscordChannelWithHttpInfo(rsp)));
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getSocialConnectionsWithHttpInfo(rsp)));
             }));
     }
 
     /**
-     * Get a specific Discord channel
-     * @param channelId
+     * Returns all social connections for the authenticated user.
+     * Get user\'s social connections
      */
-    public getDiscordChannel(channelId: string, _options?: ConfigurationOptions): Observable<DiscordChannelResponse> {
-        return this.getDiscordChannelWithHttpInfo(channelId, _options).pipe(map((apiResponse: HttpInfo<DiscordChannelResponse>) => apiResponse.data));
+    public getSocialConnections(_options?: ConfigurationOptions): Observable<ConnectionsList> {
+        return this.getSocialConnectionsWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<ConnectionsList>) => apiResponse.data));
+    }
+
+}
+
+import { TelegramAuthApiRequestFactory, TelegramAuthApiResponseProcessor} from "../apis/TelegramAuthApi";
+export class ObservableTelegramAuthApi {
+    private requestFactory: TelegramAuthApiRequestFactory;
+    private responseProcessor: TelegramAuthApiResponseProcessor;
+    private configuration: Configuration;
+
+    public constructor(
+        configuration: Configuration,
+        requestFactory?: TelegramAuthApiRequestFactory,
+        responseProcessor?: TelegramAuthApiResponseProcessor
+    ) {
+        this.configuration = configuration;
+        this.requestFactory = requestFactory || new TelegramAuthApiRequestFactory(configuration);
+        this.responseProcessor = responseProcessor || new TelegramAuthApiResponseProcessor();
     }
 
     /**
-     * Get all Discord channels that are not linked to any POD
+     * Removes the connection between the user\'s account and their Telegram account.
+     * Disconnect Telegram account
      */
-    public getUnlinkedDiscordChannelsWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<DiscordChannelsResponse>> {
+    public disconnectTelegramWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<DisconnectResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1908,7 +1952,7 @@ export class ObservableDiscordApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.getUnlinkedDiscordChannels(_config);
+        const requestContextPromise = this.requestFactory.disconnectTelegram(_config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -1921,23 +1965,24 @@ export class ObservableDiscordApi {
                 for (const middleware of allMiddleware.reverse()) {
                     middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
                 }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getUnlinkedDiscordChannelsWithHttpInfo(rsp)));
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.disconnectTelegramWithHttpInfo(rsp)));
             }));
     }
 
     /**
-     * Get all Discord channels that are not linked to any POD
+     * Removes the connection between the user\'s account and their Telegram account.
+     * Disconnect Telegram account
      */
-    public getUnlinkedDiscordChannels(_options?: ConfigurationOptions): Observable<DiscordChannelsResponse> {
-        return this.getUnlinkedDiscordChannelsWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<DiscordChannelsResponse>) => apiResponse.data));
+    public disconnectTelegram(_options?: ConfigurationOptions): Observable<DisconnectResponse> {
+        return this.disconnectTelegramWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<DisconnectResponse>) => apiResponse.data));
     }
 
     /**
-     * Update a Discord channel
-     * @param channelId
-     * @param updateDiscordChannel
+     * Handles the authentication data from the Telegram Login Widget.
+     * Process Telegram authentication data
+     * @param telegramAuth
      */
-    public updateDiscordChannelWithHttpInfo(channelId: string, updateDiscordChannel: UpdateDiscordChannel, _options?: ConfigurationOptions): Observable<HttpInfo<DiscordChannelResponse>> {
+    public telegramCallbackWithHttpInfo(telegramAuth: TelegramAuth, _options?: ConfigurationOptions): Observable<HttpInfo<ConnectionResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1968,7 +2013,7 @@ export class ObservableDiscordApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.updateDiscordChannel(channelId, updateDiscordChannel, _config);
+        const requestContextPromise = this.requestFactory.telegramCallback(telegramAuth, _config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -1981,17 +2026,17 @@ export class ObservableDiscordApi {
                 for (const middleware of allMiddleware.reverse()) {
                     middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
                 }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.updateDiscordChannelWithHttpInfo(rsp)));
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.telegramCallbackWithHttpInfo(rsp)));
             }));
     }
 
     /**
-     * Update a Discord channel
-     * @param channelId
-     * @param updateDiscordChannel
+     * Handles the authentication data from the Telegram Login Widget.
+     * Process Telegram authentication data
+     * @param telegramAuth
      */
-    public updateDiscordChannel(channelId: string, updateDiscordChannel: UpdateDiscordChannel, _options?: ConfigurationOptions): Observable<DiscordChannelResponse> {
-        return this.updateDiscordChannelWithHttpInfo(channelId, updateDiscordChannel, _options).pipe(map((apiResponse: HttpInfo<DiscordChannelResponse>) => apiResponse.data));
+    public telegramCallback(telegramAuth: TelegramAuth, _options?: ConfigurationOptions): Observable<ConnectionResponse> {
+        return this.telegramCallbackWithHttpInfo(telegramAuth, _options).pipe(map((apiResponse: HttpInfo<ConnectionResponse>) => apiResponse.data));
     }
 
 }
@@ -2374,6 +2419,204 @@ export class ObservableTreasuryApi {
      */
     public updateDAOTokenPercentages(daoId: string, _options?: ConfigurationOptions): Observable<TreasuryUpdatePercentages> {
         return this.updateDAOTokenPercentagesWithHttpInfo(daoId, _options).pipe(map((apiResponse: HttpInfo<TreasuryUpdatePercentages>) => apiResponse.data));
+    }
+
+}
+
+import { TwitterOauthApiRequestFactory, TwitterOauthApiResponseProcessor} from "../apis/TwitterOauthApi";
+export class ObservableTwitterOauthApi {
+    private requestFactory: TwitterOauthApiRequestFactory;
+    private responseProcessor: TwitterOauthApiResponseProcessor;
+    private configuration: Configuration;
+
+    public constructor(
+        configuration: Configuration,
+        requestFactory?: TwitterOauthApiRequestFactory,
+        responseProcessor?: TwitterOauthApiResponseProcessor
+    ) {
+        this.configuration = configuration;
+        this.requestFactory = requestFactory || new TwitterOauthApiRequestFactory(configuration);
+        this.responseProcessor = responseProcessor || new TwitterOauthApiResponseProcessor();
+    }
+
+    /**
+     * Redirects the user to Twitter\'s authorization page to begin the OAuth 2.0 PKCE flow.
+     * Initiate Twitter OAuth flow
+     */
+    public connectTwitterWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<void>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.connectTwitter(_config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.connectTwitterWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Redirects the user to Twitter\'s authorization page to begin the OAuth 2.0 PKCE flow.
+     * Initiate Twitter OAuth flow
+     */
+    public connectTwitter(_options?: ConfigurationOptions): Observable<void> {
+        return this.connectTwitterWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<void>) => apiResponse.data));
+    }
+
+    /**
+     * Removes the connection between the user\'s account and their Twitter account.
+     * Disconnect Twitter account
+     */
+    public disconnectTwitterWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<DisconnectResponse>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.disconnectTwitter(_config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.disconnectTwitterWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Removes the connection between the user\'s account and their Twitter account.
+     * Disconnect Twitter account
+     */
+    public disconnectTwitter(_options?: ConfigurationOptions): Observable<DisconnectResponse> {
+        return this.disconnectTwitterWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<DisconnectResponse>) => apiResponse.data));
+    }
+
+    /**
+     * Processes the callback from Twitter after user authorization.
+     * Handle Twitter OAuth callback
+     */
+    public twitterCallbackWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<void>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.twitterCallback(_config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.twitterCallbackWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Processes the callback from Twitter after user authorization.
+     * Handle Twitter OAuth callback
+     */
+    public twitterCallback(_options?: ConfigurationOptions): Observable<void> {
+        return this.twitterCallbackWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<void>) => apiResponse.data));
     }
 
 }
