@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect, ReactNode, useRef } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useRef } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { walletAuthService } from '../services/WalletAuthService';
 import { userService } from '../services/UserService';
@@ -8,6 +8,7 @@ import { useEffectOnce } from '../hooks/useEffectOnce';
 
 // Interface for user information
 interface UserInfo {
+  userId?: string;
   username?: string;
   walletAddress?: string;
   email?: string;
@@ -117,6 +118,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
         
         // Convert API response to UserInfo format with careful property access
         const userDataToStore: UserInfo = {
+          userId: user.userId,
           username: user.username || user.name || 'Unknown',
           walletAddress: user.walletAddress || user.wallet_address || localStorage.getItem('walletAddress') || '',
           email: user.email || '',

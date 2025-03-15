@@ -1,7 +1,5 @@
-import React from 'react';
-import { Search } from 'lucide-react';
-import useApiAndWallet from '../hooks/useApiAndWallet';
-import ApiAuthStatus from './common/ApiAuthStatus';
+import { Search, UserCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import NotificationIcon from './common/NotificationIcon';
 import { ui } from '../styles/theme';
 
@@ -9,12 +7,18 @@ interface HeaderProps {
   activeSection: string;
   showNotifications: boolean;
   setShowNotifications: (show: boolean) => void;
-  daoId?: string; // Make daoId optional
+  setActiveSection: (section: string) => void;
+  daoId?: string;
 }
 
-const Header = ({ activeSection, showNotifications, setShowNotifications }: HeaderProps) => {
-  const { apiStatus, userDisplayInfo } = useApiAndWallet();
-
+const Header = ({ 
+  activeSection, 
+  showNotifications, 
+  setShowNotifications,
+  setActiveSection
+}: HeaderProps) => {
+  const navigate = useNavigate();
+  
   const getSectionDisplayName = () => {
     switch (activeSection) {
       case 'governance':
@@ -23,12 +27,14 @@ const Header = ({ activeSection, showNotifications, setShowNotifications }: Head
         return 'Pods';
       case 'members':
         return 'Members';
+      case 'profile':
+        return 'My Profile';
       default:
         return 'Home';
     }
   };
 
-  // Exemple de notifications (à remplacer par vos vraies données)
+  // Example notifications with proper type
   const mockNotifications = [
     {
       id: '1',
@@ -36,6 +42,7 @@ const Header = ({ activeSection, showNotifications, setShowNotifications }: Head
       message: 'Une nouvelle proposition a été créée dans la DAO',
       timestamp: 'Il y a 5 minutes',
       read: false,
+      type: 'vote' as const
     },
     {
       id: '2',
@@ -43,8 +50,15 @@ const Header = ({ activeSection, showNotifications, setShowNotifications }: Head
       message: 'Le vote sur la proposition #123 est terminé',
       timestamp: 'Il y a 1 heure',
       read: true,
+      type: 'vote' as const
     },
   ];
+
+  // Handler for navigating to the profile page
+  const handleProfileClick = () => {
+    console.log('Profile button clicked, navigating to /profile');
+    navigate('/profile');
+  };
 
   return (
     <header className={ui.header}>
@@ -72,10 +86,13 @@ const Header = ({ activeSection, showNotifications, setShowNotifications }: Head
             setShowNotifications={setShowNotifications}
             notifications={mockNotifications}
           />
-          <ApiAuthStatus 
-            apiStatus={apiStatus} 
-            userDisplayInfo={userDisplayInfo}
-          />
+          <button 
+            onClick={handleProfileClick}
+            className="flex items-center gap-2 bg-primary text-white py-1 px-3 rounded-full hover:bg-primary-dark transition-colors"
+          >
+            <UserCircle size={18} />
+            <span>My Profile</span>
+          </button>
         </div>
       </div>
     </header>
