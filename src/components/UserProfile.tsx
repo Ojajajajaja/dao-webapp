@@ -132,7 +132,7 @@ const UserProfile: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Username */}
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-text mb-1">
+              <label htmlFor="username" className="block text-sm font-medium text-surface-500 mb-1">
                 Username
               </label>
               <input
@@ -141,14 +141,14 @@ const UserProfile: React.FC = () => {
                 name="username"
                 value={formData.username}
                 onChange={handleInputChange}
-                className="w-full p-2 border border-surface-300 rounded-md bg-surface-50 text-text"
+                className="w-full p-2 border border-surface-300 rounded-md bg-surface-100 text-text focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="Username"
               />
             </div>
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-text mb-1">
+              <label htmlFor="email" className="block text-sm font-medium text-surface-500 mb-1">
                 Email
               </label>
               <input
@@ -157,14 +157,14 @@ const UserProfile: React.FC = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-full p-2 border border-surface-300 rounded-md bg-surface-50 text-text"
+                className="w-full p-2 border border-surface-300 rounded-md bg-surface-100 text-text focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="Email address"
               />
             </div>
 
             {/* Member Name */}
             <div>
-              <label htmlFor="memberName" className="block text-sm font-medium text-text mb-1">
+              <label htmlFor="memberName" className="block text-sm font-medium text-surface-500 mb-1">
                 Member Name
               </label>
               <input
@@ -173,14 +173,14 @@ const UserProfile: React.FC = () => {
                 name="memberName"
                 value={formData.memberName}
                 onChange={handleInputChange}
-                className="w-full p-2 border border-surface-300 rounded-md bg-surface-50 text-text"
+                className="w-full p-2 border border-surface-300 rounded-md bg-surface-100 text-text focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="Display name"
               />
             </div>
 
             {/* Wallet Address (readonly) */}
             <div>
-              <label htmlFor="walletAddress" className="block text-sm font-medium text-text mb-1">
+              <label htmlFor="walletAddress" className="block text-sm font-medium text-surface-500 mb-1">
                 Wallet Address
               </label>
               <input
@@ -188,7 +188,7 @@ const UserProfile: React.FC = () => {
                 id="walletAddress"
                 value={userInfo?.walletAddress || ''}
                 readOnly
-                className="w-full p-2 border border-surface-300 rounded-md bg-surface-50 text-text opacity-70"
+                className="w-full p-2 border border-surface-300 rounded-md bg-surface-100 text-text opacity-70 focus:outline-none"
               />
             </div>
           </div>
@@ -279,7 +279,11 @@ const UserProfile: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full md:w-auto py-2 px-6 bg-primary text-white rounded-md hover:bg-primary-dark transition"
+              className={`w-full md:w-auto py-3 px-6 rounded-lg text-text font-medium ${
+                isLoading
+                  ? 'bg-primary cursor-not-allowed opacity-70'
+                  : 'bg-primary hover:bg-opacity-90 transition-colors'
+              }`}
             >
               {isLoading ? 'Saving...' : 'Save Profile'}
             </button>
