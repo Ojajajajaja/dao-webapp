@@ -10,6 +10,7 @@ import {
   FileText
 } from 'lucide-react';
 import { ui } from '../styles/theme';
+import { useAuth } from '../context/AuthContext';
 
 interface SidebarProps {
   activeSection: string;
@@ -17,6 +18,8 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) => {
+  const { userInfo } = useAuth();
+  
   const navItems = [
     {
       section: 'DAO',
@@ -53,7 +56,15 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) =>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
             </svg>
           </div>
-          <span className="text-surface-500 text-sm font-normal">USERNAME</span>
+          <span className="text-surface-500 text-sm font-normal">
+            {userInfo ? 
+              (userInfo.username || 
+               userInfo.memberName || 
+               (userInfo.walletAddress ? 
+                `${userInfo.walletAddress.substring(0, 6)}...${userInfo.walletAddress.substring(userInfo.walletAddress.length - 4)}` : 
+                'No wallet')) : 
+              'Not connected'}
+          </span>
         </div>
       </div>
       
