@@ -2,6 +2,8 @@ import { Search, UserCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import NotificationIcon from './common/NotificationIcon';
 import { ui } from '../styles/theme';
+import ApiAuthStatus from './common/ApiAuthStatus';
+import useApiAndWallet from '../hooks/useApiAndWallet';
 
 interface HeaderProps {
   activeSection: string;
@@ -18,6 +20,7 @@ const Header = ({
   setActiveSection
 }: HeaderProps) => {
   const navigate = useNavigate();
+  const { apiStatus, userDisplayInfo } = useApiAndWallet();
   
   const getSectionDisplayName = () => {
     switch (activeSection) {
@@ -86,13 +89,10 @@ const Header = ({
             setShowNotifications={setShowNotifications}
             notifications={mockNotifications}
           />
-          <button 
-            onClick={handleProfileClick}
-            className="flex items-center gap-2 bg-primary text-white py-1 px-3 rounded-full hover:bg-primary-dark transition-colors"
-          >
-            <UserCircle size={18} />
-            <span>My Profile</span>
-          </button>
+          <ApiAuthStatus 
+            apiStatus={apiStatus} 
+            userDisplayInfo={userDisplayInfo}
+          />
         </div>
       </div>
     </header>
