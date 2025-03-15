@@ -127,7 +127,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterDashboard }) => {
       />
       
       {/* Header with Wallet & API Status */}
-      <header className="w-full p-2 z-10 flex justify-end">
+      <header className="w-full p-2 flex justify-end">
         <div className="flex items-center">
           <ApiAuthStatus 
             apiStatus={apiStatus} 
