@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { 
   Home, 
   Building2, 
@@ -7,10 +8,14 @@ import {
   Users, 
   Trophy, 
   MessageSquareQuote, 
-  FileText
+  FileText,
+  ArrowLeft
 } from 'lucide-react';
 import { ui } from '../styles/theme';
 import { useAuth } from '../context/AuthContext';
+import { DAO } from '../core/modules/dao-api';
+import { daosService } from '../services/DaosService';
+import { useEffectOnce } from '../hooks/useEffectOnce';
 
 interface SidebarProps {
   activeSection: string;
@@ -19,6 +24,41 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) => {
   const { userInfo } = useAuth();
+  const { daoId } = useParams<{ daoId: string }>();
+  const navigate = useNavigate();
+  const [dao, setDao] = useState<DAO | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Fetch the DAO data when the daoId changes
+  useEffectOnce(() => {
+    const fetchDaoData = async () => {
+      if (!daoId) {
+        setDao(null);
+        return;
+      }
+      
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const daoData = await daosService.getDaoById(daoId);
+        setDao(daoData);
+      } catch (err) {
+        console.error("Error fetching DAO data:", err);
+        setError("Failed to load DAO information");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchDaoData();
+  }, [daoId]);
+
+  // Handle return to landing page
+  const handleReturnToLanding = () => {
+    navigate('/');
+  };
   
   const navItems = [
     {
@@ -46,10 +86,35 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) =>
     }
   ];
 
+  // Display a loading spinner in the DAO name area
+  const renderDaoName = () => {
+    if (isLoading) {
+      return <span className="inline-block w-6 h-6 border-2 border-surface-300 border-t-primary rounded-full animate-spin"></span>;
+    }
+    
+    if (error) {
+      return <span className="text-red-400">Error loading DAO</span>;
+    }
+    
+    return dao?.name || 'Select a DAO';
+  };
+
   return (
     <div className={`w-64 text-text flex flex-col ${ui.sidebar} font-normal`}>
-      {/* User info */}
+      {/* Back to landing page button */}
       <div className="p-4">
+        <button 
+          onClick={handleReturnToLanding}
+          className="flex items-center text-surface-500 hover:text-text transition-colors"
+          title="Return to landing page"
+        >
+          <ArrowLeft size={16} className="mr-2" />
+          <span className="text-sm">Back to DAOs</span>
+        </button>
+      </div>
+
+      {/* User info */}
+      <div className="p-4 border-t border-surface-300/10">
         <div className="flex items-center">
           <div className="mr-2">
             <svg className="w-6 h-6 text-surface-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -74,7 +139,9 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) =>
           <img src="https://i.imgur.com/PeLdfS1.png" alt="DAO Logo" className="w-full h-full object-cover" />
         </div>
         <div className="text-center">
-          <p className="text-sm text-text font-normal">BABYWEN DAO</p>
+          <p className="text-sm text-text font-normal">
+            {renderDaoName()}
+          </p>
         </div>
       </div>
       

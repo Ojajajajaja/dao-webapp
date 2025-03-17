@@ -3,70 +3,13 @@ import useApiAndWallet from '../hooks/useApiAndWallet';
 import CreateDaoForm from './CreateDaoForm';
 import { typography } from '../styles/theme';
 import ApiAuthStatus from './common/ApiAuthStatus';
+import { daosService } from '../services/DaosService';
+import { DAO } from '../core/modules/dao-api';
+import { useEffectOnce } from '../hooks/useEffectOnce';
 
 interface LandingPageProps {
   onEnterDashboard: (daoId?: string) => void;
 }
-
-// Fake DAO data for the landing page
-const FAKE_DAOS = [
-  {
-    id: 'dao-1',
-    name: 'BabyWen DAO',
-    description: 'BabyWen DAO wants to develop a new influencer governed and prompted by the community',
-    avatar: '👶',
-    badges: ['featured', 'active', 'solana']
-  },
-  {
-    id: 'dao-2',
-    name: 'Solana Builders',
-    description: 'A community of developers building the future of Solana ecosystem with innovative projects',
-    avatar: '🛠️',
-    badges: ['active', 'solana', 'dev']
-  },
-  {
-    id: 'dao-3',
-    name: 'NFT Collectors',
-    description: 'Curating the best digital art collections and supporting emerging artists in the NFT space',
-    avatar: '🖼️',
-    badges: ['featured', 'nft']
-  },
-  {
-    id: 'dao-4',
-    name: 'DeFi Alliance',
-    description: 'Working together to build decentralized financial products that are accessible to everyone',
-    avatar: '💰',
-    badges: ['active', 'defi']
-  },
-  {
-    id: 'dao-5',
-    name: 'Governance Lab',
-    description: 'Experimenting with new models of decentralized governance and collective decision making',
-    avatar: '🏛️',
-    badges: ['new', 'governance']
-  },
-  {
-    id: 'dao-6',
-    name: 'Web3 Education',
-    description: 'Making blockchain education accessible and understandable for the next generation of users',
-    avatar: '📚',
-    badges: ['new', 'education']
-  },
-  {
-    id: 'dao-7',
-    name: 'Climate Action',
-    description: 'Using blockchain technology to fund and coordinate climate change mitigation projects globally',
-    avatar: '🌱',
-    badges: ['new', 'impact']
-  },
-  {
-    id: 'dao-8',
-    name: 'Creator Economy',
-    description: 'Supporting content creators with new monetization models and direct community funding',
-    avatar: '🎨',
-    badges: ['new', 'creator']
-  },
-];
 
 // Badge colors mapping
 const getBadgeColor = (badge: string) => {
@@ -74,10 +17,48 @@ const getBadgeColor = (badge: string) => {
   return 'text-[var(--landing-page-color)] border border-[var(--landing-page-color)]';
 };
 
+// Function to get badges for a DAO based on its properties
+const getDAOBadges = (dao: DAO): string[] => {
+  const badges: string[] = [];
+  
+  // Add badges based on DAO properties
+  if (dao.isActive) {
+    badges.push('active');
+  }
+  
+  // We can add more logic here to determine badges
+  // For example, if we had data about when the DAO was created,
+  // we could add a 'new' badge for recently created DAOs
+  
+  return badges;
+};
+
 const LandingPage: React.FC<LandingPageProps> = ({ onEnterDashboard }) => {
   const { apiStatus, userDisplayInfo } = useApiAndWallet();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [activeFilter, setActiveFilter] = useState('featured'); // 'featured', 'active', 'new'
+  const [daos, setDaos] = useState<DAO[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Fetch DAOs from the API
+  useEffectOnce(() => {
+    const fetchDAOs = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const fetchedDaos = await daosService.getAllDaos();
+        setDaos(fetchedDaos);
+      } catch (err) {
+        console.error("Error fetching DAOs:", err);
+        setError("Failed to load DAOs. Please try again later.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchDAOs();
+  }, []);
   
   const handleCreateDaoSuccess = (daoId: string) => {
     // Navigate to the newly created DAO after a short delay
@@ -88,20 +69,20 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterDashboard }) => {
 
   // Filter DAOs based on active filter
   const getFilteredDaos = () => {
-    // Always return 8 DAOs but in different order based on filter
+    if (daos.length === 0) return [];
+    
     if (activeFilter === 'featured') {
-      // For featured, prioritize the first 4 DAOs
-      return [...FAKE_DAOS.slice(0, 4), ...FAKE_DAOS.slice(4, 8)];
+      // For featured, prioritize active DAOs
+      return [...daos.filter(dao => dao.isActive), ...daos.filter(dao => !dao.isActive)];
     } else if (activeFilter === 'active') {
-      // For active, show even-indexed DAOs first, then odd-indexed
-      const active = FAKE_DAOS.filter((_, index) => index % 2 === 0);
-      const inactive = FAKE_DAOS.filter((_, index) => index % 2 !== 0);
-      return [...active, ...inactive];
+      // For active, only show active DAOs
+      return daos.filter(dao => dao.isActive);
     } else if (activeFilter === 'new') {
-      // For new, show the last 4 DAOs first, then the first 4
-      return [...FAKE_DAOS.slice(4, 8), ...FAKE_DAOS.slice(0, 4)];
+      // For new, we might not have creation date, so we'll just show all DAOs
+      // In a real implementation, we would sort by creation date
+      return [...daos];
     }
-    return FAKE_DAOS;
+    return daos;
   };
   
   const filteredDaos = getFilteredDaos();
@@ -181,51 +162,92 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterDashboard }) => {
               New
             </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-            {filteredDaos.map((dao, index) => (
-              <div key={dao.id} className="group cursor-pointer" onClick={() => onEnterDashboard(dao.id)}>
-                <div className="bg-surface-200 backdrop-blur-lg bg-opacity-5 border border-white/15 rounded-2xl p-6 h-full transition-all duration-300 hover:bg-opacity-10 hover:border-[var(--landing-page-color)]">
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                      <img 
-                        src={`https://i.pravatar.cc/100?img=${index + 10}`} 
-                        alt={dao.name} 
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <h3 className="text-xl font-bold text-white group-hover:text-[var(--landing-page-color)] transition-colors duration-300">{dao.name}</h3>
-                  </div>
-                  <p className="text-white mb-4">{dao.description}</p>
-                  <div className="flex justify-between items-center">
-                    <div className="flex flex-wrap gap-2">
-                      {dao.badges.map((badge) => (
-                        <span 
-                          key={badge} 
-                          className={`text-xs px-2 py-0.5 rounded-full bg-transparent ${getBadgeColor(badge)}`}
-                        >
-                          {badge}
-                        </span>
-                      ))}
-                    </div>
-                    <svg 
-                      className="w-6 h-6 text-white group-hover:text-[var(--landing-page-color)] transition-all duration-300" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24" 
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        strokeWidth={2} 
-                        d="M14 5l7 7m0 0l-7 7m7-7H3" 
-                      />
-                    </svg>
-                  </div>
-                </div>
+          
+          {/* Loading State */}
+          {isLoading && (
+            <div className="flex flex-col items-center justify-center py-12">
+              <div className="w-16 h-16 border-4 border-surface-300 border-t-[var(--landing-page-color)] rounded-full animate-spin mb-4"></div>
+              <p className="text-text">Loading DAOs...</p>
+            </div>
+          )}
+          
+          {/* Error State */}
+          {error && (
+            <div className="bg-red-900/20 border border-red-500/50 rounded-xl p-6 mb-8">
+              <p className="text-red-400 text-center">{error}</p>
+              <div className="flex justify-center mt-4">
+                <button 
+                  onClick={() => window.location.reload()}
+                  className="bg-surface-200 hover:bg-surface-300 text-white px-4 py-2 rounded-md"
+                >
+                  Retry
+                </button>
               </div>
-            ))}
-          </div>
+            </div>
+          )}
+          
+          {/* No DAOs State */}
+          {!isLoading && !error && filteredDaos.length === 0 && (
+            <div className="bg-surface-200/20 border border-surface-300/50 rounded-xl p-6 mb-8">
+              <p className="text-text text-center">No DAOs found. Create your own DAO to get started!</p>
+            </div>
+          )}
+          
+          {/* DAO Grid */}
+          {!isLoading && !error && filteredDaos.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+              {filteredDaos.map((dao, index) => {
+                // Get badges for this DAO
+                const badges = getDAOBadges(dao);
+                
+                // Add 'featured' badge to the first few DAOs in the list
+                if (index < 2 && !badges.includes('featured')) {
+                  badges.unshift('featured');
+                }
+                
+                return (
+                  <div key={dao.daoId} className="group cursor-pointer" onClick={() => onEnterDashboard(dao.daoId)}>
+                    <div className="bg-surface-200 backdrop-blur-lg bg-opacity-5 border border-white/15 rounded-2xl p-6 h-full transition-all duration-300 hover:bg-opacity-10 hover:border-[var(--landing-page-color)]">
+                      <div className="flex items-center mb-4">
+                        <div className="w-12 h-12 rounded-full overflow-hidden mr-4 flex items-center justify-center bg-surface-300/30">
+                          {/* Use first letter of DAO name as avatar if no image is available */}
+                          <span className="text-2xl font-bold text-white">{dao.name.charAt(0)}</span>
+                        </div>
+                        <h3 className="text-xl font-bold text-white group-hover:text-[var(--landing-page-color)] transition-colors duration-300">{dao.name}</h3>
+                      </div>
+                      <p className="text-white mb-4">{dao.description}</p>
+                      <div className="flex justify-between items-center">
+                        <div className="flex flex-wrap gap-2">
+                          {badges.map((badge) => (
+                            <span 
+                              key={badge} 
+                              className={`text-xs px-2 py-0.5 rounded-full bg-transparent ${getBadgeColor(badge)}`}
+                            >
+                              {badge}
+                            </span>
+                          ))}
+                        </div>
+                        <svg 
+                          className="w-6 h-6 text-white group-hover:text-[var(--landing-page-color)] transition-all duration-300" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24" 
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth={2} 
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" 
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
           
           {/* Function Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">

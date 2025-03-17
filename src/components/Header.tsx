@@ -1,4 +1,4 @@
-import { Search, UserCircle } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import NotificationIcon from './common/NotificationIcon';
 import { ui } from '../styles/theme';
@@ -17,7 +17,6 @@ const Header = ({
   activeSection, 
   showNotifications, 
   setShowNotifications,
-  setActiveSection
 }: HeaderProps) => {
   const navigate = useNavigate();
   const { apiStatus, userDisplayInfo } = useApiAndWallet();
@@ -56,12 +55,6 @@ const Header = ({
       type: 'vote' as const
     },
   ];
-
-  // Handler for navigating to the profile page
-  const handleProfileClick = () => {
-    console.log('Profile button clicked, navigating to /profile');
-    navigate('/profile');
-  };
 
   return (
     <header className={ui.header}>

@@ -1,12 +1,42 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import UserProfile from './UserProfile';
+import { useEffectOnce } from '../hooks/useEffectOnce';
 
 const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [previousPath, setPreviousPath] = useState<string | null>(null);
+  
+  // Capture the previous path when component mounts
+  useEffectOnce(() => {
+    // Check if we have state from navigation
+    if (location.state && location.state.from) {
+      setPreviousPath(location.state.from);
+    } else {
+      // Fallback to session storage if available
+      const storedPath = sessionStorage.getItem('previousPath');
+      if (storedPath) {
+        setPreviousPath(storedPath);
+      }
+    }
+    
+    // Clear the stored path
+    sessionStorage.removeItem('previousPath');
+  }, [location]);
 
   const handleGoBack = () => {
-    navigate(-1); // Go back to previous page
+    // Check if we have a stored previous path
+    if (previousPath) {
+      // Navigate to stored previous path
+      navigate(previousPath);
+    } else if (location.key !== 'default') {
+      // If user navigated normally, go back in history
+      navigate(-1);
+    } else {
+      // Default to dashboard if no context is available
+      navigate('/');
+    }
   };
 
   return (
