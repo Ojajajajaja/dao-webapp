@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import useApiAndWallet from '../hooks/useApiAndWallet';
-import ApiAuthStatus from './common/ApiAuthStatus';
 import CreateDaoForm from './CreateDaoForm';
-import { ui, typography } from '../styles/theme';
+import { typography } from '../styles/theme';
+import ApiAuthStatus from './common/ApiAuthStatus';
 
 interface LandingPageProps {
   onEnterDashboard: (daoId?: string) => void;
@@ -127,7 +127,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onEnterDashboard }) => {
       />
       
       {/* Header with Wallet & API Status */}
-      <header className="w-full p-2 z-10 flex justify-end">
+      <header className="w-full p-2 flex justify-end">
         <div className="flex items-center">
           <ApiAuthStatus 
             apiStatus={apiStatus} 

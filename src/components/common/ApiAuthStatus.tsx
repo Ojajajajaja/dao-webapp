@@ -1,14 +1,15 @@
 import React from 'react';
-import { Wifi, WifiOff, Loader2, PenLine, AlertCircle, User } from 'lucide-react';
+import { Wifi, WifiOff, Loader2, PenLine, AlertCircle, UserCircle } from 'lucide-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { UserDisplayInfo } from '../../hooks/useApiAndWallet';
+import { useNavigate } from 'react-router-dom';
 
 interface ApiAuthStatusProps {
   apiStatus: 'online' | 'offline' | 'checking';
   userDisplayInfo: UserDisplayInfo;
 }
 
-const ApiAuthStatus: React.FC<ApiAuthStatusProps> = ({ 
+const ApiAuthStatus: React.FC<ApiAuthStatusProps> = ({
   apiStatus, 
   userDisplayInfo,
 }) => {
@@ -16,19 +17,28 @@ const ApiAuthStatus: React.FC<ApiAuthStatusProps> = ({
     isAuthenticated, 
     isLoading, 
     challengeMessage, 
-    authError, 
-    displayUsername 
+    authError,
   } = userDisplayInfo;
+
+  const navigate = useNavigate();
+
+  // Handle navigation to profile page
+  const handleProfileClick = () => {
+    navigate('/profile');
+  };
 
   return (
     <div className="flex items-center space-x-4">
       {/* Left side (title and auth status) - only show if requested */}
       <div className="flex items-center">
         {isAuthenticated && (
-          <span className="ml-2 text-xs bg-success text-text px-2 py-0.5 rounded-full flex items-center">
-            <User size={10} className="mr-1" />
-            Authenticated as {displayUsername}
-          </span>
+            <button 
+            onClick={handleProfileClick}
+            className="flex items-center gap-2 bg-[var(--landing-page-color)] text-white py-1 px-3 rounded-full hover:opacity-90 transition-colors"
+          >
+            <UserCircle size={18} />
+            <span>My Profile</span>
+          </button>
         )}
         {isLoading && !challengeMessage && (
           <span className="ml-2 text-xs bg-warning text-text px-2 py-0.5 rounded-full flex items-center">

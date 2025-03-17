@@ -1,21 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useParams, useLocation } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Home from './components/Home';
 import Governance from './components/Governance';
 import Pods from './components/Pods';
 import Members from './components/Members';
+import ProfilePage from './components/ProfilePage';
 import LandingPage from './components/LandingPage';
 import { useEffectOnce } from './hooks/useEffectOnce';
 
 // Dashboard component that handles DAO-specific routing
 const Dashboard = () => {
   const { daoId } = useParams();
+  const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('home');
   const [showNotifications, setShowNotifications] = useState(false);
   const [fadeIn, setFadeIn] = useState(true);
   const [currentComponent, setCurrentComponent] = useState<React.ReactNode>(null);
+
+  // Handle section changes
+  const handleSectionChange = (section: string) => {
+    // If navigating to profile, go to standalone profile page
+    if (section === 'profile') {
+      navigate('/profile');
+      return;
+    }
+    
+    setActiveSection(section);
+  };
 
   // Effect to initialize the correct component based on the active section
   useEffect(() => {
@@ -55,7 +68,7 @@ const Dashboard = () => {
   return (
     <div className="flex h-screen bg-background">
       {/* Left Sidebar */}
-      <Sidebar activeSection={activeSection} setActiveSection={setActiveSection} />
+      <Sidebar activeSection={activeSection} setActiveSection={handleSectionChange} />
       
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -63,6 +76,7 @@ const Dashboard = () => {
           activeSection={activeSection} 
           showNotifications={showNotifications}
           setShowNotifications={setShowNotifications}
+          setActiveSection={handleSectionChange}
           daoId={daoId}
         />
         
@@ -96,6 +110,7 @@ function App() {
     <Routes>
       <Route path="/" element={<LandingPage onEnterDashboard={handleEnterDashboard} />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/profile" element={<ProfilePage />} />
       <Route path="/daos/:daoId" element={<Dashboard />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

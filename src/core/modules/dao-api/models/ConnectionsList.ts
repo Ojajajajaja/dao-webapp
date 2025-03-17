@@ -10,13 +10,26 @@
  * Do not edit the class manually.
  */
 
+import { SocialConnection } from '../models/SocialConnection';
 import { HttpFile } from '../http/http';
 
-export class PODUpdate {
-    'name'?: string;
-    'description'?: string;
-    'isActive'?: boolean;
-    'discordChannelId'?: string;
+export class ConnectionsList {
+    /**
+    * List of social connections
+    */
+    'connections': Array<SocialConnection>;
+    /**
+    * Whether Discord is connected
+    */
+    'discordConnected': boolean;
+    /**
+    * Whether Twitter is connected
+    */
+    'twitterConnected': boolean;
+    /**
+    * Whether Telegram is connected
+    */
+    'telegramConnected': boolean;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -24,32 +37,32 @@ export class PODUpdate {
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "name",
-            "baseName": "name",
-            "type": "string",
+            "name": "connections",
+            "baseName": "connections",
+            "type": "Array<SocialConnection>",
             "format": ""
         },
         {
-            "name": "description",
-            "baseName": "description",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "isActive",
-            "baseName": "is_active",
+            "name": "discordConnected",
+            "baseName": "discord_connected",
             "type": "boolean",
             "format": ""
         },
         {
-            "name": "discordChannelId",
-            "baseName": "discord_channel_id",
-            "type": "string",
+            "name": "twitterConnected",
+            "baseName": "twitter_connected",
+            "type": "boolean",
+            "format": ""
+        },
+        {
+            "name": "telegramConnected",
+            "baseName": "telegram_connected",
+            "type": "boolean",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return PODUpdate.attributeTypeMap;
+        return ConnectionsList.attributeTypeMap;
     }
 
     public constructor() {

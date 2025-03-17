@@ -12,11 +12,15 @@
 
 import { HttpFile } from '../http/http';
 
-export class PODUpdate {
-    'name'?: string;
-    'description'?: string;
-    'isActive'?: boolean;
-    'discordChannelId'?: string;
+export class OAuthError {
+    /**
+    * Error message
+    */
+    'error': string;
+    /**
+    * Error code
+    */
+    'code'?: number;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -24,32 +28,20 @@ export class PODUpdate {
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "name",
-            "baseName": "name",
+            "name": "error",
+            "baseName": "error",
             "type": "string",
             "format": ""
         },
         {
-            "name": "description",
-            "baseName": "description",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "isActive",
-            "baseName": "is_active",
-            "type": "boolean",
-            "format": ""
-        },
-        {
-            "name": "discordChannelId",
-            "baseName": "discord_channel_id",
-            "type": "string",
+            "name": "code",
+            "baseName": "code",
+            "type": "number",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return PODUpdate.attributeTypeMap;
+        return OAuthError.attributeTypeMap;
     }
 
     public constructor() {

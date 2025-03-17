@@ -106,6 +106,9 @@ export class UserService {
     username?: string;
     email?: string;
     discordUsername?: string;
+    memberName?: string;
+    twitterUsername?: string;
+    telegramUsername?: string;
   }): Promise<UserResponse | null> {
     try {
       const apiClient = this.createAuthenticatedApiClient();
@@ -118,7 +121,12 @@ export class UserService {
       if (userData.username !== undefined) updateInput.username = userData.username;
       if (userData.email !== undefined) updateInput.email = userData.email;
       if (userData.discordUsername !== undefined) updateInput.discordUsername = userData.discordUsername;
+      if (userData.memberName !== undefined) updateInput.memberName = userData.memberName;
+      if (userData.twitterUsername !== undefined) updateInput.twitterUsername = userData.twitterUsername;
+      if (userData.telegramUsername !== undefined) updateInput.telegramUsername = userData.telegramUsername;
       
+      console.log('updateInput', updateInput);
+      console.log('userId', userId);
       const response = await apiClient.updateUser(userId, updateInput);
       return response || null;
     } catch (error) {

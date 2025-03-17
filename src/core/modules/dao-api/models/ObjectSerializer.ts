@@ -1,11 +1,13 @@
 export * from '../models/ChallengeRequest';
 export * from '../models/ChallengeResponse';
-export * from '../models/CreateDiscordChannel';
+export * from '../models/ConnectionResponse';
+export * from '../models/ConnectionsList';
 export * from '../models/DAO';
 export * from '../models/DAOMembership';
 export * from '../models/DAOMembershipResponse';
 export * from '../models/DAOSchemaResponse';
 export * from '../models/DAOUpdate';
+export * from '../models/DisconnectResponse';
 export * from '../models/DiscordChannel';
 export * from '../models/DiscordChannelResponse';
 export * from '../models/DiscordChannelsResponse';
@@ -19,6 +21,8 @@ export * from '../models/LinkDiscordChannel';
 export * from '../models/LoginResponse';
 export * from '../models/LogoutResponse';
 export * from '../models/ModelError';
+export * from '../models/OAuthError';
+export * from '../models/OAuthResponse';
 export * from '../models/POD';
 export * from '../models/PODMembership';
 export * from '../models/PODMembershipResponse';
@@ -26,6 +30,8 @@ export * from '../models/PODSchemaResponse';
 export * from '../models/PODUpdate';
 export * from '../models/PaginationMetadata';
 export * from '../models/PagingError';
+export * from '../models/SocialConnection';
+export * from '../models/TelegramAuth';
 export * from '../models/Token';
 export * from '../models/TokenCreate';
 export * from '../models/TokenSchemaResponse';
@@ -34,21 +40,23 @@ export * from '../models/TransferCreate';
 export * from '../models/TransferSchemaResponse';
 export * from '../models/Treasury';
 export * from '../models/TreasuryUpdatePercentages';
-export * from '../models/UpdateDiscordChannel';
 export * from '../models/User';
 export * from '../models/UserBasic';
 export * from '../models/UserExistResponse';
+export * from '../models/UserInfoError';
 export * from '../models/UserResponse';
 export * from '../models/VerifySignature';
 
 import { ChallengeRequest } from '../models/ChallengeRequest';
 import { ChallengeResponse } from '../models/ChallengeResponse';
-import { CreateDiscordChannel } from '../models/CreateDiscordChannel';
+import { ConnectionResponse } from '../models/ConnectionResponse';
+import { ConnectionsList } from '../models/ConnectionsList';
 import { DAO } from '../models/DAO';
 import { DAOMembership } from '../models/DAOMembership';
 import { DAOMembershipResponse } from '../models/DAOMembershipResponse';
 import { DAOSchemaResponse } from '../models/DAOSchemaResponse';
 import { DAOUpdate } from '../models/DAOUpdate';
+import { DisconnectResponse } from '../models/DisconnectResponse';
 import { DiscordChannel } from '../models/DiscordChannel';
 import { DiscordChannelResponse } from '../models/DiscordChannelResponse';
 import { DiscordChannelsResponse } from '../models/DiscordChannelsResponse';
@@ -62,6 +70,8 @@ import { LinkDiscordChannel } from '../models/LinkDiscordChannel';
 import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
+import { OAuthError } from '../models/OAuthError';
+import { OAuthResponse } from '../models/OAuthResponse';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
 import { PODMembershipResponse } from '../models/PODMembershipResponse';
@@ -69,6 +79,8 @@ import { PODSchemaResponse } from '../models/PODSchemaResponse';
 import { PODUpdate } from '../models/PODUpdate';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
+import { SocialConnection } from '../models/SocialConnection';
+import { TelegramAuth } from '../models/TelegramAuth';
 import { Token } from '../models/Token';
 import { TokenCreate } from '../models/TokenCreate';
 import { TokenSchemaResponse } from '../models/TokenSchemaResponse';
@@ -77,10 +89,10 @@ import { TransferCreate } from '../models/TransferCreate';
 import { TransferSchemaResponse } from '../models/TransferSchemaResponse';
 import { Treasury } from '../models/Treasury';
 import { TreasuryUpdatePercentages } from '../models/TreasuryUpdatePercentages';
-import { UpdateDiscordChannel } from '../models/UpdateDiscordChannel';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
 import { UserExistResponse } from '../models/UserExistResponse';
+import { UserInfoError } from '../models/UserInfoError';
 import { UserResponse } from '../models/UserResponse';
 import { VerifySignature } from '../models/VerifySignature';
 
@@ -102,12 +114,14 @@ let enumsMap: Set<string> = new Set<string>([
 let typeMap: {[index: string]: any} = {
     "ChallengeRequest": ChallengeRequest,
     "ChallengeResponse": ChallengeResponse,
-    "CreateDiscordChannel": CreateDiscordChannel,
+    "ConnectionResponse": ConnectionResponse,
+    "ConnectionsList": ConnectionsList,
     "DAO": DAO,
     "DAOMembership": DAOMembership,
     "DAOMembershipResponse": DAOMembershipResponse,
     "DAOSchemaResponse": DAOSchemaResponse,
     "DAOUpdate": DAOUpdate,
+    "DisconnectResponse": DisconnectResponse,
     "DiscordChannel": DiscordChannel,
     "DiscordChannelResponse": DiscordChannelResponse,
     "DiscordChannelsResponse": DiscordChannelsResponse,
@@ -121,6 +135,8 @@ let typeMap: {[index: string]: any} = {
     "LoginResponse": LoginResponse,
     "LogoutResponse": LogoutResponse,
     "ModelError": ModelError,
+    "OAuthError": OAuthError,
+    "OAuthResponse": OAuthResponse,
     "POD": POD,
     "PODMembership": PODMembership,
     "PODMembershipResponse": PODMembershipResponse,
@@ -128,6 +144,8 @@ let typeMap: {[index: string]: any} = {
     "PODUpdate": PODUpdate,
     "PaginationMetadata": PaginationMetadata,
     "PagingError": PagingError,
+    "SocialConnection": SocialConnection,
+    "TelegramAuth": TelegramAuth,
     "Token": Token,
     "TokenCreate": TokenCreate,
     "TokenSchemaResponse": TokenSchemaResponse,
@@ -136,10 +154,10 @@ let typeMap: {[index: string]: any} = {
     "TransferSchemaResponse": TransferSchemaResponse,
     "Treasury": Treasury,
     "TreasuryUpdatePercentages": TreasuryUpdatePercentages,
-    "UpdateDiscordChannel": UpdateDiscordChannel,
     "User": User,
     "UserBasic": UserBasic,
     "UserExistResponse": UserExistResponse,
+    "UserInfoError": UserInfoError,
     "UserResponse": UserResponse,
     "VerifySignature": VerifySignature,
 }

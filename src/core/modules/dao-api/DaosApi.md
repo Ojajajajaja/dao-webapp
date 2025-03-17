@@ -1297,6 +1297,7 @@ const request: DaosApiUpdatePODRequest = {
     name: "name_example",
     description: "description_example",
     isActive: true,
+    discordChannelId: "discordChannelId_example",
   },
 };
 

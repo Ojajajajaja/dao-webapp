@@ -4,12 +4,14 @@ import type { Middleware } from '../middleware';
 
 import { ChallengeRequest } from '../models/ChallengeRequest';
 import { ChallengeResponse } from '../models/ChallengeResponse';
-import { CreateDiscordChannel } from '../models/CreateDiscordChannel';
+import { ConnectionResponse } from '../models/ConnectionResponse';
+import { ConnectionsList } from '../models/ConnectionsList';
 import { DAO } from '../models/DAO';
 import { DAOMembership } from '../models/DAOMembership';
 import { DAOMembershipResponse } from '../models/DAOMembershipResponse';
 import { DAOSchemaResponse } from '../models/DAOSchemaResponse';
 import { DAOUpdate } from '../models/DAOUpdate';
+import { DisconnectResponse } from '../models/DisconnectResponse';
 import { DiscordChannel } from '../models/DiscordChannel';
 import { DiscordChannelResponse } from '../models/DiscordChannelResponse';
 import { DiscordChannelsResponse } from '../models/DiscordChannelsResponse';
@@ -23,6 +25,8 @@ import { LinkDiscordChannel } from '../models/LinkDiscordChannel';
 import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
+import { OAuthError } from '../models/OAuthError';
+import { OAuthResponse } from '../models/OAuthResponse';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
 import { PODMembershipResponse } from '../models/PODMembershipResponse';
@@ -30,6 +34,8 @@ import { PODSchemaResponse } from '../models/PODSchemaResponse';
 import { PODUpdate } from '../models/PODUpdate';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
+import { SocialConnection } from '../models/SocialConnection';
+import { TelegramAuth } from '../models/TelegramAuth';
 import { Token } from '../models/Token';
 import { TokenCreate } from '../models/TokenCreate';
 import { TokenSchemaResponse } from '../models/TokenSchemaResponse';
@@ -38,10 +44,10 @@ import { TransferCreate } from '../models/TransferCreate';
 import { TransferSchemaResponse } from '../models/TransferSchemaResponse';
 import { Treasury } from '../models/Treasury';
 import { TreasuryUpdatePercentages } from '../models/TreasuryUpdatePercentages';
-import { UpdateDiscordChannel } from '../models/UpdateDiscordChannel';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
 import { UserExistResponse } from '../models/UserExistResponse';
+import { UserInfoError } from '../models/UserInfoError';
 import { UserResponse } from '../models/UserResponse';
 import { VerifySignature } from '../models/VerifySignature';
 
@@ -841,161 +847,170 @@ export class ObjectDaosApi {
 
 }
 
-import { ObservableDiscordApi } from "./ObservableAPI";
-import { DiscordApiRequestFactory, DiscordApiResponseProcessor} from "../apis/DiscordApi";
+import { ObservableDiscordOauthApi } from "./ObservableAPI";
+import { DiscordOauthApiRequestFactory, DiscordOauthApiResponseProcessor} from "../apis/DiscordOauthApi";
 
-export interface DiscordApiCreateDiscordChannelRequest {
+export interface DiscordOauthApiConnectDiscordRequest {
+}
+
+export interface DiscordOauthApiDisconnectDiscordRequest {
+}
+
+export interface DiscordOauthApiDiscordCallbackRequest {
+}
+
+export class ObjectDiscordOauthApi {
+    private api: ObservableDiscordOauthApi
+
+    public constructor(configuration: Configuration, requestFactory?: DiscordOauthApiRequestFactory, responseProcessor?: DiscordOauthApiResponseProcessor) {
+        this.api = new ObservableDiscordOauthApi(configuration, requestFactory, responseProcessor);
+    }
+
+    /**
+     * Redirects the user to Discord\'s authorization page to begin the OAuth flow.
+     * Initiate Discord OAuth flow
+     * @param param the request object
+     */
+    public connectDiscordWithHttpInfo(param: DiscordOauthApiConnectDiscordRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<OAuthResponse>> {
+        return this.api.connectDiscordWithHttpInfo( options).toPromise();
+    }
+
+    /**
+     * Redirects the user to Discord\'s authorization page to begin the OAuth flow.
+     * Initiate Discord OAuth flow
+     * @param param the request object
+     */
+    public connectDiscord(param: DiscordOauthApiConnectDiscordRequest = {}, options?: ConfigurationOptions): Promise<OAuthResponse> {
+        return this.api.connectDiscord( options).toPromise();
+    }
+
+    /**
+     * Removes the connection between the user\'s account and their Discord account.
+     * Disconnect Discord account
+     * @param param the request object
+     */
+    public disconnectDiscordWithHttpInfo(param: DiscordOauthApiDisconnectDiscordRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<DisconnectResponse>> {
+        return this.api.disconnectDiscordWithHttpInfo( options).toPromise();
+    }
+
+    /**
+     * Removes the connection between the user\'s account and their Discord account.
+     * Disconnect Discord account
+     * @param param the request object
+     */
+    public disconnectDiscord(param: DiscordOauthApiDisconnectDiscordRequest = {}, options?: ConfigurationOptions): Promise<DisconnectResponse> {
+        return this.api.disconnectDiscord( options).toPromise();
+    }
+
+    /**
+     * Processes the callback from Discord after user authorization.
+     * Handle Discord OAuth callback
+     * @param param the request object
+     */
+    public discordCallbackWithHttpInfo(param: DiscordOauthApiDiscordCallbackRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<void>> {
+        return this.api.discordCallbackWithHttpInfo( options).toPromise();
+    }
+
+    /**
+     * Processes the callback from Discord after user authorization.
+     * Handle Discord OAuth callback
+     * @param param the request object
+     */
+    public discordCallback(param: DiscordOauthApiDiscordCallbackRequest = {}, options?: ConfigurationOptions): Promise<void> {
+        return this.api.discordCallback( options).toPromise();
+    }
+
+}
+
+import { ObservableSocialConnectionsApi } from "./ObservableAPI";
+import { SocialConnectionsApiRequestFactory, SocialConnectionsApiResponseProcessor} from "../apis/SocialConnectionsApi";
+
+export interface SocialConnectionsApiGetSocialConnectionsRequest {
+}
+
+export class ObjectSocialConnectionsApi {
+    private api: ObservableSocialConnectionsApi
+
+    public constructor(configuration: Configuration, requestFactory?: SocialConnectionsApiRequestFactory, responseProcessor?: SocialConnectionsApiResponseProcessor) {
+        this.api = new ObservableSocialConnectionsApi(configuration, requestFactory, responseProcessor);
+    }
+
+    /**
+     * Returns all social connections for the authenticated user.
+     * Get user\'s social connections
+     * @param param the request object
+     */
+    public getSocialConnectionsWithHttpInfo(param: SocialConnectionsApiGetSocialConnectionsRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<ConnectionsList>> {
+        return this.api.getSocialConnectionsWithHttpInfo( options).toPromise();
+    }
+
+    /**
+     * Returns all social connections for the authenticated user.
+     * Get user\'s social connections
+     * @param param the request object
+     */
+    public getSocialConnections(param: SocialConnectionsApiGetSocialConnectionsRequest = {}, options?: ConfigurationOptions): Promise<ConnectionsList> {
+        return this.api.getSocialConnections( options).toPromise();
+    }
+
+}
+
+import { ObservableTelegramAuthApi } from "./ObservableAPI";
+import { TelegramAuthApiRequestFactory, TelegramAuthApiResponseProcessor} from "../apis/TelegramAuthApi";
+
+export interface TelegramAuthApiDisconnectTelegramRequest {
+}
+
+export interface TelegramAuthApiTelegramCallbackRequest {
     /**
      * 
-     * @type CreateDiscordChannel
-     * @memberof DiscordApicreateDiscordChannel
+     * @type TelegramAuth
+     * @memberof TelegramAuthApitelegramCallback
      */
-    createDiscordChannel: CreateDiscordChannel
+    telegramAuth: TelegramAuth
 }
 
-export interface DiscordApiDeleteDiscordChannelRequest {
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DiscordApideleteDiscordChannel
-     */
-    channelId: string
-}
+export class ObjectTelegramAuthApi {
+    private api: ObservableTelegramAuthApi
 
-export interface DiscordApiGetAllDiscordChannelsRequest {
-}
-
-export interface DiscordApiGetDiscordChannelRequest {
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DiscordApigetDiscordChannel
-     */
-    channelId: string
-}
-
-export interface DiscordApiGetUnlinkedDiscordChannelsRequest {
-}
-
-export interface DiscordApiUpdateDiscordChannelRequest {
-    /**
-     * 
-     * Defaults to: undefined
-     * @type string
-     * @memberof DiscordApiupdateDiscordChannel
-     */
-    channelId: string
-    /**
-     * 
-     * @type UpdateDiscordChannel
-     * @memberof DiscordApiupdateDiscordChannel
-     */
-    updateDiscordChannel: UpdateDiscordChannel
-}
-
-export class ObjectDiscordApi {
-    private api: ObservableDiscordApi
-
-    public constructor(configuration: Configuration, requestFactory?: DiscordApiRequestFactory, responseProcessor?: DiscordApiResponseProcessor) {
-        this.api = new ObservableDiscordApi(configuration, requestFactory, responseProcessor);
+    public constructor(configuration: Configuration, requestFactory?: TelegramAuthApiRequestFactory, responseProcessor?: TelegramAuthApiResponseProcessor) {
+        this.api = new ObservableTelegramAuthApi(configuration, requestFactory, responseProcessor);
     }
 
     /**
-     * Create a new Discord channel in the system
+     * Removes the connection between the user\'s account and their Telegram account.
+     * Disconnect Telegram account
      * @param param the request object
      */
-    public createDiscordChannelWithHttpInfo(param: DiscordApiCreateDiscordChannelRequest, options?: ConfigurationOptions): Promise<HttpInfo<DiscordChannelResponse>> {
-        return this.api.createDiscordChannelWithHttpInfo(param.createDiscordChannel,  options).toPromise();
+    public disconnectTelegramWithHttpInfo(param: TelegramAuthApiDisconnectTelegramRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<DisconnectResponse>> {
+        return this.api.disconnectTelegramWithHttpInfo( options).toPromise();
     }
 
     /**
-     * Create a new Discord channel in the system
+     * Removes the connection between the user\'s account and their Telegram account.
+     * Disconnect Telegram account
      * @param param the request object
      */
-    public createDiscordChannel(param: DiscordApiCreateDiscordChannelRequest, options?: ConfigurationOptions): Promise<DiscordChannelResponse> {
-        return this.api.createDiscordChannel(param.createDiscordChannel,  options).toPromise();
+    public disconnectTelegram(param: TelegramAuthApiDisconnectTelegramRequest = {}, options?: ConfigurationOptions): Promise<DisconnectResponse> {
+        return this.api.disconnectTelegram( options).toPromise();
     }
 
     /**
-     * Delete a Discord channel
+     * Handles the authentication data from the Telegram Login Widget.
+     * Process Telegram authentication data
      * @param param the request object
      */
-    public deleteDiscordChannelWithHttpInfo(param: DiscordApiDeleteDiscordChannelRequest, options?: ConfigurationOptions): Promise<HttpInfo<DiscordChannelResponse>> {
-        return this.api.deleteDiscordChannelWithHttpInfo(param.channelId,  options).toPromise();
+    public telegramCallbackWithHttpInfo(param: TelegramAuthApiTelegramCallbackRequest, options?: ConfigurationOptions): Promise<HttpInfo<ConnectionResponse>> {
+        return this.api.telegramCallbackWithHttpInfo(param.telegramAuth,  options).toPromise();
     }
 
     /**
-     * Delete a Discord channel
+     * Handles the authentication data from the Telegram Login Widget.
+     * Process Telegram authentication data
      * @param param the request object
      */
-    public deleteDiscordChannel(param: DiscordApiDeleteDiscordChannelRequest, options?: ConfigurationOptions): Promise<DiscordChannelResponse> {
-        return this.api.deleteDiscordChannel(param.channelId,  options).toPromise();
-    }
-
-    /**
-     * Get all Discord channels
-     * @param param the request object
-     */
-    public getAllDiscordChannelsWithHttpInfo(param: DiscordApiGetAllDiscordChannelsRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<DiscordChannelsResponse>> {
-        return this.api.getAllDiscordChannelsWithHttpInfo( options).toPromise();
-    }
-
-    /**
-     * Get all Discord channels
-     * @param param the request object
-     */
-    public getAllDiscordChannels(param: DiscordApiGetAllDiscordChannelsRequest = {}, options?: ConfigurationOptions): Promise<DiscordChannelsResponse> {
-        return this.api.getAllDiscordChannels( options).toPromise();
-    }
-
-    /**
-     * Get a specific Discord channel
-     * @param param the request object
-     */
-    public getDiscordChannelWithHttpInfo(param: DiscordApiGetDiscordChannelRequest, options?: ConfigurationOptions): Promise<HttpInfo<DiscordChannelResponse>> {
-        return this.api.getDiscordChannelWithHttpInfo(param.channelId,  options).toPromise();
-    }
-
-    /**
-     * Get a specific Discord channel
-     * @param param the request object
-     */
-    public getDiscordChannel(param: DiscordApiGetDiscordChannelRequest, options?: ConfigurationOptions): Promise<DiscordChannelResponse> {
-        return this.api.getDiscordChannel(param.channelId,  options).toPromise();
-    }
-
-    /**
-     * Get all Discord channels that are not linked to any POD
-     * @param param the request object
-     */
-    public getUnlinkedDiscordChannelsWithHttpInfo(param: DiscordApiGetUnlinkedDiscordChannelsRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<DiscordChannelsResponse>> {
-        return this.api.getUnlinkedDiscordChannelsWithHttpInfo( options).toPromise();
-    }
-
-    /**
-     * Get all Discord channels that are not linked to any POD
-     * @param param the request object
-     */
-    public getUnlinkedDiscordChannels(param: DiscordApiGetUnlinkedDiscordChannelsRequest = {}, options?: ConfigurationOptions): Promise<DiscordChannelsResponse> {
-        return this.api.getUnlinkedDiscordChannels( options).toPromise();
-    }
-
-    /**
-     * Update a Discord channel
-     * @param param the request object
-     */
-    public updateDiscordChannelWithHttpInfo(param: DiscordApiUpdateDiscordChannelRequest, options?: ConfigurationOptions): Promise<HttpInfo<DiscordChannelResponse>> {
-        return this.api.updateDiscordChannelWithHttpInfo(param.channelId, param.updateDiscordChannel,  options).toPromise();
-    }
-
-    /**
-     * Update a Discord channel
-     * @param param the request object
-     */
-    public updateDiscordChannel(param: DiscordApiUpdateDiscordChannelRequest, options?: ConfigurationOptions): Promise<DiscordChannelResponse> {
-        return this.api.updateDiscordChannel(param.channelId, param.updateDiscordChannel,  options).toPromise();
+    public telegramCallback(param: TelegramAuthApiTelegramCallbackRequest, options?: ConfigurationOptions): Promise<ConnectionResponse> {
+        return this.api.telegramCallback(param.telegramAuth,  options).toPromise();
     }
 
 }
@@ -1176,6 +1191,81 @@ export class ObjectTreasuryApi {
      */
     public updateDAOTokenPercentages(param: TreasuryApiUpdateDAOTokenPercentagesRequest, options?: ConfigurationOptions): Promise<TreasuryUpdatePercentages> {
         return this.api.updateDAOTokenPercentages(param.daoId,  options).toPromise();
+    }
+
+}
+
+import { ObservableTwitterOauthApi } from "./ObservableAPI";
+import { TwitterOauthApiRequestFactory, TwitterOauthApiResponseProcessor} from "../apis/TwitterOauthApi";
+
+export interface TwitterOauthApiConnectTwitterRequest {
+}
+
+export interface TwitterOauthApiDisconnectTwitterRequest {
+}
+
+export interface TwitterOauthApiTwitterCallbackRequest {
+}
+
+export class ObjectTwitterOauthApi {
+    private api: ObservableTwitterOauthApi
+
+    public constructor(configuration: Configuration, requestFactory?: TwitterOauthApiRequestFactory, responseProcessor?: TwitterOauthApiResponseProcessor) {
+        this.api = new ObservableTwitterOauthApi(configuration, requestFactory, responseProcessor);
+    }
+
+    /**
+     * Redirects the user to Twitter\'s authorization page to begin the OAuth 2.0 PKCE flow.
+     * Initiate Twitter OAuth flow
+     * @param param the request object
+     */
+    public connectTwitterWithHttpInfo(param: TwitterOauthApiConnectTwitterRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<OAuthResponse>> {
+        return this.api.connectTwitterWithHttpInfo( options).toPromise();
+    }
+
+    /**
+     * Redirects the user to Twitter\'s authorization page to begin the OAuth 2.0 PKCE flow.
+     * Initiate Twitter OAuth flow
+     * @param param the request object
+     */
+    public connectTwitter(param: TwitterOauthApiConnectTwitterRequest = {}, options?: ConfigurationOptions): Promise<OAuthResponse> {
+        return this.api.connectTwitter( options).toPromise();
+    }
+
+    /**
+     * Removes the connection between the user\'s account and their Twitter account.
+     * Disconnect Twitter account
+     * @param param the request object
+     */
+    public disconnectTwitterWithHttpInfo(param: TwitterOauthApiDisconnectTwitterRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<DisconnectResponse>> {
+        return this.api.disconnectTwitterWithHttpInfo( options).toPromise();
+    }
+
+    /**
+     * Removes the connection between the user\'s account and their Twitter account.
+     * Disconnect Twitter account
+     * @param param the request object
+     */
+    public disconnectTwitter(param: TwitterOauthApiDisconnectTwitterRequest = {}, options?: ConfigurationOptions): Promise<DisconnectResponse> {
+        return this.api.disconnectTwitter( options).toPromise();
+    }
+
+    /**
+     * Processes the callback from Twitter after user authorization.
+     * Handle Twitter OAuth callback
+     * @param param the request object
+     */
+    public twitterCallbackWithHttpInfo(param: TwitterOauthApiTwitterCallbackRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<void>> {
+        return this.api.twitterCallbackWithHttpInfo( options).toPromise();
+    }
+
+    /**
+     * Processes the callback from Twitter after user authorization.
+     * Handle Twitter OAuth callback
+     * @param param the request object
+     */
+    public twitterCallback(param: TwitterOauthApiTwitterCallbackRequest = {}, options?: ConfigurationOptions): Promise<void> {
+        return this.api.twitterCallback( options).toPromise();
     }
 
 }
