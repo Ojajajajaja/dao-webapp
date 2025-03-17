@@ -23,7 +23,12 @@ const Dashboard = () => {
   const handleSectionChange = (section: string) => {
     // If navigating to profile, go to standalone profile page
     if (section === 'profile') {
-      navigate('/profile');
+      // Store the current path for context-aware navigation
+      const currentPath = window.location.pathname;
+      sessionStorage.setItem('previousPath', currentPath);
+      
+      // Navigate to profile with state containing the source path
+      navigate('/profile', { state: { from: currentPath } });
       return;
     }
     
