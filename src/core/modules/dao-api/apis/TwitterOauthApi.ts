@@ -10,6 +10,7 @@ import {SecurityAuthentication} from '../auth/auth';
 
 import { DisconnectResponse } from '../models/DisconnectResponse';
 import { OAuthError } from '../models/OAuthError';
+import { OAuthResponse } from '../models/OAuthResponse';
 import { UserInfoError } from '../models/UserInfoError';
 
 /**
@@ -100,10 +101,14 @@ export class TwitterOauthApiResponseProcessor {
      * @params response Response returned by the server for a request to connectTwitter
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async connectTwitterWithHttpInfo(response: ResponseContext): Promise<HttpInfo< void>> {
+     public async connectTwitterWithHttpInfo(response: ResponseContext): Promise<HttpInfo<OAuthResponse >> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
-        if (isCodeInRange("302", response.httpStatusCode)) {
-            throw new ApiException<undefined>(response.httpStatusCode, "Redirect to Twitter authorization page", undefined, response.headers);
+        if (isCodeInRange("200", response.httpStatusCode)) {
+            const body: OAuthResponse = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "OAuthResponse", ""
+            ) as OAuthResponse;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
         if (isCodeInRange("401", response.httpStatusCode)) {
             const body: OAuthError = ObjectSerializer.deserialize(
@@ -122,7 +127,11 @@ export class TwitterOauthApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            return new HttpInfo(response.httpStatusCode, response.headers, response.body, undefined);
+            const body: OAuthResponse = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "OAuthResponse", ""
+            ) as OAuthResponse;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 
         throw new ApiException<string | Blob | undefined>(response.httpStatusCode, "Unknown API Status Code!", await response.getBodyAsAny(), response.headers);

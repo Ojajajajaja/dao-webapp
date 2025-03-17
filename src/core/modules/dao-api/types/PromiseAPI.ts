@@ -26,6 +26,7 @@ import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
 import { OAuthError } from '../models/OAuthError';
+import { OAuthResponse } from '../models/OAuthResponse';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
 import { PODMembershipResponse } from '../models/PODMembershipResponse';
@@ -1193,7 +1194,7 @@ export class PromiseDiscordOauthApi {
      * Redirects the user to Discord\'s authorization page to begin the OAuth flow.
      * Initiate Discord OAuth flow
      */
-    public connectDiscordWithHttpInfo(_options?: PromiseConfigurationOptions): Promise<HttpInfo<void>> {
+    public connectDiscordWithHttpInfo(_options?: PromiseConfigurationOptions): Promise<HttpInfo<OAuthResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1214,7 +1215,7 @@ export class PromiseDiscordOauthApi {
      * Redirects the user to Discord\'s authorization page to begin the OAuth flow.
      * Initiate Discord OAuth flow
      */
-    public connectDiscord(_options?: PromiseConfigurationOptions): Promise<void> {
+    public connectDiscord(_options?: PromiseConfigurationOptions): Promise<OAuthResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1779,7 +1780,7 @@ export class PromiseTwitterOauthApi {
      * Redirects the user to Twitter\'s authorization page to begin the OAuth 2.0 PKCE flow.
      * Initiate Twitter OAuth flow
      */
-    public connectTwitterWithHttpInfo(_options?: PromiseConfigurationOptions): Promise<HttpInfo<void>> {
+    public connectTwitterWithHttpInfo(_options?: PromiseConfigurationOptions): Promise<HttpInfo<OAuthResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1800,7 +1801,7 @@ export class PromiseTwitterOauthApi {
      * Redirects the user to Twitter\'s authorization page to begin the OAuth 2.0 PKCE flow.
      * Initiate Twitter OAuth flow
      */
-    public connectTwitter(_options?: PromiseConfigurationOptions): Promise<void> {
+    public connectTwitter(_options?: PromiseConfigurationOptions): Promise<OAuthResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {

@@ -50,6 +50,7 @@ models/LoginResponse.ts
 models/LogoutResponse.ts
 models/ModelError.ts
 models/OAuthError.ts
+models/OAuthResponse.ts
 models/ObjectSerializer.ts
 models/POD.ts
 models/PODMembership.ts

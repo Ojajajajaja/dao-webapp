@@ -27,6 +27,7 @@ import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
 import { OAuthError } from '../models/OAuthError';
+import { OAuthResponse } from '../models/OAuthResponse';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
 import { PODMembershipResponse } from '../models/PODMembershipResponse';
@@ -1645,7 +1646,7 @@ export class ObservableDiscordOauthApi {
      * Redirects the user to Discord\'s authorization page to begin the OAuth flow.
      * Initiate Discord OAuth flow
      */
-    public connectDiscordWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<void>> {
+    public connectDiscordWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<OAuthResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1697,8 +1698,8 @@ export class ObservableDiscordOauthApi {
      * Redirects the user to Discord\'s authorization page to begin the OAuth flow.
      * Initiate Discord OAuth flow
      */
-    public connectDiscord(_options?: ConfigurationOptions): Observable<void> {
-        return this.connectDiscordWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<void>) => apiResponse.data));
+    public connectDiscord(_options?: ConfigurationOptions): Observable<OAuthResponse> {
+        return this.connectDiscordWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<OAuthResponse>) => apiResponse.data));
     }
 
     /**
@@ -2443,7 +2444,7 @@ export class ObservableTwitterOauthApi {
      * Redirects the user to Twitter\'s authorization page to begin the OAuth 2.0 PKCE flow.
      * Initiate Twitter OAuth flow
      */
-    public connectTwitterWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<void>> {
+    public connectTwitterWithHttpInfo(_options?: ConfigurationOptions): Observable<HttpInfo<OAuthResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -2495,8 +2496,8 @@ export class ObservableTwitterOauthApi {
      * Redirects the user to Twitter\'s authorization page to begin the OAuth 2.0 PKCE flow.
      * Initiate Twitter OAuth flow
      */
-    public connectTwitter(_options?: ConfigurationOptions): Observable<void> {
-        return this.connectTwitterWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<void>) => apiResponse.data));
+    public connectTwitter(_options?: ConfigurationOptions): Observable<OAuthResponse> {
+        return this.connectTwitterWithHttpInfo(_options).pipe(map((apiResponse: HttpInfo<OAuthResponse>) => apiResponse.data));
     }
 
     /**

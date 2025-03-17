@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 
 # **connectTwitter**
-> connectTwitter()
+> OAuthResponse connectTwitter()
 
 Redirects the user to Twitter\'s authorization page to begin the OAuth 2.0 PKCE flow.
 
@@ -36,7 +36,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-void (empty response body)
+**OAuthResponse**
 
 ### Authorization
 
@@ -51,7 +51,7 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**302** | Redirect to Twitter authorization page |  -  |
+**200** | Redirect to Twitter authorization page |  -  |
 **401** | Unauthorized |  -  |
 **0** | Default error response |  -  |
 

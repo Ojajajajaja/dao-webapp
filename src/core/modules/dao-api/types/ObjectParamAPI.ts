@@ -26,6 +26,7 @@ import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
 import { OAuthError } from '../models/OAuthError';
+import { OAuthResponse } from '../models/OAuthResponse';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
 import { PODMembershipResponse } from '../models/PODMembershipResponse';
@@ -870,7 +871,7 @@ export class ObjectDiscordOauthApi {
      * Initiate Discord OAuth flow
      * @param param the request object
      */
-    public connectDiscordWithHttpInfo(param: DiscordOauthApiConnectDiscordRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<void>> {
+    public connectDiscordWithHttpInfo(param: DiscordOauthApiConnectDiscordRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<OAuthResponse>> {
         return this.api.connectDiscordWithHttpInfo( options).toPromise();
     }
 
@@ -879,7 +880,7 @@ export class ObjectDiscordOauthApi {
      * Initiate Discord OAuth flow
      * @param param the request object
      */
-    public connectDiscord(param: DiscordOauthApiConnectDiscordRequest = {}, options?: ConfigurationOptions): Promise<void> {
+    public connectDiscord(param: DiscordOauthApiConnectDiscordRequest = {}, options?: ConfigurationOptions): Promise<OAuthResponse> {
         return this.api.connectDiscord( options).toPromise();
     }
 
@@ -1218,7 +1219,7 @@ export class ObjectTwitterOauthApi {
      * Initiate Twitter OAuth flow
      * @param param the request object
      */
-    public connectTwitterWithHttpInfo(param: TwitterOauthApiConnectTwitterRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<void>> {
+    public connectTwitterWithHttpInfo(param: TwitterOauthApiConnectTwitterRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<OAuthResponse>> {
         return this.api.connectTwitterWithHttpInfo( options).toPromise();
     }
 
@@ -1227,7 +1228,7 @@ export class ObjectTwitterOauthApi {
      * Initiate Twitter OAuth flow
      * @param param the request object
      */
-    public connectTwitter(param: TwitterOauthApiConnectTwitterRequest = {}, options?: ConfigurationOptions): Promise<void> {
+    public connectTwitter(param: TwitterOauthApiConnectTwitterRequest = {}, options?: ConfigurationOptions): Promise<OAuthResponse> {
         return this.api.connectTwitter( options).toPromise();
     }
 

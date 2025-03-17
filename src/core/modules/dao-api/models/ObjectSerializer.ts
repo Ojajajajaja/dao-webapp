@@ -22,6 +22,7 @@ export * from '../models/LoginResponse';
 export * from '../models/LogoutResponse';
 export * from '../models/ModelError';
 export * from '../models/OAuthError';
+export * from '../models/OAuthResponse';
 export * from '../models/POD';
 export * from '../models/PODMembership';
 export * from '../models/PODMembershipResponse';
@@ -70,6 +71,7 @@ import { LoginResponse } from '../models/LoginResponse';
 import { LogoutResponse } from '../models/LogoutResponse';
 import { ModelError } from '../models/ModelError';
 import { OAuthError } from '../models/OAuthError';
+import { OAuthResponse } from '../models/OAuthResponse';
 import { POD } from '../models/POD';
 import { PODMembership } from '../models/PODMembership';
 import { PODMembershipResponse } from '../models/PODMembershipResponse';
@@ -134,6 +136,7 @@ let typeMap: {[index: string]: any} = {
     "LogoutResponse": LogoutResponse,
     "ModelError": ModelError,
     "OAuthError": OAuthError,
+    "OAuthResponse": OAuthResponse,
     "POD": POD,
     "PODMembership": PODMembership,
     "PODMembershipResponse": PODMembershipResponse,
