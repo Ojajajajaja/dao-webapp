@@ -6,6 +6,7 @@ import Home from './components/Home';
 import Governance from './components/Governance';
 import Pods from './components/Pods';
 import Members from './components/Members';
+import Treasury from './components/Treasury';
 import ProfilePage from './components/ProfilePage';
 import LandingPage from './components/LandingPage';
 import { useEffectOnce } from './hooks/useEffectOnce';
@@ -50,6 +51,9 @@ const Dashboard = () => {
           break;
         case 'members':
           setCurrentComponent(<Members />);
+          break;
+        case 'treasury':
+          setCurrentComponent(<Treasury />);
           break;
         case 'home':
           setCurrentComponent(<Home />);
