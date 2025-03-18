@@ -26,3 +26,9 @@ dist-ssr
 .specstory
 .cursor
 vite.config.ts
+solana-dao-program/
+
+dao-treasury-cli/
+dao-treasury-cli.ts
+dao-treasury-package.json
+setup-treasury-cli.sh
