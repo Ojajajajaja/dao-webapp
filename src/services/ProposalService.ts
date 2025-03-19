@@ -180,9 +180,9 @@ export class ProposalService {
 
       // Map our vote values to what the API expects
       const voteRequestVoteEnum = {
-        'for': 'FOR',
-        'against': 'AGAINST',
-        'abstain': 'ABSTAIN'
+        'for': 'for',
+        'against': 'against',
+        'abstain': 'abstain'
       }[vote];
 
       // Create vote request object with the correct enum value
