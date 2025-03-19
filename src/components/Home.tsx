@@ -243,46 +243,71 @@ const NetworkVisualization = ({ memberLocations }: { memberLocations: {[key: str
     
     // Draw zoom controls - clearly visible and labeled
     const drawZoomControls = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
-      const buttonSize = 30;
-      const margin = 20;
+      const buttonSize = 24; // Smaller buttons
+      const margin = 16;
       const buttonY = height - margin - buttonSize;
+      const spacing = 8; // Space between buttons
       
-      // Zoom in button
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+      // Create a semi-transparent background for controls
+      const controlWidth = 3 * buttonSize + 2 * spacing + 10;
+      const controlHeight = buttonSize + 5;
+      const controlX = width - margin - controlWidth;
+      
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
       ctx.beginPath();
-      ctx.arc(width - margin - buttonSize/2, buttonY, buttonSize/2, 0, Math.PI * 2);
+      ctx.roundRect(controlX, buttonY - controlHeight/2, controlWidth, controlHeight, 12);
       ctx.fill();
       
+      // Zoom in button
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.beginPath();
+      ctx.arc(width - margin - buttonSize/2, buttonY, buttonSize/2 - 2, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(width - margin - buttonSize/2, buttonY, buttonSize/2 - 2, 0, Math.PI * 2);
+      ctx.stroke();
+      
       ctx.fillStyle = 'white';
-      ctx.font = '20px Arial';
+      ctx.font = '16px Arial';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText('+', width - margin - buttonSize/2, buttonY);
       
       // Zoom out button
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
       ctx.beginPath();
-      ctx.arc(width - margin - buttonSize/2 - buttonSize - 10, buttonY, buttonSize/2, 0, Math.PI * 2);
+      ctx.arc(width - margin - buttonSize/2 - buttonSize - spacing, buttonY, buttonSize/2 - 2, 0, Math.PI * 2);
       ctx.fill();
       
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(width - margin - buttonSize/2 - buttonSize - spacing, buttonY, buttonSize/2 - 2, 0, Math.PI * 2);
+      ctx.stroke();
+      
       ctx.fillStyle = 'white';
-      ctx.fillText('-', width - margin - buttonSize/2 - buttonSize - 10, buttonY);
+      ctx.fillText('-', width - margin - buttonSize/2 - buttonSize - spacing, buttonY);
       
       // Reset button
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
       ctx.beginPath();
-      ctx.arc(width - margin - buttonSize/2 - 2*buttonSize - 20, buttonY, buttonSize/2, 0, Math.PI * 2);
+      ctx.arc(width - margin - buttonSize/2 - 2*buttonSize - 2*spacing, buttonY, buttonSize/2 - 2, 0, Math.PI * 2);
       ctx.fill();
       
-      ctx.fillStyle = 'white';
-      ctx.font = '14px Arial';
-      ctx.fillText('R', width - margin - buttonSize/2 - 2*buttonSize - 20, buttonY);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(width - margin - buttonSize/2 - 2*buttonSize - 2*spacing, buttonY, buttonSize/2 - 2, 0, Math.PI * 2);
+      ctx.stroke();
       
-      // Add small text label about zooming
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.fillStyle = 'white';
       ctx.font = '12px Arial';
-      ctx.textAlign = 'right';
-      ctx.fillText('Zoom & Pan Available', width - margin, buttonY - buttonSize - 5);
+      ctx.fillText('R', width - margin - buttonSize/2 - 2*buttonSize - 2*spacing, buttonY);
+      
+      // Don't add the text label to make it cleaner
     };
     
     // Initial render
@@ -336,8 +361,9 @@ const NetworkVisualization = ({ memberLocations }: { memberLocations: {[key: str
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       
-      const buttonSize = 30;
-      const margin = 20;
+      const buttonSize = 24; // Match the size in drawZoomControls
+      const margin = 16;
+      const spacing = 8;
       const buttonY = height - margin - buttonSize;
       
       // Check if zoom in button was clicked
@@ -355,7 +381,7 @@ const NetworkVisualization = ({ memberLocations }: { memberLocations: {[key: str
       
       // Check if zoom out button was clicked
       const distZoomOut = Math.sqrt(
-        Math.pow(x - (width - margin - buttonSize/2 - buttonSize - 10), 2) + 
+        Math.pow(x - (width - margin - buttonSize/2 - buttonSize - spacing), 2) + 
         Math.pow(y - buttonY, 2)
       );
       
@@ -368,14 +394,32 @@ const NetworkVisualization = ({ memberLocations }: { memberLocations: {[key: str
       
       // Check if reset button was clicked
       const distReset = Math.sqrt(
-        Math.pow(x - (width - margin - buttonSize/2 - 2*buttonSize - 20), 2) + 
+        Math.pow(x - (width - margin - buttonSize/2 - 2*buttonSize - 2*spacing), 2) + 
         Math.pow(y - buttonY, 2)
       );
       
       if (distReset < buttonSize/2) {
+        // Fix for reset functionality - immediately apply the changes
         setZoom(1);
         setOffset({ x: 0, y: 0 });
-        requestAnimationFrame(render);
+        // Force immediate render rather than waiting for state updates
+        setTimeout(() => {
+          // We use setTimeout to ensure state changes have been applied
+          if (canvasRef.current) {
+            ctx.save();
+            ctx.clearRect(0, 0, width, height);
+            
+            // Reset transformations
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            
+            // Set dark blue background
+            ctx.fillStyle = 'rgb(13, 15, 30)';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Render with reset values
+            render();
+          }
+        }, 0);
         return;
       }
     };
