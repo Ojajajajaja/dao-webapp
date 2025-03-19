@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Check, AlertTriangle, ThumbsUp, ThumbsDown, Users, Calendar, Clock, Minus, Wallet, UserMinus, ArrowUpRight } from 'lucide-react';
+import { proposalService } from '../services/ProposalService';
 
 interface ProposalAction {
   type: string;
@@ -12,43 +13,69 @@ interface ProposalAction {
 interface ProposalVote {
   for: number;
   against: number;
+  abstain?: number;
 }
 
 interface ProposalDetails {
   id: string;
-  title: string;
+  name: string;
   description: string;
   status: string;
   creator: string;
   createdAt: string;
-  startDate: string;
-  endDate: string;
+  startTime: string;
+  endTime: string;
   votes: ProposalVote;
   actions: ProposalAction[];
   quorum: number;
   minApproval: number;
+  daoId?: string;
 }
 
 interface PopupProposalProps {
   proposal: ProposalDetails;
   onClose: () => void;
+  onVoteSubmitted?: () => void;
 }
 
-const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose }) => {
-  const [voteOption, setVoteOption] = useState<string | null>(null);
+const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVoteSubmitted }) => {
+  const [voteOption, setVoteOption] = useState<'for' | 'against' | 'abstain' | null>(null);
   const [isVoting, setIsVoting] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleVote = () => {
+  const handleVote = async () => {
     if (!voteOption) return;
+    if (!proposal.daoId) {
+      setError('Missing DAO ID. Cannot submit vote.');
+      return;
+    }
     
     setIsVoting(true);
+    setError(null);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Submit the vote using the proposal service
+      const success = await proposalService.voteOnProposal(
+        proposal.daoId,
+        proposal.id,
+        voteOption
+      );
+      
+      if (success) {
+        setHasVoted(true);
+        if (onVoteSubmitted) {
+          onVoteSubmitted();
+        }
+      } else {
+        setError('Failed to submit vote. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error voting on proposal:', err);
+      setError('An error occurred while voting. Please try again.');
+    } finally {
       setIsVoting(false);
-      setHasVoted(true);
-    }, 1500);
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -67,7 +94,7 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose }) => {
   };
 
   const calculateProgress = () => {
-    const total = proposal.votes.for + proposal.votes.against;
+    const total = (proposal.votes.for || 0) + (proposal.votes.against || 0) + (proposal.votes.abstain || 0);
     const forPercentage = total > 0 ? (proposal.votes.for / total) * 100 : 0;
     const againstPercentage = total > 0 ? (proposal.votes.against / total) * 100 : 0;
     
@@ -86,7 +113,7 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose }) => {
       <div className="bg-surface-menu rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
         <div className="flex justify-between items-center p-4 border-b border-gray-600">
           <div className="flex items-center">
-            <h2 className="text-xl font-semibold text-text">{proposal.title}</h2>
+            <h2 className="text-xl font-semibold text-text">{proposal.name}</h2>
             <span className={`ml-3 px-2 py-1 rounded-full text-xs ${getStatusColor(proposal.status)}`}>
               {proposal.status}
             </span>
@@ -106,7 +133,7 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose }) => {
                 <Calendar size={14} className="mr-1" />
                 <span className="text-xs">Start Date</span>
               </div>
-              <p className="text-text">{proposal.startDate}</p>
+              <p className="text-text">{proposal.startTime}</p>
             </div>
             
             <div className="bg-surface-200 p-3 rounded-md">
@@ -114,7 +141,7 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose }) => {
                 <Clock size={14} className="mr-1" />
                 <span className="text-xs">End Date</span>
               </div>
-              <p className="text-text">{proposal.endDate}</p>
+              <p className="text-text">{proposal.endTime}</p>
             </div>
             
             <div className="bg-surface-200 p-3 rounded-md">
@@ -209,6 +236,11 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose }) => {
               <Check size={18} className="mr-2" />
               Your vote has been recorded. Thank you for participating!
             </div>
+          ) : proposal.status.toLowerCase() !== 'active' ? (
+            <div className="bg-surface-200 p-3 rounded-md text-surface-500 flex items-center">
+              <AlertTriangle size={18} className="mr-2" />
+              Voting is not available for this proposal.
+            </div>
           ) : (
             <>
               <h3 className="text-lg font-medium text-text mb-3">Cast Your Vote</h3>
@@ -237,6 +269,12 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose }) => {
                   <span>Against</span>
                 </button>
               </div>
+              
+              {error && (
+                <div className="bg-red-900 text-error p-2 rounded-md mb-4 text-sm">
+                  {error}
+                </div>
+              )}
               
               <button
                 className={`w-full p-3 rounded-md font-medium ${
