@@ -846,24 +846,35 @@ const Dashboard = () => {
           )}
         </div>
         
-        <div className="bg-primary text-text rounded-lg shadow p-4">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-medium">Member Count</h3>
-            <Users className="text-text" size={20} />
+        <div className="bg-primary text-text rounded-lg shadow p-4 relative overflow-hidden border border-indigo-500/30">
+          {/* Add decorative background effects */}
+          <div className="absolute -top-10 -left-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-xl"></div>
+          <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-500/10 rounded-full blur-xl"></div>
+          
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-medium text-lg flex items-center bg-gradient-to-r from-indigo-200 to-purple-200 bg-clip-text text-transparent">
+                <Users className="text-indigo-400 mr-2" size={20} />
+                Member Distribution
+              </h3>
+              <div className="flex items-center space-x-2">
+                <div className="px-2 py-1 rounded-full bg-indigo-500/20 text-xs">
+                  {members.length || 1342} Members
+                </div>
+                <div className="px-2 py-1 rounded-full bg-green-500/20 text-xs text-green-400">
+                  +12 this week
+                </div>
+              </div>
+            </div>
           </div>
+          
           {membersLoading ? (
             <div className="flex items-center justify-center h-16">
               <Loader className="animate-spin text-text" size={24} />
             </div>
           ) : (
             <>
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="text-2xl font-bold">{members.length || 1342}</p>
-                  <p className="text-text text-sm">+12 this week</p>
-                </div>
-              </div>
-              <div className="h-[400px] mt-2 relative">
+              <div className="h-[400px] relative rounded-lg overflow-hidden border border-indigo-500/20 bg-[#0d0f1e]">
                 {Object.keys(memberLocations).length > 0 && (
                   <NetworkVisualization memberLocations={memberLocations} />
                 )}
