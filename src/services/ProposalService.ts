@@ -6,6 +6,8 @@
 import { createConfiguration, DaosApi, InputCreateProposal, ProposalsApi, Proposal as ApiProposal } from '../core/modules/dao-api';
 import { ServerConfiguration } from '../core/modules/dao-api/servers';
 import { walletAuthService } from './WalletAuthService';
+import { Connection, PublicKey, Transaction, Keypair } from '@solana/web3.js';
+import { createProposalTransaction, createVoteTransaction } from '../utils/solanaTransactions';
 
 // Default API endpoint - using the proxy URL
 const DEFAULT_API_ENDPOINT = '/api';
@@ -26,6 +28,7 @@ export class ProposalService {
   private apiEndpoint: string;
   private proposalsApi: ProposalsApi;
   private daosApi: DaosApi;
+  private connection: Connection | null = null;
 
   constructor(apiEndpoint: string = DEFAULT_API_ENDPOINT) {
     this.apiEndpoint = apiEndpoint;
@@ -39,6 +42,14 @@ export class ProposalService {
     // Initialize API clients
     this.proposalsApi = new ProposalsApi(configuration);
     this.daosApi = new DaosApi(configuration);
+  }
+
+  /**
+   * Initialize Solana connection
+   * @param endpoint Solana cluster endpoint
+   */
+  initializeSolanaConnection(endpoint: string): void {
+    this.connection = new Connection(endpoint);
   }
 
   /**
@@ -127,15 +138,64 @@ export class ProposalService {
   }
 
   /**
-   * Create a new proposal
+   * Create a transaction for proposal creation
+   * This is the first step of the two-step process - creating a Solana transaction
    */
-  async createProposal(daoId: string, proposalData: {
-    title: string;
-    description: string;
-    startDate?: Date;
-    endDate: Date;
-    actions?: any[];
-  }): Promise<ApiProposal | null> {
+  async createProposalTransaction(
+    daoId: string,
+    walletPublicKey: PublicKey,
+    proposalData: {
+      title: string;
+      description: string;
+      startDate?: Date;
+      endDate: Date;
+      actions?: any[];
+    }
+  ): Promise<{ transaction: Transaction, proposalAccount: Keypair } | null> {
+    if (!this.connection) {
+      console.error('Solana connection not initialized. Call initializeSolanaConnection first.');
+      return null;
+    }
+
+    try {
+      console.log(`Creating proposal transaction for DAO: ${daoId}`);
+      
+      const result = await createProposalTransaction(
+        this.connection,
+        walletPublicKey,
+        daoId,
+        {
+          title: proposalData.title,
+          description: proposalData.description,
+          startTime: proposalData.startDate || new Date(),
+          endTime: proposalData.endDate,
+          actions: proposalData.actions || [],
+        }
+      );
+
+      return result;
+    } catch (error) {
+      console.error('Error creating proposal transaction:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Create a new proposal
+   * This is the second step - after the transaction is signed and confirmed,
+   * we also update our API/database with the proposal details
+   */
+  async createProposal(
+    daoId: string,
+    proposalData: {
+      title: string;
+      description: string;
+      startDate?: Date;
+      endDate: Date;
+      actions?: any[];
+      transactionSignature?: string; // Optional signature from the Solana transaction
+    }
+  ): Promise<ApiProposal | null> {
     try {
       const apiClient = this.createAuthenticatedApiClient();
       if (!apiClient) return null;
@@ -164,9 +224,49 @@ export class ProposalService {
   }
 
   /**
-   * Vote on a proposal
+   * Create a transaction for voting on a proposal
+   * This is the first step of the two-step voting process
    */
-  async voteOnProposal(daoId: string, proposalId: string, vote: 'for' | 'against' | 'abstain'): Promise<boolean> {
+  async createVoteTransaction(
+    daoId: string,
+    proposalId: string,
+    walletPublicKey: PublicKey,
+    vote: 'for' | 'against' | 'abstain'
+  ): Promise<{ transaction: Transaction, voteAccount: Keypair } | null> {
+    if (!this.connection) {
+      console.error('Solana connection not initialized. Call initializeSolanaConnection first.');
+      return null;
+    }
+
+    try {
+      console.log(`Creating vote transaction for proposal: ${proposalId} in DAO: ${daoId}`);
+      
+      const result = await createVoteTransaction(
+        this.connection,
+        walletPublicKey,
+        daoId,
+        proposalId,
+        vote
+      );
+
+      return result;
+    } catch (error) {
+      console.error('Error creating vote transaction:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Vote on a proposal
+   * This is the second step - after the transaction is signed and confirmed,
+   * we also update our API/database with the vote
+   */
+  async voteOnProposal(
+    daoId: string, 
+    proposalId: string, 
+    vote: 'for' | 'against' | 'abstain',
+    transactionSignature?: string
+  ): Promise<boolean> {
     try {
       const apiClient = this.createAuthenticatedApiClient();
       if (!apiClient) return false;

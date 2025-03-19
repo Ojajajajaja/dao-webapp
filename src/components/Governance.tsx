@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { PieChart, Plus, X, Check } from 'lucide-react';
 import PopupProposal from './PopupProposal';
 import { containers } from '../styles/theme';
 import { proposalService } from '../services/ProposalService';
 import { useEffectOnce } from '../hooks/useEffectOnce';
+import { useSolanaTransaction } from '../hooks/useSolanaTransaction';
+import { SOLANA_RPC_ENDPOINT } from '../config/solana';
+import { toast } from 'react-hot-toast';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { Connection } from '@solana/web3.js';
 
 interface Action {
   type: string;
@@ -70,6 +75,27 @@ const Governance = () => {
   const [proposals, setProposals] = useState<ProposalDetails[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Get Solana transaction utilities from our custom hook
+  const { 
+    sendTransaction, 
+    isLoading: isTransactionLoading, 
+    isSuccess: isTransactionSuccess,
+    isError: isTransactionError,
+    error: transactionError,
+    signature: transactionSignature,
+    publicKey,
+    connected
+  } = useSolanaTransaction();
+
+  const wallet = useWallet();
+  const connection = new Connection(SOLANA_RPC_ENDPOINT);
+
+  // Initialize Solana connection once on component mount
+  useEffectOnce(() => {
+    // Initialize the Solana connection with our configured endpoint
+    proposalService.initializeSolanaConnection(SOLANA_RPC_ENDPOINT);
+  });
 
   // Fetch proposals when the component mounts
   useEffectOnce(() => {
@@ -78,6 +104,19 @@ const Governance = () => {
       fetchProposals();
     }
   });
+
+  // Watch for transaction success/error to proceed with API updates
+  useEffectOnce(() => {
+    if (isTransactionSuccess && transactionSignature) {
+      // If we just completed a proposal creation transaction, continue with API call
+      handleCreateProposalAPI(transactionSignature);
+    }
+    
+    if (isTransactionError) {
+      setIsSubmitting(false);
+      alert(`Transaction failed: ${transactionError?.message || 'Unknown error'}`);
+    }
+  }, [isTransactionSuccess, isTransactionError, transactionSignature]);
 
   const fetchProposals = async () => {
     if (!daoId) {
@@ -235,11 +274,24 @@ const Governance = () => {
     return proposal.actions.find(action => action.type === actionType);
   };
 
-  const handleCreateProposal = async () => {
-    if (!daoId) return;
+  // Step 1: Create and send the blockchain transaction
+  const handleCreateProposalTransaction = async () => {
+    if (!publicKey || !wallet) {
+      alert('Wallet not connected.');
+      return;
+    }
+    
+    if (!daoId) {
+      alert('DAO ID is missing.');
+      return;
+    }
     
     setIsSubmitting(true);
+    
     try {
+      console.log(`Starting proposal creation for DAO ID: ${daoId}`);
+      console.log(`Using wallet public key: ${publicKey.toString()}`);
+      
       // Calculate start and end dates
       let startDate = new Date();
       if (proposal.startTime === 'custom' && proposal.customStartDate && proposal.customStartTime) {
@@ -247,6 +299,108 @@ const Governance = () => {
       }
       
       // Calculate end date based on expiration time
+      const days = parseInt(proposal.expirationDays) || 0;
+      const hours = parseInt(proposal.expirationHours) || 0;
+      const minutes = parseInt(proposal.expirationMinutes) || 0;
+      
+      const endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + days);
+      endDate.setHours(endDate.getHours() + hours);
+      endDate.setMinutes(endDate.getMinutes() + minutes);
+      
+      // Make sure voting period is at least 5 minutes to avoid too short periods
+      const minVotingPeriod = 5 * 60 * 1000; // 5 minutes in milliseconds
+      if (endDate.getTime() - startDate.getTime() < minVotingPeriod) {
+        alert('Voting period must be at least 5 minutes long.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Format actions for the transaction (simplified for now)
+      const actions = proposal.actions.map(action => {
+        return {
+          type: action.type,
+          walletAddress: action.walletAddress,
+          amount: action.tokenAmount,
+          token: action.tokenSymbol
+        };
+      });
+      
+      console.log('Creating proposal transaction with data:', {
+        title: proposal.title,
+        description: proposal.description,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        votingPeriod: Math.floor((endDate.getTime() - startDate.getTime()) / 1000),
+        actions: actions.length ? actions : 'None'
+      });
+      
+      // Create the transaction
+      const result = await proposalService.createProposalTransaction(
+        daoId,
+        publicKey,
+        {
+          title: proposal.title,
+          description: proposal.description,
+          startDate,
+          endDate,
+          actions
+        }
+      );
+      
+      if (!result) {
+        throw new Error('Failed to create proposal transaction - null result returned');
+      }
+      
+      // Extract transaction and account from result
+      const { transaction, proposalAccount } = result;
+      
+      if (!transaction) {
+        throw new Error('Failed to create proposal transaction - transaction is null');
+      }
+      
+      // Log the transaction details for debugging
+      console.log('Transaction created successfully:', {
+        numInstructions: transaction.instructions.length,
+        proposalAccount: proposalAccount?.publicKey.toString(),
+        feePayer: transaction.feePayer?.toString(),
+      });
+      
+      console.log('Transaction created successfully, sending for signature...');
+      
+      // Send the transaction directly with wallet adapter
+      const signature = await wallet.sendTransaction(transaction, connection);
+      
+      // Wait for confirmation
+      const confirmation = await connection.confirmTransaction(signature, 'confirmed');
+      
+      if (confirmation.value.err) {
+        throw new Error(`Transaction failed: ${confirmation.value.err.toString()}`);
+      }
+      
+      console.log('Transaction signed and sent successfully! Signature:', signature);
+      
+      // Now call the API to update the database
+      await handleCreateProposalAPI(signature);
+      
+    } catch (error) {
+      console.error('Failed to create proposal transaction:', error);
+      alert(`Failed to create proposal transaction: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setIsSubmitting(false);
+    }
+  };
+
+  // Step 2: After blockchain transaction is confirmed, update the API
+  const handleCreateProposalAPI = async (signature: string) => {
+    if (!daoId) return;
+    
+    try {
+      // Calculate start and end dates (same as in handleCreateProposalTransaction)
+      let startDate = new Date();
+      if (proposal.startTime === 'custom' && proposal.customStartDate && proposal.customStartTime) {
+        startDate = new Date(`${proposal.customStartDate}T${proposal.customStartTime}`);
+      }
+      
       const days = parseInt(proposal.expirationDays) || 0;
       const hours = parseInt(proposal.expirationHours) || 0;
       const minutes = parseInt(proposal.expirationMinutes) || 0;
@@ -281,13 +435,14 @@ const Governance = () => {
         };
       });
       
-      // Create the proposal using the service
+      // Create the proposal using the service, including the transaction signature
       const newProposal = await proposalService.createProposal(daoId, {
         title: proposal.title,
         description: proposal.description,
         startDate,
         endDate,
-        actions
+        actions,
+        transactionSignature: signature // Include the signature from the successful transaction
       });
       
       if (newProposal) {
@@ -296,8 +451,8 @@ const Governance = () => {
         resetForm();
       }
     } catch (error) {
-      console.error('Failed to create proposal:', error);
-      alert('Failed to create proposal. Please try again.');
+      console.error('Failed to create proposal in API:', error);
+      alert('Blockchain transaction succeeded, but there was an error updating the database. Please contact support.');
     } finally {
       setIsSubmitting(false);
     }
@@ -351,6 +506,68 @@ const Governance = () => {
       setSelectedProposal(transformedProposal);
     } catch (error) {
       console.error(`Failed to fetch proposal details for ${proposalId}:`, error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Step 1: Create and send transaction for voting
+  const handleVoteTransaction = async (proposalId: string, vote: 'for' | 'against' | 'abstain') => {
+    if (!publicKey || !wallet) {
+      alert('Please connect your wallet first');
+      return;
+    }
+    
+    if (!daoId) {
+      alert('DAO ID is missing');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      
+      console.log(`Creating vote transaction for proposal: ${proposalId}, vote: ${vote}`);
+      
+      // Create the vote transaction
+      const result = await proposalService.createVoteTransaction(
+        daoId,
+        proposalId,
+        publicKey,
+        vote
+      );
+
+      if (!result) {
+        alert('Failed to create vote transaction');
+        return;
+      }
+      
+      // Extract transaction and vote account
+      const { transaction, voteAccount } = result;
+      
+      console.log('Vote transaction created successfully:', {
+        proposalId,
+        vote,
+        voteAccount: voteAccount?.publicKey.toString()
+      });
+
+      // Send the transaction
+      const signature = await wallet.sendTransaction(transaction, connection);
+      
+      // Wait for confirmation
+      const confirmation = await connection.confirmTransaction(signature, 'confirmed');
+      
+      if (confirmation.value.err) {
+        throw new Error(`Transaction failed: ${confirmation.value.err.toString()}`);
+      }
+      
+      console.log("Vote transaction confirmed:", signature);
+      alert(`Vote submitted successfully!`);
+      
+      // Refresh proposals after voting
+      fetchProposals();
+    } catch (error) {
+      console.error("Error voting on proposal:", error);
+      alert(`Failed to vote: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsLoading(false);
     }
@@ -780,7 +997,7 @@ const Governance = () => {
                 Back
               </button>
               <button
-                onClick={handleCreateProposal}
+                onClick={handleCreateProposalTransaction}
                 disabled={isSubmitting}
                 className="px-4 py-2 rounded-md text-text bg-primary hover:bg-primary"
               >
@@ -861,6 +1078,7 @@ const Governance = () => {
           proposal={selectedProposal} 
           onClose={closeProposalDetails}
           onVoteSubmitted={handleVoteSubmitted}
+          onVote={handleVoteTransaction}
         />
       )}
       

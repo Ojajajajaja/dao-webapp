@@ -37,9 +37,10 @@ interface PopupProposalProps {
   proposal: ProposalDetails;
   onClose: () => void;
   onVoteSubmitted?: () => void;
+  onVote?: (proposalId: string, vote: 'for' | 'against' | 'abstain') => Promise<void>;
 }
 
-const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVoteSubmitted }) => {
+const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVoteSubmitted, onVote }) => {
   const [voteOption, setVoteOption] = useState<'for' | 'against' | 'abstain' | null>(null);
   const [isVoting, setIsVoting] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
@@ -62,21 +63,28 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVote
     setError(null);
     
     try {
-      // Submit the vote using the proposal service
-      const success = await proposalService.voteOnProposal(
-        localProposal.daoId,
-        localProposal.id,
-        voteOption
-      );
-      
-      if (success) {
+      if (onVote) {
+        // Use the blockchain transaction method if provided
+        await onVote(localProposal.id, voteOption);
         setHasVoted(true);
-        // Call the parent's callback to refresh the proposal data
-        if (onVoteSubmitted) {
-          onVoteSubmitted();
-        }
+        // onVoteSubmitted is called by the parent component after blockchain confirmation
       } else {
-        setError('Failed to submit vote. Please try again.');
+        // Fallback to the direct API call if no blockchain method is provided
+        const success = await proposalService.voteOnProposal(
+          localProposal.daoId,
+          localProposal.id,
+          voteOption
+        );
+        
+        if (success) {
+          setHasVoted(true);
+          // Call the parent's callback to refresh the proposal data
+          if (onVoteSubmitted) {
+            onVoteSubmitted();
+          }
+        } else {
+          setError('Failed to submit vote. Please try again.');
+        }
       }
     } catch (err) {
       console.error('Error voting on proposal:', err);
