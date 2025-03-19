@@ -3,6 +3,7 @@ import { Plus, Users, MessageSquare, Calendar, ExternalLink, Layers, ArrowUpRigh
 import CreatePodModal from './CreatePodModal';
 import UpdatePodModal from './UpdatePodModal';
 import CreateProposalModal from './CreateProposalModal';
+import PopupProposal from './PopupProposal';
 import { useParams } from 'react-router-dom';
 import { podsService } from '../services/PodsService';
 import { proposalService } from '../services/ProposalService';
@@ -24,6 +25,7 @@ const Pods = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isCreateProposalModalOpen, setIsCreateProposalModalOpen] = useState(false);
+  const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
 
   // Fetch pods when component loads or daoId changes
   useEffectOnce(() => {
@@ -136,6 +138,30 @@ const Pods = () => {
     // Refresh proposals list for the selected pod
     if (selectedPod && selectedPod.podId && selectedPod.name) {
       fetchProposalsForPod(selectedPod.podId, selectedPod.name);
+    }
+  };
+
+  // Handler for proposal voting
+  const handleProposalVoted = async () => {
+    // After a successful vote, refresh the proposals list
+    if (selectedPod && selectedPod.podId && selectedPod.name) {
+      fetchProposalsForPod(selectedPod.podId, selectedPod.name);
+      
+      // Also update the selected proposal with fresh data if one is selected
+      if (selectedProposal && selectedProposal.proposalId && daoId) {
+        try {
+          const updatedProposal = await proposalService.getPodProposalById(
+            daoId, 
+            selectedPod.podId, 
+            selectedProposal.proposalId
+          );
+          if (updatedProposal) {
+            setSelectedProposal(updatedProposal);
+          }
+        } catch (err) {
+          console.error('Error refreshing proposal data after vote:', err);
+        }
+      }
     }
   };
 
@@ -299,7 +325,11 @@ const Pods = () => {
                 {filteredProposals.length > 0 ? (
                   <div className="space-y-4">
                     {filteredProposals.map((proposal) => (
-                      <div key={proposal.proposalId} className="bg-surface-200 p-3 rounded-md">
+                      <div 
+                        key={proposal.proposalId} 
+                        className="bg-surface-200 p-3 rounded-md cursor-pointer hover:bg-surface-300"
+                        onClick={() => setSelectedProposal(proposal)}
+                      >
                         <h3 className="text-text font-medium mb-1">{proposal.name}</h3>
                         <p className="text-text opacity-80 text-sm mb-2">{proposal.description}</p>
                         <div className="flex justify-between items-center text-xs">
@@ -356,6 +386,49 @@ const Pods = () => {
         podId={selectedPod?.podId}
         podName={selectedPod?.name}
       />
+
+      {selectedProposal && daoId && selectedPod && (
+        <PopupProposal 
+          proposal={{
+            id: selectedProposal.proposalId || '',
+            name: selectedProposal.name || '',
+            description: selectedProposal.description || '',
+            status: selectedProposal.isActive ? 'active' : (selectedProposal.hasPassed ? 'passed' : 'rejected'),
+            creator: selectedProposal.createdBy || 'Unknown',
+            createdAt: new Date(selectedProposal.startTime).toLocaleString(),
+            startTime: new Date(selectedProposal.startTime).toLocaleString(),
+            endTime: new Date(selectedProposal.endTime).toLocaleString(),
+            votes: {
+              for: selectedProposal.forVotesCount || 0,
+              against: selectedProposal.againstVotesCount || 0,
+              abstain: 0
+            },
+            actions: [],
+            quorum: 1, // Default value
+            minApproval: 50, // Default percentage
+            daoId: daoId
+          }}
+          onClose={() => setSelectedProposal(null)}
+          onVoteSubmitted={handleProposalVoted}
+          onVote={async (proposalId: string, vote: 'for' | 'against' | 'abstain') => {
+            try {
+              if (!selectedPod.podId) {
+                throw new Error('No POD ID available');
+              }
+              // Use the POD-specific voting method
+              await proposalService.voteOnPODProposal(
+                daoId, 
+                selectedPod.podId, 
+                proposalId, 
+                vote
+              );
+            } catch (err) {
+              console.error('Error voting on proposal:', err);
+              throw err;
+            }
+          }}
+        />
+      )}
     </div>
   );
 };

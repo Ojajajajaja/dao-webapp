@@ -67,7 +67,11 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVote
         // Use the blockchain transaction method if provided
         await onVote(localProposal.id, voteOption);
         setHasVoted(true);
-        // onVoteSubmitted is called by the parent component after blockchain confirmation
+        
+        // Call the parent's callback to refresh the proposal data
+        if (onVoteSubmitted) {
+          onVoteSubmitted();
+        }
       } else {
         // Fallback to the direct API call if no blockchain method is provided
         const success = await proposalService.voteOnProposal(
@@ -118,7 +122,8 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVote
       for: forPercentage,
       against: againstPercentage,
       quorumMet: total >= localProposal.quorum,
-      approvalMet: forPercentage >= localProposal.minApproval
+      approvalMet: forPercentage >= localProposal.minApproval,
+      total: total
     };
   };
 
@@ -221,15 +226,20 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVote
                 </span>
               </div>
               
-              <div className="w-full h-6 bg-surface-300 rounded-md overflow-hidden flex mb-2">
+              <div className="w-full h-6 bg-surface-300 rounded-md overflow-hidden flex mb-2 relative">
                 <div 
-                  className="bg-primary h-full" 
+                  className={`bg-primary h-full transition-all duration-300 ease-in-out ${isVoting ? 'opacity-70' : ''}`}
                   style={{ width: `${progress.for}%` }}
                 ></div>
                 <div 
-                  className="bg-error h-full" 
+                  className={`bg-error h-full transition-all duration-300 ease-in-out ${isVoting ? 'opacity-70' : ''}`}
                   style={{ width: `${progress.against}%` }}
                 ></div>
+                {isVoting && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-xs text-white font-medium animate-pulse">Updating...</span>
+                  </div>
+                )}
               </div>
               
               <div className="grid grid-cols-2 gap-4 text-center text-sm">
