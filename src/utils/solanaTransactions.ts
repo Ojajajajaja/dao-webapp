@@ -206,7 +206,7 @@ export const createVoteTransaction = async (
   vote: 'for' | 'against' | 'abstain'
 ) => {
   try {
-    // Create a new account for the vote
+    // Create a new account for the vote record
     const voteAccount = Keypair.generate();
     
     // Convert vote choice to boolean (true for 'for', false for 'against')
@@ -226,13 +226,13 @@ export const createVoteTransaction = async (
     );
     
     // Calculate the size needed for the vote data
-    const voteSize = 8 + 1 + 8; // Simplified size estimate
+    const voteSize = 32 + 1 + 8; // PublicKey + bool + padding
     
     // Minimum lamports needed for rent exemption
     const lamports = await connection.getMinimumBalanceForRentExemption(voteSize);
     
     // Create a transaction with two instructions:
-    // 1. Create vote account
+    // 1. Create vote account instruction
     const createAccountInstruction = SystemProgram.createAccount({
       fromPubkey: walletPubkey,
       newAccountPubkey: voteAccount.publicKey,
@@ -244,8 +244,8 @@ export const createVoteTransaction = async (
     // 2. Vote instruction
     const voteInstruction = new TransactionInstruction({
       keys: [
-        { pubkey: walletPubkey, isSigner: true, isWritable: true }, // User wallet (voter)
-        { pubkey: voteAccount.publicKey, isSigner: true, isWritable: true }, // Vote account
+        { pubkey: walletPubkey, isSigner: true, isWritable: true }, // Voter
+        { pubkey: voteAccount.publicKey, isSigner: true, isWritable: true }, // Vote record account
       ],
       programId: DAO_PROGRAM_PUBLIC_KEY,
       data,
@@ -261,7 +261,7 @@ export const createVoteTransaction = async (
     transaction.recentBlockhash = blockhash;
     transaction.feePayer = walletPubkey;
     
-    // The vote account also needs to sign the transaction
+    // Partial sign with the vote account
     transaction.partialSign(voteAccount);
     
     return { 

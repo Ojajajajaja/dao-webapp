@@ -547,7 +547,7 @@ const Governance = () => {
       console.log('Vote transaction created successfully:', {
         proposalId,
         vote,
-        voteAccount: voteAccount?.publicKey.toString()
+        voteAccountPubkey: voteAccount.publicKey.toString()
       });
 
       // Send the transaction
@@ -561,7 +561,7 @@ const Governance = () => {
       }
       
       console.log("Vote transaction confirmed:", signature);
-      alert(`Vote submitted successfully!`);
+      await proposalService.voteOnProposal(daoId, proposalId, vote, signature);
       
       // Refresh proposals after voting
       fetchProposals();
