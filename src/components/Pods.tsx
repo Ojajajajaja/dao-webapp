@@ -2,70 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Users, MessageSquare, Calendar, ExternalLink, Layers, ArrowUpRight, X, Check, PlusCircle, RefreshCw, Edit } from 'lucide-react';
 import CreatePodModal from './CreatePodModal';
 import UpdatePodModal from './UpdatePodModal';
+import CreateProposalModal from './CreateProposalModal';
 import { useParams } from 'react-router-dom';
 import { podsService } from '../services/PodsService';
+import { proposalService } from '../services/ProposalService';
 import { POD } from '../core/modules/dao-api/models/POD';
 import { DiscordMessage } from '../core/modules/dao-api/models/DiscordMessage';
+import { Proposal } from '../core/modules/dao-api/models/Proposal';
 import { useEffectOnce } from '../hooks/useEffectOnce';
 
-// Simulation of the base de données propositions de pods
-interface PodProposal {
-  id: number;
-  title: string;
-  description: string;
-  author: string;
-  date: string;
-  votes: number;
-  pod: string;
-}
-
-const podProposals: PodProposal[] = [
-  {
-    id: 1,
-    title: 'Weekly Design Workshops',
-    description: 'Proposal to host weekly design workshops to improve our collective skills.',
-    author: 'alex_j',
-    date: '2023-10-14',
-    votes: 12,
-    pod: 'Design'
-  },
-  {
-    id: 2,
-    title: 'Community Newsletter',
-    description: 'Start a monthly newsletter to keep everyone informed about our progress.',
-    author: 'sarahw',
-    date: '2023-10-13',
-    votes: 8,
-    pod: 'Communication'
-  },
-  {
-    id: 3,
-    title: 'Trading Signal Bot',
-    description: 'Develop a bot that shares trading signals with the community.',
-    author: 'mikeb',
-    date: '2023-10-12',
-    votes: 15,
-    pod: 'Trading'
-  },
-  {
-    id: 4,
-    title: 'Limited Edition Hoodies',
-    description: 'Create a limited run of premium hoodies for our most active members.',
-    author: 'emilyd',
-    date: '2023-10-11',
-    votes: 20,
-    pod: 'Merch'
-  },
-  {
-    id: 5,
-    title: 'Movie Night Fridays',
-    description: 'Host a weekly movie night where we can all chill and watch something together.',
-    author: 'davidw',
-    date: '2023-10-10',
-    votes: 18,
-    pod: 'Chilling'
-  }
-];
 
 const Pods = () => {
   const { daoId } = useParams<{ daoId: string }>();
@@ -75,9 +20,10 @@ const Pods = () => {
   const [error, setError] = useState<string | null>(null);
   const [feedMessages, setFeedMessages] = useState<DiscordMessage[]>([]);
   const [feedLoading, setFeedLoading] = useState<boolean>(false);
-  const [filteredProposals, setFilteredProposals] = useState<PodProposal[]>([]);
+  const [filteredProposals, setFilteredProposals] = useState<Proposal[]>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isCreateProposalModalOpen, setIsCreateProposalModalOpen] = useState(false);
 
   // Fetch pods when component loads or daoId changes
   useEffectOnce(() => {
@@ -111,14 +57,28 @@ const Pods = () => {
     }
   };
 
+  // Helper function to fetch proposals for a pod
+  const fetchProposalsForPod = async (podId: string, podName: string) => {
+    if (!daoId || !podId) return;
+    
+    try {
+      // Get proposals for this POD from the API
+      const proposals = await proposalService.getProposalsByPOD(daoId, podId);
+      setFilteredProposals(proposals);
+    } catch (err) {
+      console.error('Error fetching proposals:', err);
+      setFilteredProposals([]);
+    }
+  };
+
   // Fetch feed messages when selected pod changes
   useEffectOnce(() => {
     if (selectedPod && selectedPod.podId && daoId) {
       fetchFeedMessages(daoId, selectedPod.podId);
       
-      // Filter proposals for the selected pod
+      // Fetch proposals for the selected pod
       if (selectedPod.name) {
-        setFilteredProposals(podProposals.filter(proposal => proposal.pod === selectedPod.name));
+        fetchProposalsForPod(selectedPod.podId, selectedPod.name);
       } else {
         setFilteredProposals([]);
       }
@@ -167,6 +127,16 @@ const Pods = () => {
   // Refresh pods data after creating or updating a pod
   const handlePodUpdated = () => {
     fetchPods();
+  };
+
+  // Handler for successful proposal creation
+  const handleProposalCreated = () => {
+    console.log('Proposal created successfully');
+    
+    // Refresh proposals list for the selected pod
+    if (selectedPod && selectedPod.podId && selectedPod.name) {
+      fetchProposalsForPod(selectedPod.podId, selectedPod.name);
+    }
   };
 
   return (
@@ -329,13 +299,19 @@ const Pods = () => {
                 {filteredProposals.length > 0 ? (
                   <div className="space-y-4">
                     {filteredProposals.map((proposal) => (
-                      <div key={proposal.id} className="bg-surface-200 p-3 rounded-md">
-                        <h3 className="text-text font-medium mb-1">{proposal.title}</h3>
+                      <div key={proposal.proposalId} className="bg-surface-200 p-3 rounded-md">
+                        <h3 className="text-text font-medium mb-1">{proposal.name}</h3>
                         <p className="text-text opacity-80 text-sm mb-2">{proposal.description}</p>
                         <div className="flex justify-between items-center text-xs">
-                          <span className="text-surface-500">By {proposal.author} on {proposal.date}</span>
+                          <span className="text-surface-500">
+                            By {proposal.createdBy || 'Unknown'} on {
+                              proposal.startTime instanceof Date 
+                              ? proposal.startTime.toLocaleString() 
+                              : new Date(proposal.startTime).toLocaleString()
+                            }
+                          </span>
                           <div className="flex items-center">
-                            <span className="text-primary mr-1">{proposal.votes}</span>
+                            <span className="text-primary mr-1">{proposal.forVotesCount || 0}</span>
                             <span className="text-surface-500">votes</span>
                           </div>
                         </div>
@@ -348,7 +324,7 @@ const Pods = () => {
                   </div>
                 )}
                 
-                <button className="w-full mt-4 bg-primary text-text px-4 py-2 rounded-md text-sm">
+                <button className="w-full mt-4 bg-primary text-text px-4 py-2 rounded-md text-sm" onClick={() => setIsCreateProposalModalOpen(true)}>
                   Create Proposal
                 </button>
               </div>
@@ -370,6 +346,15 @@ const Pods = () => {
         onSuccess={handlePodUpdated}
         daoId={daoId}
         pod={selectedPod}
+      />
+
+      <CreateProposalModal
+        isOpen={isCreateProposalModalOpen}
+        onClose={() => setIsCreateProposalModalOpen(false)}
+        onSuccess={handleProposalCreated}
+        daoId={daoId}
+        podId={selectedPod?.podId}
+        podName={selectedPod?.name}
       />
     </div>
   );
