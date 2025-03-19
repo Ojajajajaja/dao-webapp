@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { PieChart, Vote, Plus, X, Clock, Calendar, Wallet, UserMinus, ArrowUpRight, Check } from 'lucide-react';
+import { PieChart, Plus, X, Check } from 'lucide-react';
 import PopupProposal from './PopupProposal';
 import { containers } from '../styles/theme';
 import { proposalService } from '../services/ProposalService';
@@ -97,23 +97,6 @@ const Governance = () => {
         return;
       }
       
-      // Check the structure of the first proposal to debug property access
-      const firstProposal = fetchedProposals[0];
-      console.log("First proposal structure:", {
-        proposalId: firstProposal.proposalId,
-        name: firstProposal.name,
-        description: firstProposal.description,
-        isActive: firstProposal.isActive,
-        hasPassed: firstProposal.hasPassed,
-        createdBy: firstProposal.createdBy,
-        startTime: firstProposal.startTime,
-        endTime: firstProposal.endTime,
-        forVotesCount: firstProposal.forVotesCount,
-        againstVotesCount: firstProposal.againstVotesCount,
-        actions: firstProposal.actions,
-        daoId: firstProposal.daoId
-      });
-      
       // Transform API proposals to our component's format
       const transformedProposals = fetchedProposals.map(p => ({
         id: p.proposalId || '',
@@ -140,8 +123,6 @@ const Governance = () => {
         minApproval: 60,
         daoId: p.daoId
       }));
-      
-      console.log("Transformed proposals:", transformedProposals);
       setProposals(transformedProposals);
     } catch (error) {
       console.error('Failed to fetch proposals:', error);
@@ -300,8 +281,6 @@ const Governance = () => {
         };
       });
       
-      console.log("Creating proposal with actions:", actions);
-      
       // Create the proposal using the service
       const newProposal = await proposalService.createProposal(daoId, {
         title: proposal.title,
@@ -312,7 +291,6 @@ const Governance = () => {
       });
       
       if (newProposal) {
-        console.log("New proposal created:", newProposal);
         // Refresh the proposal list
         await fetchProposals();
         resetForm();
@@ -331,11 +309,9 @@ const Governance = () => {
       return;
     }
     
-    console.log(`Viewing proposal ${proposalId} in DAO ${daoId}`);
     setIsLoading(true);
     try {
       const proposalDetails = await proposalService.getProposalById(daoId, proposalId);
-      console.log("Fetched proposal details:", proposalDetails);
       
       if (!proposalDetails) {
         console.error("No proposal details returned from API");
@@ -343,25 +319,8 @@ const Governance = () => {
         return;
       }
       
-      // Log the structure of the proposal to debug property access
-      console.log("Proposal structure:", {
-        proposalId: proposalDetails.proposalId,
-        name: proposalDetails.name,
-        description: proposalDetails.description,
-        isActive: proposalDetails.isActive,
-        hasPassed: proposalDetails.hasPassed,
-        createdBy: proposalDetails.createdBy,
-        startTime: proposalDetails.startTime,
-        endTime: proposalDetails.endTime,
-        forVotesCount: proposalDetails.forVotesCount,
-        againstVotesCount: proposalDetails.againstVotesCount,
-        actions: proposalDetails.actions,
-        daoId: proposalDetails.daoId
-      });
-      
       // Get proposal votes
-      const votes = await proposalService.getProposalVotes(daoId, proposalId);
-      console.log("Fetched proposal votes:", votes);
+      const votes = await proposalService.getProposalVotes(daoId, proposalId);;
       
       const transformedProposal: ProposalDetails = {
         id: proposalDetails.proposalId || '',
@@ -389,12 +348,67 @@ const Governance = () => {
         daoId: proposalDetails.daoId
       };
       
-      console.log("Transformed proposal:", transformedProposal);
       setSelectedProposal(transformedProposal);
     } catch (error) {
       console.error(`Failed to fetch proposal details for ${proposalId}:`, error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Handle vote submission and refresh the current proposal
+  const handleVoteSubmitted = async () => {
+    // First refresh all proposals in the background
+    fetchProposals();
+    
+    // Then refresh the currently selected proposal to update its vote counts
+    if (selectedProposal && daoId) {
+      await refreshSelectedProposal(selectedProposal.id);
+    }
+  };
+
+  // Refresh the currently selected proposal
+  const refreshSelectedProposal = async (proposalId: string) => {
+    if (!daoId) return;
+    
+    try {
+      const proposalDetails = await proposalService.getProposalById(daoId, proposalId);
+      
+      if (!proposalDetails) return;
+      
+      // Get updated vote information
+      const votes = await proposalService.getProposalVotes(daoId, proposalId);
+      
+      // Transform the proposal data using the same logic as in handleViewProposal
+      const transformedProposal: ProposalDetails = {
+        id: proposalDetails.proposalId || '',
+        name: proposalDetails.name || '',
+        description: proposalDetails.description || '',
+        status: proposalDetails.isActive ? 'Active' : proposalDetails.hasPassed ? 'Passed' : 'Rejected',
+        creator: proposalDetails.createdBy || 'Unknown',
+        createdAt: formatDate(new Date()),
+        startTime: formatDate(proposalDetails.startTime instanceof Date ? proposalDetails.startTime : new Date(proposalDetails.startTime)),
+        endTime: formatDate(proposalDetails.endTime instanceof Date ? proposalDetails.endTime : new Date(proposalDetails.endTime)),
+        votes: {
+          for: votes?.forVotes || proposalDetails.forVotesCount || 0,
+          against: votes?.againstVotes || proposalDetails.againstVotesCount || 0,
+          abstain: votes?.abstainVotes || 0
+        },
+        actions: Object.values(proposalDetails.actions || {}).map((action: any) => ({
+          type: action.type || '',
+          description: action.description || '',
+          walletAddress: action.wallet_address,
+          amount: action.amount,
+          token: action.token
+        })),
+        quorum: 1000,
+        minApproval: 60,
+        daoId: proposalDetails.daoId
+      };
+      
+      setSelectedProposal(transformedProposal);
+    } catch (error) {
+      console.error(`Failed to refresh proposal ${proposalId} after vote:`, error);
     }
   };
 
@@ -846,7 +860,7 @@ const Governance = () => {
         <PopupProposal 
           proposal={selectedProposal} 
           onClose={closeProposalDetails}
-          onVoteSubmitted={fetchProposals}
+          onVoteSubmitted={handleVoteSubmitted}
         />
       )}
       

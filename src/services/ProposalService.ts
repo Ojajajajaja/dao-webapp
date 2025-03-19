@@ -95,13 +95,11 @@ export class ProposalService {
    */
   async getAllProposals(daoId: string): Promise<ApiProposal[]> {
     try {
-      console.log(`Getting proposals for DAO ${daoId}`);
       const apiClient = this.createAuthenticatedApiClient();
       if (!apiClient) return [];
 
       // Use the SDK to get all proposals for the DAO
       const response = await apiClient.proposalsApi.getProposalsByDAO(daoId);
-      console.log("API response:", response);
       
       return response || [];
     } catch (error) {
@@ -115,13 +113,11 @@ export class ProposalService {
    */
   async getProposalById(daoId: string, proposalId: string): Promise<ApiProposal | null> {
     try {
-      console.log(`Getting proposal with ID ${proposalId} for DAO ${daoId}`);
       const apiClient = this.createAuthenticatedApiClient();
       if (!apiClient) return null;
 
       // Use the SDK to get a proposal by ID
       const response = await apiClient.proposalsApi.getDAOProposalById(daoId, proposalId);
-      console.log("API response for proposal:", response);
       
       return response || null;
     } catch (error) {
@@ -157,11 +153,8 @@ export class ProposalService {
         actions: apiActions
       };
 
-      console.log("Creating proposal with data:", proposalRequest);
-
       // Use the SDK to create a proposal
       const response = await apiClient.proposalsApi.createProposalForDAO(daoId, proposalRequest);
-      console.log("API response for create proposal:", response);
       
       return response?.proposal || null;
     } catch (error) {
@@ -187,7 +180,6 @@ export class ProposalService {
 
       // Create vote request object with the correct enum value
       const voteRequest = { vote: voteRequestVoteEnum };
-      console.log(`Voting on proposal ${proposalId} with vote ${vote} (${voteRequestVoteEnum})`);
 
       // Use the API client to vote on the proposal 
       await apiClient.proposalsApi.voteOnDAOProposal(daoId, proposalId, voteRequest as any);
@@ -205,8 +197,6 @@ export class ProposalService {
     try {
       const apiClient = this.createAuthenticatedApiClient();
       if (!apiClient) return null;
-
-      console.log(`Getting votes for proposal ${proposalId} in DAO ${daoId}`);
       
       // Use the SDK to get votes
       const proposal = await this.getProposalById(daoId, proposalId);
