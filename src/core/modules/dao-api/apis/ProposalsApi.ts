@@ -180,6 +180,45 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
     }
 
     /**
+     * Get vote counts for a proposal
+     * @param daoId 
+     * @param proposalId 
+     */
+    public async getProposalVotes(daoId: string, proposalId: string, _options?: Configuration): Promise<RequestContext> {
+        let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("ProposalsApi", "getProposalVotes", "daoId");
+        }
+
+
+        // verify required parameter 'proposalId' is not null or undefined
+        if (proposalId === null || proposalId === undefined) {
+            throw new RequiredError("ProposalsApi", "getProposalVotes", "proposalId");
+        }
+
+
+        // Path Params
+        const localVarPath = '/proposals/dao/{dao_id}/proposals/{proposal_id}/vote'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
+            .replace('{' + 'proposal_id' + '}', encodeURIComponent(String(proposalId)));
+
+        // Make Request Context
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+
+        
+        const defaultAuth: SecurityAuthentication | undefined = _config?.authMethods?.default
+        if (defaultAuth?.applySecurityAuthentication) {
+            await defaultAuth?.applySecurityAuthentication(requestContext);
+        }
+
+        return requestContext;
+    }
+
+    /**
      * Get all proposals for a specific DAO
      * @param daoId 
      */
@@ -589,6 +628,63 @@ export class ProposalsApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "Proposal", ""
             ) as Proposal;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+
+        throw new ApiException<string | Blob | undefined>(response.httpStatusCode, "Unknown API Status Code!", await response.getBodyAsAny(), response.headers);
+    }
+
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to getProposalVotes
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+     public async getProposalVotesWithHttpInfo(response: ResponseContext): Promise<HttpInfo<ProposalVoteResponse >> {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
+        if (isCodeInRange("200", response.httpStatusCode)) {
+            const body: ProposalVoteResponse = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "ProposalVoteResponse", ""
+            ) as ProposalVoteResponse;
+            return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
+        }
+        if (isCodeInRange("400", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Bad Request - Proposal does not belong to this DAO", body, response.headers);
+        }
+        if (isCodeInRange("401", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "Unauthorized - Invalid or missing token", body, response.headers);
+        }
+        if (isCodeInRange("404", response.httpStatusCode)) {
+            const body: PagingError = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "PagingError", ""
+            ) as PagingError;
+            throw new ApiException<PagingError>(response.httpStatusCode, "DAO or Proposal not found", body, response.headers);
+        }
+        if (isCodeInRange("0", response.httpStatusCode)) {
+            const body: Error = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "Default error response", body, response.headers);
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: ProposalVoteResponse = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "ProposalVoteResponse", ""
+            ) as ProposalVoteResponse;
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
         }
 

@@ -15,7 +15,10 @@ import { HttpFile } from '../http/http';
 
 export class ProposalVoteResponse {
     'action': string;
+    'voteStatus': ProposalVoteResponseVoteStatusEnum;
     'proposal': Proposal;
+    'forVotesCount': number;
+    'againstVotesCount': number;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -29,9 +32,27 @@ export class ProposalVoteResponse {
             "format": ""
         },
         {
+            "name": "voteStatus",
+            "baseName": "vote_status",
+            "type": "ProposalVoteResponseVoteStatusEnum",
+            "format": ""
+        },
+        {
             "name": "proposal",
             "baseName": "proposal",
             "type": "Proposal",
+            "format": ""
+        },
+        {
+            "name": "forVotesCount",
+            "baseName": "for_votes_count",
+            "type": "number",
+            "format": ""
+        },
+        {
+            "name": "againstVotesCount",
+            "baseName": "against_votes_count",
+            "type": "number",
             "format": ""
         }    ];
 
@@ -42,3 +63,10 @@ export class ProposalVoteResponse {
     public constructor() {
     }
 }
+
+export enum ProposalVoteResponseVoteStatusEnum {
+    None = 'none',
+    For = 'for',
+    Against = 'against'
+}
+

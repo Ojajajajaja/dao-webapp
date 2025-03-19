@@ -1517,6 +1517,50 @@ export class PromiseProposalsApi {
     }
 
     /**
+     * Get vote counts for a proposal
+     * @param daoId
+     * @param proposalId
+     */
+    public getProposalVotesWithHttpInfo(daoId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getProposalVotesWithHttpInfo(daoId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get vote counts for a proposal
+     * @param daoId
+     * @param proposalId
+     */
+    public getProposalVotes(daoId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<ProposalVoteResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getProposalVotes(daoId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
      * Get all proposals for a specific DAO
      * @param daoId
      */

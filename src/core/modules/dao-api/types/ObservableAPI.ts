@@ -2094,6 +2094,68 @@ export class ObservableProposalsApi {
     }
 
     /**
+     * Get vote counts for a proposal
+     * @param daoId
+     * @param proposalId
+     */
+    public getProposalVotesWithHttpInfo(daoId: string, proposalId: string, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalVoteResponse>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.getProposalVotes(daoId, proposalId, _config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getProposalVotesWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Get vote counts for a proposal
+     * @param daoId
+     * @param proposalId
+     */
+    public getProposalVotes(daoId: string, proposalId: string, _options?: ConfigurationOptions): Observable<ProposalVoteResponse> {
+        return this.getProposalVotesWithHttpInfo(daoId, proposalId, _options).pipe(map((apiResponse: HttpInfo<ProposalVoteResponse>) => apiResponse.data));
+    }
+
+    /**
      * Get all proposals for a specific DAO
      * @param daoId
      */

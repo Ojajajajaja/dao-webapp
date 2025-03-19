@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**deleteDAOProposal**](ProposalsApi.md#deleteDAOProposal) | **DELETE** /proposals/dao/{dao_id}/proposals/{proposal_id} | Delete a proposal for a DAO
 [**getActiveProposalsByDAO**](ProposalsApi.md#getActiveProposalsByDAO) | **GET** /proposals/dao/{dao_id}/proposals/active | Get all active proposals for a specific DAO
 [**getDAOProposalById**](ProposalsApi.md#getDAOProposalById) | **GET** /proposals/dao/{dao_id}/proposals/{proposal_id} | Get a specific proposal for a DAO
+[**getProposalVotes**](ProposalsApi.md#getProposalVotes) | **GET** /proposals/dao/{dao_id}/proposals/{proposal_id}/vote | Get vote counts for a proposal
 [**getProposalsByDAO**](ProposalsApi.md#getProposalsByDAO) | **GET** /proposals/dao/{dao_id}/proposals | Get all proposals for a specific DAO
 [**removeVoteFromDAOProposal**](ProposalsApi.md#removeVoteFromDAOProposal) | **DELETE** /proposals/dao/{dao_id}/proposals/{proposal_id}/vote | Remove vote from a proposal for a DAO
 [**updateDAOProposal**](ProposalsApi.md#updateDAOProposal) | **PUT** /proposals/dao/{dao_id}/proposals/{proposal_id} | Update a proposal for a DAO
@@ -251,6 +252,65 @@ No authorization required
 |-------------|-------------|------------------|
 **200** | Proposal retrieved successfully |  -  |
 **400** | Proposal does not belong to this DAO |  -  |
+**404** | DAO or Proposal not found |  -  |
+**0** | Default error response |  -  |
+
+[[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
+
+# **getProposalVotes**
+> ProposalVoteResponse getProposalVotes()
+
+
+### Example
+
+
+```typescript
+import { createConfiguration, ProposalsApi } from '';
+import type { ProposalsApiGetProposalVotesRequest } from '';
+
+const configuration = createConfiguration();
+const apiInstance = new ProposalsApi(configuration);
+
+const request: ProposalsApiGetProposalVotesRequest = {
+  
+  daoId: "dao_id_example",
+  
+  proposalId: "proposal_id_example",
+};
+
+const data = await apiInstance.getProposalVotes(request);
+console.log('API called successfully. Returned data:', data);
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **daoId** | [**string**] |  | defaults to undefined
+ **proposalId** | [**string**] |  | defaults to undefined
+
+
+### Return type
+
+**ProposalVoteResponse**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Vote counts retrieved successfully |  -  |
+**400** | Bad Request - Proposal does not belong to this DAO |  -  |
+**401** | Unauthorized - Invalid or missing token |  -  |
 **404** | DAO or Proposal not found |  -  |
 **0** | Default error response |  -  |
 

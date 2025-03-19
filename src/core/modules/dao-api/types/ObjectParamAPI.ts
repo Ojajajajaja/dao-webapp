@@ -992,6 +992,23 @@ export interface ProposalsApiGetDAOProposalByIdRequest {
     proposalId: string
 }
 
+export interface ProposalsApiGetProposalVotesRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApigetProposalVotes
+     */
+    daoId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApigetProposalVotes
+     */
+    proposalId: string
+}
+
 export interface ProposalsApiGetProposalsByDAORequest {
     /**
      * 
@@ -1134,6 +1151,22 @@ export class ObjectProposalsApi {
      */
     public getDAOProposalById(param: ProposalsApiGetDAOProposalByIdRequest, options?: ConfigurationOptions): Promise<Proposal> {
         return this.api.getDAOProposalById(param.daoId, param.proposalId,  options).toPromise();
+    }
+
+    /**
+     * Get vote counts for a proposal
+     * @param param the request object
+     */
+    public getProposalVotesWithHttpInfo(param: ProposalsApiGetProposalVotesRequest, options?: ConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+        return this.api.getProposalVotesWithHttpInfo(param.daoId, param.proposalId,  options).toPromise();
+    }
+
+    /**
+     * Get vote counts for a proposal
+     * @param param the request object
+     */
+    public getProposalVotes(param: ProposalsApiGetProposalVotesRequest, options?: ConfigurationOptions): Promise<ProposalVoteResponse> {
+        return this.api.getProposalVotes(param.daoId, param.proposalId,  options).toPromise();
     }
 
     /**

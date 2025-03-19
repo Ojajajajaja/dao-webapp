@@ -91,7 +91,7 @@ import { Proposal } from '../models/Proposal';
 import { ProposalSchemaResponse } from '../models/ProposalSchemaResponse';
 import { ProposalUpdate } from '../models/ProposalUpdate';
 import { ProposalVote, ProposalVoteVoteEnum   } from '../models/ProposalVote';
-import { ProposalVoteResponse } from '../models/ProposalVoteResponse';
+import { ProposalVoteResponse , ProposalVoteResponseVoteStatusEnum      } from '../models/ProposalVoteResponse';
 import { SocialConnection } from '../models/SocialConnection';
 import { TelegramAuth } from '../models/TelegramAuth';
 import { Token } from '../models/Token';
@@ -124,6 +124,7 @@ let primitives = [
 
 let enumsMap: Set<string> = new Set<string>([
     "ProposalVoteVoteEnum",
+    "ProposalVoteResponseVoteStatusEnum",
 ]);
 
 let typeMap: {[index: string]: any} = {
