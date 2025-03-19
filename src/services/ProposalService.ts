@@ -316,6 +316,64 @@ export class ProposalService {
       return null;
     }
   }
+
+  /**
+   * Create a new proposal for a specific POD
+   * This creates a proposal within a specific POD in the DAO
+   */
+  async createProposalForPOD(
+    daoId: string,
+    podId: string,
+    proposalData: {
+      title: string;
+      description: string;
+      startDate?: Date;
+      endDate: Date;
+    }
+  ): Promise<ApiProposal | null> {
+    try {
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return null;
+
+      // Create the request object for the API
+      const proposalRequest: InputCreateProposal = {
+        name: proposalData.title,
+        description: proposalData.description,
+        startTime: proposalData.startDate || new Date(),
+        endTime: proposalData.endDate,
+        daoId: daoId,
+        podId: podId, // Include the POD ID in the request
+        actions: [] // No actions for POD proposals
+      };
+
+      // Use the SDK to create a proposal
+      const response = await apiClient.proposalsApi.createProposalForDAO(daoId, proposalRequest);
+      
+      return response?.proposal || null;
+    } catch (error) {
+      console.error(`Error creating proposal for POD ${podId} in DAO ${daoId}:`, error);
+      return null;
+    }
+  }
+
+  /**
+   * Get all proposals for a specific POD in a DAO
+   */
+  async getProposalsByPOD(daoId: string, podId: string): Promise<ApiProposal[]> {
+    try {
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return [];
+
+      // Use the SDK to get all proposals for the specific POD
+      const response = await apiClient.proposalsApi.getProposalsByPOD(daoId, podId);
+      
+      // Return the proposals array from the response or an empty array if not available
+      return response?.proposals || [];
+    } catch (error) {
+      console.error(`Error getting proposals for POD ${podId} in DAO ${daoId}:`, error);
+      return [];
+    }
+  }
 }
 
 // Create a singleton instance
