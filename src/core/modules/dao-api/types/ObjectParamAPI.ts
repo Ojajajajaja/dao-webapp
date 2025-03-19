@@ -35,6 +35,7 @@ import { PODSchemaResponse } from '../models/PODSchemaResponse';
 import { PODUpdate } from '../models/PODUpdate';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
+import { PodProposalListResponse } from '../models/PodProposalListResponse';
 import { Proposal } from '../models/Proposal';
 import { ProposalSchemaResponse } from '../models/ProposalSchemaResponse';
 import { ProposalUpdate } from '../models/ProposalUpdate';
@@ -948,6 +949,22 @@ export interface ProposalsApiCreateProposalForDAORequest {
     inputCreateProposal: InputCreateProposal
 }
 
+export interface ProposalsApiCreateProposalForPODRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApicreateProposalForPOD
+     */
+    podId: string
+    /**
+     * 
+     * @type InputCreateProposal
+     * @memberof ProposalsApicreateProposalForPOD
+     */
+    inputCreateProposal: InputCreateProposal
+}
+
 export interface ProposalsApiDeleteDAOProposalRequest {
     /**
      * 
@@ -965,6 +982,23 @@ export interface ProposalsApiDeleteDAOProposalRequest {
     proposalId: string
 }
 
+export interface ProposalsApiDeletePODProposalRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApideletePODProposal
+     */
+    podId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApideletePODProposal
+     */
+    proposalId: string
+}
+
 export interface ProposalsApiGetActiveProposalsByDAORequest {
     /**
      * 
@@ -973,6 +1007,16 @@ export interface ProposalsApiGetActiveProposalsByDAORequest {
      * @memberof ProposalsApigetActiveProposalsByDAO
      */
     daoId: string
+}
+
+export interface ProposalsApiGetActiveProposalsByPODRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApigetActiveProposalsByPOD
+     */
+    podId: string
 }
 
 export interface ProposalsApiGetDAOProposalByIdRequest {
@@ -988,6 +1032,40 @@ export interface ProposalsApiGetDAOProposalByIdRequest {
      * Defaults to: undefined
      * @type string
      * @memberof ProposalsApigetDAOProposalById
+     */
+    proposalId: string
+}
+
+export interface ProposalsApiGetPODProposalByIdRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApigetPODProposalById
+     */
+    podId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApigetPODProposalById
+     */
+    proposalId: string
+}
+
+export interface ProposalsApiGetPODProposalVotesRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApigetPODProposalVotes
+     */
+    podId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApigetPODProposalVotes
      */
     proposalId: string
 }
@@ -1019,6 +1097,16 @@ export interface ProposalsApiGetProposalsByDAORequest {
     daoId: string
 }
 
+export interface ProposalsApiGetProposalsByPODRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApigetProposalsByPOD
+     */
+    podId: string
+}
+
 export interface ProposalsApiRemoveVoteFromDAOProposalRequest {
     /**
      * 
@@ -1032,6 +1120,23 @@ export interface ProposalsApiRemoveVoteFromDAOProposalRequest {
      * Defaults to: undefined
      * @type string
      * @memberof ProposalsApiremoveVoteFromDAOProposal
+     */
+    proposalId: string
+}
+
+export interface ProposalsApiRemoveVoteFromPODProposalRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApiremoveVoteFromPODProposal
+     */
+    podId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApiremoveVoteFromPODProposal
      */
     proposalId: string
 }
@@ -1059,6 +1164,29 @@ export interface ProposalsApiUpdateDAOProposalRequest {
     proposalUpdate: ProposalUpdate
 }
 
+export interface ProposalsApiUpdatePODProposalRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApiupdatePODProposal
+     */
+    podId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApiupdatePODProposal
+     */
+    proposalId: string
+    /**
+     * 
+     * @type ProposalUpdate
+     * @memberof ProposalsApiupdatePODProposal
+     */
+    proposalUpdate: ProposalUpdate
+}
+
 export interface ProposalsApiVoteOnDAOProposalRequest {
     /**
      * 
@@ -1078,6 +1206,29 @@ export interface ProposalsApiVoteOnDAOProposalRequest {
      * 
      * @type ProposalVote
      * @memberof ProposalsApivoteOnDAOProposal
+     */
+    proposalVote: ProposalVote
+}
+
+export interface ProposalsApiVoteOnPODProposalRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApivoteOnPODProposal
+     */
+    podId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApivoteOnPODProposal
+     */
+    proposalId: string
+    /**
+     * 
+     * @type ProposalVote
+     * @memberof ProposalsApivoteOnPODProposal
      */
     proposalVote: ProposalVote
 }
@@ -1106,6 +1257,22 @@ export class ObjectProposalsApi {
     }
 
     /**
+     * Create a new proposal for this specific POD
+     * @param param the request object
+     */
+    public createProposalForPODWithHttpInfo(param: ProposalsApiCreateProposalForPODRequest, options?: ConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+        return this.api.createProposalForPODWithHttpInfo(param.podId, param.inputCreateProposal,  options).toPromise();
+    }
+
+    /**
+     * Create a new proposal for this specific POD
+     * @param param the request object
+     */
+    public createProposalForPOD(param: ProposalsApiCreateProposalForPODRequest, options?: ConfigurationOptions): Promise<ProposalSchemaResponse> {
+        return this.api.createProposalForPOD(param.podId, param.inputCreateProposal,  options).toPromise();
+    }
+
+    /**
      * Delete a proposal for a DAO
      * @param param the request object
      */
@@ -1119,6 +1286,22 @@ export class ObjectProposalsApi {
      */
     public deleteDAOProposal(param: ProposalsApiDeleteDAOProposalRequest, options?: ConfigurationOptions): Promise<ProposalSchemaResponse> {
         return this.api.deleteDAOProposal(param.daoId, param.proposalId,  options).toPromise();
+    }
+
+    /**
+     * Delete a proposal for a POD
+     * @param param the request object
+     */
+    public deletePODProposalWithHttpInfo(param: ProposalsApiDeletePODProposalRequest, options?: ConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+        return this.api.deletePODProposalWithHttpInfo(param.podId, param.proposalId,  options).toPromise();
+    }
+
+    /**
+     * Delete a proposal for a POD
+     * @param param the request object
+     */
+    public deletePODProposal(param: ProposalsApiDeletePODProposalRequest, options?: ConfigurationOptions): Promise<ProposalSchemaResponse> {
+        return this.api.deletePODProposal(param.podId, param.proposalId,  options).toPromise();
     }
 
     /**
@@ -1138,6 +1321,22 @@ export class ObjectProposalsApi {
     }
 
     /**
+     * Get all active proposals for a specific POD
+     * @param param the request object
+     */
+    public getActiveProposalsByPODWithHttpInfo(param: ProposalsApiGetActiveProposalsByPODRequest, options?: ConfigurationOptions): Promise<HttpInfo<PodProposalListResponse>> {
+        return this.api.getActiveProposalsByPODWithHttpInfo(param.podId,  options).toPromise();
+    }
+
+    /**
+     * Get all active proposals for a specific POD
+     * @param param the request object
+     */
+    public getActiveProposalsByPOD(param: ProposalsApiGetActiveProposalsByPODRequest, options?: ConfigurationOptions): Promise<PodProposalListResponse> {
+        return this.api.getActiveProposalsByPOD(param.podId,  options).toPromise();
+    }
+
+    /**
      * Get a specific proposal for a DAO
      * @param param the request object
      */
@@ -1151,6 +1350,38 @@ export class ObjectProposalsApi {
      */
     public getDAOProposalById(param: ProposalsApiGetDAOProposalByIdRequest, options?: ConfigurationOptions): Promise<Proposal> {
         return this.api.getDAOProposalById(param.daoId, param.proposalId,  options).toPromise();
+    }
+
+    /**
+     * Get a specific proposal for a POD
+     * @param param the request object
+     */
+    public getPODProposalByIdWithHttpInfo(param: ProposalsApiGetPODProposalByIdRequest, options?: ConfigurationOptions): Promise<HttpInfo<Proposal>> {
+        return this.api.getPODProposalByIdWithHttpInfo(param.podId, param.proposalId,  options).toPromise();
+    }
+
+    /**
+     * Get a specific proposal for a POD
+     * @param param the request object
+     */
+    public getPODProposalById(param: ProposalsApiGetPODProposalByIdRequest, options?: ConfigurationOptions): Promise<Proposal> {
+        return this.api.getPODProposalById(param.podId, param.proposalId,  options).toPromise();
+    }
+
+    /**
+     * Get vote counts for a POD proposal
+     * @param param the request object
+     */
+    public getPODProposalVotesWithHttpInfo(param: ProposalsApiGetPODProposalVotesRequest, options?: ConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+        return this.api.getPODProposalVotesWithHttpInfo(param.podId, param.proposalId,  options).toPromise();
+    }
+
+    /**
+     * Get vote counts for a POD proposal
+     * @param param the request object
+     */
+    public getPODProposalVotes(param: ProposalsApiGetPODProposalVotesRequest, options?: ConfigurationOptions): Promise<ProposalVoteResponse> {
+        return this.api.getPODProposalVotes(param.podId, param.proposalId,  options).toPromise();
     }
 
     /**
@@ -1186,6 +1417,22 @@ export class ObjectProposalsApi {
     }
 
     /**
+     * Get all proposals for a specific POD
+     * @param param the request object
+     */
+    public getProposalsByPODWithHttpInfo(param: ProposalsApiGetProposalsByPODRequest, options?: ConfigurationOptions): Promise<HttpInfo<PodProposalListResponse>> {
+        return this.api.getProposalsByPODWithHttpInfo(param.podId,  options).toPromise();
+    }
+
+    /**
+     * Get all proposals for a specific POD
+     * @param param the request object
+     */
+    public getProposalsByPOD(param: ProposalsApiGetProposalsByPODRequest, options?: ConfigurationOptions): Promise<PodProposalListResponse> {
+        return this.api.getProposalsByPOD(param.podId,  options).toPromise();
+    }
+
+    /**
      * Remove vote from a proposal for a DAO
      * @param param the request object
      */
@@ -1199,6 +1446,22 @@ export class ObjectProposalsApi {
      */
     public removeVoteFromDAOProposal(param: ProposalsApiRemoveVoteFromDAOProposalRequest, options?: ConfigurationOptions): Promise<ProposalVoteResponse> {
         return this.api.removeVoteFromDAOProposal(param.daoId, param.proposalId,  options).toPromise();
+    }
+
+    /**
+     * Remove a vote from a POD proposal
+     * @param param the request object
+     */
+    public removeVoteFromPODProposalWithHttpInfo(param: ProposalsApiRemoveVoteFromPODProposalRequest, options?: ConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+        return this.api.removeVoteFromPODProposalWithHttpInfo(param.podId, param.proposalId,  options).toPromise();
+    }
+
+    /**
+     * Remove a vote from a POD proposal
+     * @param param the request object
+     */
+    public removeVoteFromPODProposal(param: ProposalsApiRemoveVoteFromPODProposalRequest, options?: ConfigurationOptions): Promise<ProposalVoteResponse> {
+        return this.api.removeVoteFromPODProposal(param.podId, param.proposalId,  options).toPromise();
     }
 
     /**
@@ -1218,6 +1481,22 @@ export class ObjectProposalsApi {
     }
 
     /**
+     * Update a proposal for a POD
+     * @param param the request object
+     */
+    public updatePODProposalWithHttpInfo(param: ProposalsApiUpdatePODProposalRequest, options?: ConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+        return this.api.updatePODProposalWithHttpInfo(param.podId, param.proposalId, param.proposalUpdate,  options).toPromise();
+    }
+
+    /**
+     * Update a proposal for a POD
+     * @param param the request object
+     */
+    public updatePODProposal(param: ProposalsApiUpdatePODProposalRequest, options?: ConfigurationOptions): Promise<ProposalSchemaResponse> {
+        return this.api.updatePODProposal(param.podId, param.proposalId, param.proposalUpdate,  options).toPromise();
+    }
+
+    /**
      * Vote on a proposal for a DAO
      * @param param the request object
      */
@@ -1231,6 +1510,22 @@ export class ObjectProposalsApi {
      */
     public voteOnDAOProposal(param: ProposalsApiVoteOnDAOProposalRequest, options?: ConfigurationOptions): Promise<ProposalVoteResponse> {
         return this.api.voteOnDAOProposal(param.daoId, param.proposalId, param.proposalVote,  options).toPromise();
+    }
+
+    /**
+     * Vote on a POD proposal
+     * @param param the request object
+     */
+    public voteOnPODProposalWithHttpInfo(param: ProposalsApiVoteOnPODProposalRequest, options?: ConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+        return this.api.voteOnPODProposalWithHttpInfo(param.podId, param.proposalId, param.proposalVote,  options).toPromise();
+    }
+
+    /**
+     * Vote on a POD proposal
+     * @param param the request object
+     */
+    public voteOnPODProposal(param: ProposalsApiVoteOnPODProposalRequest, options?: ConfigurationOptions): Promise<ProposalVoteResponse> {
+        return this.api.voteOnPODProposal(param.podId, param.proposalId, param.proposalVote,  options).toPromise();
     }
 
 }

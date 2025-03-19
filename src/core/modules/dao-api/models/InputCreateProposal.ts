@@ -16,6 +16,7 @@ export class InputCreateProposal {
     'name': string;
     'description': string;
     'daoId': string;
+    'podId'?: string | null;
     'startTime': Date;
     'endTime': Date;
     'actions'?: { [key: string]: any; } | null;
@@ -40,6 +41,12 @@ export class InputCreateProposal {
         {
             "name": "daoId",
             "baseName": "dao_id",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "podId",
+            "baseName": "pod_id",
             "type": "string",
             "format": ""
         },

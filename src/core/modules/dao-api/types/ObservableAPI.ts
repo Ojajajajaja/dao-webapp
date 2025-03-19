@@ -36,6 +36,7 @@ import { PODSchemaResponse } from '../models/PODSchemaResponse';
 import { PODUpdate } from '../models/PODUpdate';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
+import { PodProposalListResponse } from '../models/PodProposalListResponse';
 import { Proposal } from '../models/Proposal';
 import { ProposalSchemaResponse } from '../models/ProposalSchemaResponse';
 import { ProposalUpdate } from '../models/ProposalUpdate';
@@ -1910,6 +1911,68 @@ export class ObservableProposalsApi {
     }
 
     /**
+     * Create a new proposal for this specific POD
+     * @param podId
+     * @param inputCreateProposal
+     */
+    public createProposalForPODWithHttpInfo(podId: string, inputCreateProposal: InputCreateProposal, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalSchemaResponse>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.createProposalForPOD(podId, inputCreateProposal, _config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.createProposalForPODWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Create a new proposal for this specific POD
+     * @param podId
+     * @param inputCreateProposal
+     */
+    public createProposalForPOD(podId: string, inputCreateProposal: InputCreateProposal, _options?: ConfigurationOptions): Observable<ProposalSchemaResponse> {
+        return this.createProposalForPODWithHttpInfo(podId, inputCreateProposal, _options).pipe(map((apiResponse: HttpInfo<ProposalSchemaResponse>) => apiResponse.data));
+    }
+
+    /**
      * Delete a proposal for a DAO
      * @param daoId
      * @param proposalId
@@ -1969,6 +2032,68 @@ export class ObservableProposalsApi {
      */
     public deleteDAOProposal(daoId: string, proposalId: string, _options?: ConfigurationOptions): Observable<ProposalSchemaResponse> {
         return this.deleteDAOProposalWithHttpInfo(daoId, proposalId, _options).pipe(map((apiResponse: HttpInfo<ProposalSchemaResponse>) => apiResponse.data));
+    }
+
+    /**
+     * Delete a proposal for a POD
+     * @param podId
+     * @param proposalId
+     */
+    public deletePODProposalWithHttpInfo(podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalSchemaResponse>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.deletePODProposal(podId, proposalId, _config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.deletePODProposalWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Delete a proposal for a POD
+     * @param podId
+     * @param proposalId
+     */
+    public deletePODProposal(podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<ProposalSchemaResponse> {
+        return this.deletePODProposalWithHttpInfo(podId, proposalId, _options).pipe(map((apiResponse: HttpInfo<ProposalSchemaResponse>) => apiResponse.data));
     }
 
     /**
@@ -2032,6 +2157,66 @@ export class ObservableProposalsApi {
     }
 
     /**
+     * Get all active proposals for a specific POD
+     * @param podId
+     */
+    public getActiveProposalsByPODWithHttpInfo(podId: string, _options?: ConfigurationOptions): Observable<HttpInfo<PodProposalListResponse>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.getActiveProposalsByPOD(podId, _config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getActiveProposalsByPODWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Get all active proposals for a specific POD
+     * @param podId
+     */
+    public getActiveProposalsByPOD(podId: string, _options?: ConfigurationOptions): Observable<PodProposalListResponse> {
+        return this.getActiveProposalsByPODWithHttpInfo(podId, _options).pipe(map((apiResponse: HttpInfo<PodProposalListResponse>) => apiResponse.data));
+    }
+
+    /**
      * Get a specific proposal for a DAO
      * @param daoId
      * @param proposalId
@@ -2091,6 +2276,130 @@ export class ObservableProposalsApi {
      */
     public getDAOProposalById(daoId: string, proposalId: string, _options?: ConfigurationOptions): Observable<Proposal> {
         return this.getDAOProposalByIdWithHttpInfo(daoId, proposalId, _options).pipe(map((apiResponse: HttpInfo<Proposal>) => apiResponse.data));
+    }
+
+    /**
+     * Get a specific proposal for a POD
+     * @param podId
+     * @param proposalId
+     */
+    public getPODProposalByIdWithHttpInfo(podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<HttpInfo<Proposal>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.getPODProposalById(podId, proposalId, _config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getPODProposalByIdWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Get a specific proposal for a POD
+     * @param podId
+     * @param proposalId
+     */
+    public getPODProposalById(podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<Proposal> {
+        return this.getPODProposalByIdWithHttpInfo(podId, proposalId, _options).pipe(map((apiResponse: HttpInfo<Proposal>) => apiResponse.data));
+    }
+
+    /**
+     * Get vote counts for a POD proposal
+     * @param podId
+     * @param proposalId
+     */
+    public getPODProposalVotesWithHttpInfo(podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalVoteResponse>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.getPODProposalVotes(podId, proposalId, _config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getPODProposalVotesWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Get vote counts for a POD proposal
+     * @param podId
+     * @param proposalId
+     */
+    public getPODProposalVotes(podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<ProposalVoteResponse> {
+        return this.getPODProposalVotesWithHttpInfo(podId, proposalId, _options).pipe(map((apiResponse: HttpInfo<ProposalVoteResponse>) => apiResponse.data));
     }
 
     /**
@@ -2216,6 +2525,66 @@ export class ObservableProposalsApi {
     }
 
     /**
+     * Get all proposals for a specific POD
+     * @param podId
+     */
+    public getProposalsByPODWithHttpInfo(podId: string, _options?: ConfigurationOptions): Observable<HttpInfo<PodProposalListResponse>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.getProposalsByPOD(podId, _config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getProposalsByPODWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Get all proposals for a specific POD
+     * @param podId
+     */
+    public getProposalsByPOD(podId: string, _options?: ConfigurationOptions): Observable<PodProposalListResponse> {
+        return this.getProposalsByPODWithHttpInfo(podId, _options).pipe(map((apiResponse: HttpInfo<PodProposalListResponse>) => apiResponse.data));
+    }
+
+    /**
      * Remove vote from a proposal for a DAO
      * @param daoId
      * @param proposalId
@@ -2275,6 +2644,68 @@ export class ObservableProposalsApi {
      */
     public removeVoteFromDAOProposal(daoId: string, proposalId: string, _options?: ConfigurationOptions): Observable<ProposalVoteResponse> {
         return this.removeVoteFromDAOProposalWithHttpInfo(daoId, proposalId, _options).pipe(map((apiResponse: HttpInfo<ProposalVoteResponse>) => apiResponse.data));
+    }
+
+    /**
+     * Remove a vote from a POD proposal
+     * @param podId
+     * @param proposalId
+     */
+    public removeVoteFromPODProposalWithHttpInfo(podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalVoteResponse>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.removeVoteFromPODProposal(podId, proposalId, _config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.removeVoteFromPODProposalWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Remove a vote from a POD proposal
+     * @param podId
+     * @param proposalId
+     */
+    public removeVoteFromPODProposal(podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<ProposalVoteResponse> {
+        return this.removeVoteFromPODProposalWithHttpInfo(podId, proposalId, _options).pipe(map((apiResponse: HttpInfo<ProposalVoteResponse>) => apiResponse.data));
     }
 
     /**
@@ -2342,6 +2773,70 @@ export class ObservableProposalsApi {
     }
 
     /**
+     * Update a proposal for a POD
+     * @param podId
+     * @param proposalId
+     * @param proposalUpdate
+     */
+    public updatePODProposalWithHttpInfo(podId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalSchemaResponse>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.updatePODProposal(podId, proposalId, proposalUpdate, _config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.updatePODProposalWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Update a proposal for a POD
+     * @param podId
+     * @param proposalId
+     * @param proposalUpdate
+     */
+    public updatePODProposal(podId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: ConfigurationOptions): Observable<ProposalSchemaResponse> {
+        return this.updatePODProposalWithHttpInfo(podId, proposalId, proposalUpdate, _options).pipe(map((apiResponse: HttpInfo<ProposalSchemaResponse>) => apiResponse.data));
+    }
+
+    /**
      * Vote on a proposal for a DAO
      * @param daoId
      * @param proposalId
@@ -2403,6 +2898,70 @@ export class ObservableProposalsApi {
      */
     public voteOnDAOProposal(daoId: string, proposalId: string, proposalVote: ProposalVote, _options?: ConfigurationOptions): Observable<ProposalVoteResponse> {
         return this.voteOnDAOProposalWithHttpInfo(daoId, proposalId, proposalVote, _options).pipe(map((apiResponse: HttpInfo<ProposalVoteResponse>) => apiResponse.data));
+    }
+
+    /**
+     * Vote on a POD proposal
+     * @param podId
+     * @param proposalId
+     * @param proposalVote
+     */
+    public voteOnPODProposalWithHttpInfo(podId: string, proposalId: string, proposalVote: ProposalVote, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalVoteResponse>> {
+    let _config = this.configuration;
+    let allMiddleware: Middleware[] = [];
+    if (_options && _options.middleware){
+      const middlewareMergeStrategy = _options.middlewareMergeStrategy || 'replace' // default to replace behavior
+      // call-time middleware provided
+      const calltimeMiddleware: Middleware[] = _options.middleware;
+
+      switch(middlewareMergeStrategy){
+      case 'append':
+        allMiddleware = this.configuration.middleware.concat(calltimeMiddleware);
+        break;
+      case 'prepend':
+        allMiddleware = calltimeMiddleware.concat(this.configuration.middleware)
+        break;
+      case 'replace':
+        allMiddleware = calltimeMiddleware
+        break;
+      default: 
+        throw new Error(`unrecognized middleware merge strategy '${middlewareMergeStrategy}'`)
+      }
+	}
+	if (_options){
+    _config = {
+      baseServer: _options.baseServer || this.configuration.baseServer,
+      httpApi: _options.httpApi || this.configuration.httpApi,
+      authMethods: _options.authMethods || this.configuration.authMethods,
+      middleware: allMiddleware || this.configuration.middleware
+		};
+	}
+
+        const requestContextPromise = this.requestFactory.voteOnPODProposal(podId, proposalId, proposalVote, _config);
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (const middleware of allMiddleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (const middleware of allMiddleware.reverse()) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.voteOnPODProposalWithHttpInfo(rsp)));
+            }));
+    }
+
+    /**
+     * Vote on a POD proposal
+     * @param podId
+     * @param proposalId
+     * @param proposalVote
+     */
+    public voteOnPODProposal(podId: string, proposalId: string, proposalVote: ProposalVote, _options?: ConfigurationOptions): Observable<ProposalVoteResponse> {
+        return this.voteOnPODProposalWithHttpInfo(podId, proposalId, proposalVote, _options).pipe(map((apiResponse: HttpInfo<ProposalVoteResponse>) => apiResponse.data));
     }
 
 }

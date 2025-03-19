@@ -31,6 +31,7 @@ export * from '../models/PODSchemaResponse';
 export * from '../models/PODUpdate';
 export * from '../models/PaginationMetadata';
 export * from '../models/PagingError';
+export * from '../models/PodProposalListResponse';
 export * from '../models/Proposal';
 export * from '../models/ProposalSchemaResponse';
 export * from '../models/ProposalUpdate';
@@ -87,6 +88,7 @@ import { PODSchemaResponse } from '../models/PODSchemaResponse';
 import { PODUpdate } from '../models/PODUpdate';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
+import { PodProposalListResponse } from '../models/PodProposalListResponse';
 import { Proposal } from '../models/Proposal';
 import { ProposalSchemaResponse } from '../models/ProposalSchemaResponse';
 import { ProposalUpdate } from '../models/ProposalUpdate';
@@ -161,6 +163,7 @@ let typeMap: {[index: string]: any} = {
     "PODUpdate": PODUpdate,
     "PaginationMetadata": PaginationMetadata,
     "PagingError": PagingError,
+    "PodProposalListResponse": PodProposalListResponse,
     "Proposal": Proposal,
     "ProposalSchemaResponse": ProposalSchemaResponse,
     "ProposalUpdate": ProposalUpdate,

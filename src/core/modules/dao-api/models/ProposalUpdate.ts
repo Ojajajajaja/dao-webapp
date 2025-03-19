@@ -17,6 +17,7 @@ export class ProposalUpdate {
     'description'?: string;
     'startTime'?: Date;
     'endTime'?: Date;
+    'podId'?: string | null;
     'actions'?: { [key: string]: any; } | null;
 
     static readonly discriminator: string | undefined = undefined;
@@ -47,6 +48,12 @@ export class ProposalUpdate {
             "baseName": "end_time",
             "type": "Date",
             "format": "date-time"
+        },
+        {
+            "name": "podId",
+            "baseName": "pod_id",
+            "type": "string",
+            "format": ""
         },
         {
             "name": "actions",

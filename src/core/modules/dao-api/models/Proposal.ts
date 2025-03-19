@@ -18,6 +18,7 @@ export class Proposal {
     'name': string;
     'description': string;
     'daoId': string;
+    'podId'?: string | null;
     'createdBy': string;
     'startTime': Date;
     'endTime': Date;
@@ -55,6 +56,12 @@ export class Proposal {
         {
             "name": "daoId",
             "baseName": "dao_id",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "podId",
+            "baseName": "pod_id",
             "type": "string",
             "format": ""
         },

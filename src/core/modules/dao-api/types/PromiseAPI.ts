@@ -35,6 +35,7 @@ import { PODSchemaResponse } from '../models/PODSchemaResponse';
 import { PODUpdate } from '../models/PODUpdate';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
+import { PodProposalListResponse } from '../models/PodProposalListResponse';
 import { Proposal } from '../models/Proposal';
 import { ProposalSchemaResponse } from '../models/ProposalSchemaResponse';
 import { ProposalUpdate } from '../models/ProposalUpdate';
@@ -1387,6 +1388,50 @@ export class PromiseProposalsApi {
     }
 
     /**
+     * Create a new proposal for this specific POD
+     * @param podId
+     * @param inputCreateProposal
+     */
+    public createProposalForPODWithHttpInfo(podId: string, inputCreateProposal: InputCreateProposal, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.createProposalForPODWithHttpInfo(podId, inputCreateProposal, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Create a new proposal for this specific POD
+     * @param podId
+     * @param inputCreateProposal
+     */
+    public createProposalForPOD(podId: string, inputCreateProposal: InputCreateProposal, _options?: PromiseConfigurationOptions): Promise<ProposalSchemaResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.createProposalForPOD(podId, inputCreateProposal, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
      * Delete a proposal for a DAO
      * @param daoId
      * @param proposalId
@@ -1427,6 +1472,50 @@ export class PromiseProposalsApi {
 	    }
 	}
         const result = this.api.deleteDAOProposal(daoId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Delete a proposal for a POD
+     * @param podId
+     * @param proposalId
+     */
+    public deletePODProposalWithHttpInfo(podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.deletePODProposalWithHttpInfo(podId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Delete a proposal for a POD
+     * @param podId
+     * @param proposalId
+     */
+    public deletePODProposal(podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<ProposalSchemaResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.deletePODProposal(podId, proposalId, observableOptions);
         return result.toPromise();
     }
 
@@ -1473,6 +1562,48 @@ export class PromiseProposalsApi {
     }
 
     /**
+     * Get all active proposals for a specific POD
+     * @param podId
+     */
+    public getActiveProposalsByPODWithHttpInfo(podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<PodProposalListResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getActiveProposalsByPODWithHttpInfo(podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all active proposals for a specific POD
+     * @param podId
+     */
+    public getActiveProposalsByPOD(podId: string, _options?: PromiseConfigurationOptions): Promise<PodProposalListResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getActiveProposalsByPOD(podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
      * Get a specific proposal for a DAO
      * @param daoId
      * @param proposalId
@@ -1513,6 +1644,94 @@ export class PromiseProposalsApi {
 	    }
 	}
         const result = this.api.getDAOProposalById(daoId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get a specific proposal for a POD
+     * @param podId
+     * @param proposalId
+     */
+    public getPODProposalByIdWithHttpInfo(podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Proposal>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getPODProposalByIdWithHttpInfo(podId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get a specific proposal for a POD
+     * @param podId
+     * @param proposalId
+     */
+    public getPODProposalById(podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<Proposal> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getPODProposalById(podId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get vote counts for a POD proposal
+     * @param podId
+     * @param proposalId
+     */
+    public getPODProposalVotesWithHttpInfo(podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getPODProposalVotesWithHttpInfo(podId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get vote counts for a POD proposal
+     * @param podId
+     * @param proposalId
+     */
+    public getPODProposalVotes(podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<ProposalVoteResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getPODProposalVotes(podId, proposalId, observableOptions);
         return result.toPromise();
     }
 
@@ -1603,6 +1822,48 @@ export class PromiseProposalsApi {
     }
 
     /**
+     * Get all proposals for a specific POD
+     * @param podId
+     */
+    public getProposalsByPODWithHttpInfo(podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<PodProposalListResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getProposalsByPODWithHttpInfo(podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all proposals for a specific POD
+     * @param podId
+     */
+    public getProposalsByPOD(podId: string, _options?: PromiseConfigurationOptions): Promise<PodProposalListResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getProposalsByPOD(podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
      * Remove vote from a proposal for a DAO
      * @param daoId
      * @param proposalId
@@ -1643,6 +1904,50 @@ export class PromiseProposalsApi {
 	    }
 	}
         const result = this.api.removeVoteFromDAOProposal(daoId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Remove a vote from a POD proposal
+     * @param podId
+     * @param proposalId
+     */
+    public removeVoteFromPODProposalWithHttpInfo(podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.removeVoteFromPODProposalWithHttpInfo(podId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Remove a vote from a POD proposal
+     * @param podId
+     * @param proposalId
+     */
+    public removeVoteFromPODProposal(podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<ProposalVoteResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.removeVoteFromPODProposal(podId, proposalId, observableOptions);
         return result.toPromise();
     }
 
@@ -1693,6 +1998,52 @@ export class PromiseProposalsApi {
     }
 
     /**
+     * Update a proposal for a POD
+     * @param podId
+     * @param proposalId
+     * @param proposalUpdate
+     */
+    public updatePODProposalWithHttpInfo(podId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.updatePODProposalWithHttpInfo(podId, proposalId, proposalUpdate, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Update a proposal for a POD
+     * @param podId
+     * @param proposalId
+     * @param proposalUpdate
+     */
+    public updatePODProposal(podId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: PromiseConfigurationOptions): Promise<ProposalSchemaResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.updatePODProposal(podId, proposalId, proposalUpdate, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
      * Vote on a proposal for a DAO
      * @param daoId
      * @param proposalId
@@ -1735,6 +2086,52 @@ export class PromiseProposalsApi {
 	    }
 	}
         const result = this.api.voteOnDAOProposal(daoId, proposalId, proposalVote, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Vote on a POD proposal
+     * @param podId
+     * @param proposalId
+     * @param proposalVote
+     */
+    public voteOnPODProposalWithHttpInfo(podId: string, proposalId: string, proposalVote: ProposalVote, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.voteOnPODProposalWithHttpInfo(podId, proposalId, proposalVote, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Vote on a POD proposal
+     * @param podId
+     * @param proposalId
+     * @param proposalVote
+     */
+    public voteOnPODProposal(podId: string, proposalId: string, proposalVote: ProposalVote, _options?: PromiseConfigurationOptions): Promise<ProposalVoteResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.voteOnPODProposal(podId, proposalId, proposalVote, observableOptions);
         return result.toPromise();
     }
 
