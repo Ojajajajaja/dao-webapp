@@ -42,7 +42,6 @@ interface ProposalDetails {
   votes: {
     for: number;
     against: number;
-    abstain: number;
   };
   actions: {
     type: string;
@@ -149,7 +148,6 @@ const Governance = () => {
         votes: {
           for: p.forVotesCount || 0,
           against: p.againstVotesCount || 0,
-          abstain: 0
         },
         actions: Object.values(p.actions || {}).map((action: any) => ({
           type: action.type || '',
@@ -488,8 +486,7 @@ const Governance = () => {
         endTime: formatDate(proposalDetails.endTime instanceof Date ? proposalDetails.endTime : new Date(proposalDetails.endTime)),
         votes: {
           for: votes?.forVotes || proposalDetails.forVotesCount || 0,
-          against: votes?.againstVotes || proposalDetails.againstVotesCount || 0,
-          abstain: votes?.abstainVotes || 0
+          against: votes?.againstVotes || proposalDetails.againstVotesCount || 0
         },
         actions: Object.values(proposalDetails.actions || {}).map((action: any) => ({
           type: action.type || '',
@@ -512,7 +509,7 @@ const Governance = () => {
   };
 
   // Step 1: Create and send transaction for voting
-  const handleVoteTransaction = async (proposalId: string, vote: 'for' | 'against' | 'abstain') => {
+  const handleVoteTransaction = async (proposalId: string, vote: 'for' | 'against') => {
     if (!publicKey || !wallet) {
       alert('Please connect your wallet first');
       return;
@@ -608,8 +605,7 @@ const Governance = () => {
         endTime: formatDate(proposalDetails.endTime instanceof Date ? proposalDetails.endTime : new Date(proposalDetails.endTime)),
         votes: {
           for: votes?.forVotes || proposalDetails.forVotesCount || 0,
-          against: votes?.againstVotes || proposalDetails.againstVotesCount || 0,
-          abstain: votes?.abstainVotes || 0
+          against: votes?.againstVotes || proposalDetails.againstVotesCount || 0
         },
         actions: Object.values(proposalDetails.actions || {}).map((action: any) => ({
           type: action.type || '',
@@ -1126,12 +1122,12 @@ const Governance = () => {
                 <div className="w-full bg-surface-300 rounded-full h-2.5">
                   <div 
                     className="bg-primary h-2.5 rounded-full" 
-                    style={{ width: `${proposal.votes.for / (proposal.votes.for + proposal.votes.against + proposal.votes.abstain) * 100 || 0}%` }}
+                    style={{ width: `${proposal.votes.for / (proposal.votes.for + proposal.votes.against) * 100 || 0}%` }}
                   ></div>
                 </div>
                 <div className="flex justify-between text-xs mt-1">
-                  <span className="text-primary">{Math.round(proposal.votes.for / (proposal.votes.for + proposal.votes.against + proposal.votes.abstain) * 100 || 0)}% For</span>
-                  <span className="text-surface-500">{Math.round(proposal.votes.against / (proposal.votes.for + proposal.votes.against + proposal.votes.abstain) * 100 || 0)}% Against</span>
+                  <span className="text-primary">{Math.round(proposal.votes.for / (proposal.votes.for + proposal.votes.against) * 100 || 0)}% For</span>
+                  <span className="text-surface-500">{Math.round(proposal.votes.against / (proposal.votes.for + proposal.votes.against) * 100 || 0)}% Against</span>
                 </div>
               </div>
             ))}

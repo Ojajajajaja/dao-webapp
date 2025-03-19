@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calendar } from 'lucide-react';
+import { X, Calendar, AlertTriangle } from 'lucide-react';
 import { proposalService } from '../services/ProposalService';
+import { useWallet, WalletContextState } from '@solana/wallet-adapter-react';
 
 interface CreateProposalModalProps {
   isOpen: boolean;
@@ -9,6 +10,8 @@ interface CreateProposalModalProps {
   daoId?: string;
   podId?: string;
   podName?: string;
+  createWithTransaction?: (title: string, description: string, endDate: Date) => Promise<any>;
+  wallet?: WalletContextState;
 }
 
 const CreateProposalModal: React.FC<CreateProposalModalProps> = ({ 
@@ -17,7 +20,9 @@ const CreateProposalModal: React.FC<CreateProposalModalProps> = ({
   onSuccess, 
   daoId, 
   podId, 
-  podName 
+  podName,
+  createWithTransaction,
+  wallet
 }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -71,31 +76,39 @@ const CreateProposalModal: React.FC<CreateProposalModalProps> = ({
       return;
     }
 
+    // Check if wallet is connected
+    if (!wallet || !wallet.connected) {
+      setError('Wallet not connected. Please connect your wallet to create a proposal.');
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     try {
-      // Create the proposal using the proposal service
-      const result = await proposalService.createProposalForPOD(
-        daoId,
-        podId,
-        {
-          title: title.trim(),
-          description: description.trim(),
-          endDate: new Date(endDate)
+      if (createWithTransaction) {
+        // Create proposal using blockchain transaction
+        console.log('Creating proposal with blockchain transaction');
+        const result = await createWithTransaction(
+          title.trim(),
+          description.trim(),
+          new Date(endDate)
+        );
+        
+        if (result) {
+          console.log('Proposal created successfully:', result);
+          resetForm();
+          onSuccess();
+          onClose();
+        } else {
+          setError('Failed to create proposal. Please try again.');
         }
-      );
-      
-      if (result) {
-        console.log('Proposal created successfully:', result);
-        resetForm();
-        onSuccess();
-        onClose();
       } else {
-        setError('Failed to create proposal. Please try again.');
+        // Fallback if blockchain transaction isn't available
+        setError('Proposal creation is not available at this time.');
       }
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
+      setError(`An error occurred: ${err instanceof Error ? err.message : 'Unknown error'}`);
       console.error('Error creating proposal:', err);
     } finally {
       setLoading(false);
@@ -153,7 +166,7 @@ const CreateProposalModal: React.FC<CreateProposalModalProps> = ({
               />
             </div>
 
-            <div className="mb-6">
+            <div className="mb-4">
               <label htmlFor="proposal-end-date" className="block text-text mb-1">
                 End Date*
               </label>
@@ -178,6 +191,13 @@ const CreateProposalModal: React.FC<CreateProposalModalProps> = ({
               </p>
             </div>
 
+            {!wallet?.connected && (
+              <div className="bg-yellow-900 text-warning p-2 rounded-md mb-4 text-sm flex items-start">
+                <AlertTriangle size={16} className="mr-2 mt-0.5 flex-shrink-0" />
+                <span>Please connect your wallet to create a proposal.</span>
+              </div>
+            )}
+
             {error && (
               <div className="bg-red-900 text-error p-2 rounded-md mb-4 text-sm">
                 {error}
@@ -196,7 +216,7 @@ const CreateProposalModal: React.FC<CreateProposalModalProps> = ({
               </button>
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !wallet?.connected}
                 className="px-4 py-2 bg-primary text-text rounded-md hover:opacity-90 disabled:opacity-70"
               >
                 {loading ? 'Creating...' : 'Create Proposal'}

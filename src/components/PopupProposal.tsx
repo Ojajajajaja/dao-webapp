@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import { X, Check, AlertTriangle, ThumbsUp, ThumbsDown, Users, Calendar, Clock, Minus, Wallet, UserMinus, ArrowUpRight } from 'lucide-react';
 import { proposalService } from '../services/ProposalService';
 import { useEffectOnce } from '../hooks/useEffectOnce';
+import { WalletContextState } from '@solana/wallet-adapter-react';
 
-interface ProposalAction {
+interface ProposalVotes {
+  for: number;
+  against: number;
+}
+
+interface ProposalActions {
   type: string;
   description: string;
   walletAddress?: string;
   amount?: string;
   token?: string;
-}
-
-interface ProposalVote {
-  for: number;
-  against: number;
-  abstain?: number;
 }
 
 interface ProposalDetails {
@@ -26,22 +26,23 @@ interface ProposalDetails {
   createdAt: string;
   startTime: string;
   endTime: string;
-  votes: ProposalVote;
-  actions: ProposalAction[];
+  votes: ProposalVotes;
+  actions: ProposalActions[];
   quorum: number;
   minApproval: number;
-  daoId?: string;
+  daoId: string;
 }
 
 interface PopupProposalProps {
   proposal: ProposalDetails;
   onClose: () => void;
   onVoteSubmitted?: () => void;
-  onVote?: (proposalId: string, vote: 'for' | 'against' | 'abstain') => Promise<void>;
+  onVote?: (proposalId: string, vote: 'for' | 'against') => Promise<any>;
+  wallet?: WalletContextState;
 }
 
-const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVoteSubmitted, onVote }) => {
-  const [voteOption, setVoteOption] = useState<'for' | 'against' | 'abstain' | null>(null);
+const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVoteSubmitted, onVote, wallet }) => {
+  const [voteOption, setVoteOption] = useState<'for' | 'against' | null>(null);
   const [isVoting, setIsVoting] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -59,12 +60,18 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVote
       return;
     }
     
+    // Check if wallet is connected
+    if (!wallet || !wallet.connected) {
+      setError('Wallet not connected. Please connect your wallet to vote.');
+      return;
+    }
+    
     setIsVoting(true);
     setError(null);
     
     try {
       if (onVote) {
-        // Use the blockchain transaction method if provided
+        console.log('Submitting vote via blockchain transaction');
         await onVote(localProposal.id, voteOption);
         setHasVoted(true);
         
@@ -73,26 +80,11 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVote
           onVoteSubmitted();
         }
       } else {
-        // Fallback to the direct API call if no blockchain method is provided
-        const success = await proposalService.voteOnProposal(
-          localProposal.daoId,
-          localProposal.id,
-          voteOption
-        );
-        
-        if (success) {
-          setHasVoted(true);
-          // Call the parent's callback to refresh the proposal data
-          if (onVoteSubmitted) {
-            onVoteSubmitted();
-          }
-        } else {
-          setError('Failed to submit vote. Please try again.');
-        }
+        setError('Voting is not available at this time.');
       }
     } catch (err) {
       console.error('Error voting on proposal:', err);
-      setError('An error occurred while voting. Please try again.');
+      setError(`An error occurred while voting: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
       setIsVoting(false);
     }
@@ -114,7 +106,7 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVote
   };
 
   const calculateProgress = () => {
-    const total = (localProposal.votes.for || 0) + (localProposal.votes.against || 0) + (localProposal.votes.abstain || 0);
+    const total = (localProposal.votes.for || 0) + (localProposal.votes.against || 0);
     const forPercentage = total > 0 ? (localProposal.votes.for / total) * 100 : 0;
     const againstPercentage = total > 0 ? (localProposal.votes.against / total) * 100 : 0;
     
@@ -270,31 +262,13 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVote
           ) : (
             <>
               <h3 className="text-lg font-medium text-text mb-3">Cast Your Vote</h3>
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <button 
-                  className={`p-3 rounded-md flex flex-col items-center justify-center ${
-                    voteOption === 'for' 
-                      ? 'bg-primary text-text' 
-                      : 'bg-surface-200 text-text opacity-80 hover:bg-surface-300'
-                  }`}
-                  onClick={() => setVoteOption('for')}
-                >
-                  <ThumbsUp size={24} className="mb-1" />
-                  <span>For</span>
-                </button>
-                
-                <button 
-                  className={`p-3 rounded-md flex flex-col items-center justify-center ${
-                    voteOption === 'against' 
-                      ? 'bg-error text-text' 
-                      : 'bg-surface-200 text-text opacity-80 hover:bg-surface-300'
-                  }`}
-                  onClick={() => setVoteOption('against')}
-                >
-                  <ThumbsDown size={24} className="mb-1" />
-                  <span>Against</span>
-                </button>
-              </div>
+              
+              {!wallet?.connected && (
+                <div className="bg-yellow-900 text-warning p-2 rounded-md mb-4 text-sm flex items-start">
+                  <AlertTriangle size={16} className="mr-2 mt-0.5 flex-shrink-0" />
+                  <span>Please connect your wallet to vote on this proposal.</span>
+                </div>
+              )}
               
               {error && (
                 <div className="bg-red-900 text-error p-2 rounded-md mb-4 text-sm">
@@ -302,17 +276,38 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVote
                 </div>
               )}
               
-              <button
-                className={`w-full p-3 rounded-md font-medium ${
-                  voteOption
-                    ? 'bg-primary text-text hover:opacity-90'
-                    : 'bg-surface-200 text-surface-500 cursor-not-allowed'
-                }`}
-                onClick={handleVote}
-                disabled={!voteOption || isVoting}
-              >
-                {isVoting ? 'Submitting vote...' : 'Submit Vote'}
-              </button>
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <button
+                  onClick={() => setVoteOption('for')}
+                  className={`p-2 rounded-md flex items-center justify-center ${
+                    voteOption === 'for' 
+                      ? 'bg-primary text-white' 
+                      : 'bg-surface-200 text-text hover:bg-surface-300'
+                  }`}
+                >
+                  <span>For</span>
+                </button>
+                <button
+                  onClick={() => setVoteOption('against')}
+                  className={`p-2 rounded-md flex items-center justify-center ${
+                    voteOption === 'against' 
+                      ? 'bg-error text-white' 
+                      : 'bg-surface-200 text-text hover:bg-surface-300'
+                  }`}
+                >
+                  <span>Against</span>
+                </button>
+              </div>
+              
+              <div className="flex justify-end">
+                <button
+                  onClick={handleVote}
+                  disabled={!voteOption || isVoting || !wallet?.connected}
+                  className="px-4 py-2 bg-primary text-white rounded-md hover:opacity-90 disabled:opacity-70"
+                >
+                  {isVoting ? 'Submitting...' : 'Submit Vote'}
+                </button>
+              </div>
             </>
           )}
         </div>

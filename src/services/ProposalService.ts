@@ -18,7 +18,6 @@ export type Proposal = ApiProposal;
 interface VoteResult {
   forVotes: number;
   againstVotes: number;
-  abstainVotes: number;
 }
 
 /**
@@ -231,7 +230,7 @@ export class ProposalService {
     daoId: string,
     proposalId: string,
     walletPublicKey: PublicKey,
-    vote: 'for' | 'against' | 'abstain'
+    vote: 'for' | 'against'
   ): Promise<{ transaction: Transaction, voteAccount: Keypair } | null> {
     if (!this.connection) {
       console.error('Solana connection not initialized. Call initializeSolanaConnection first.');
@@ -264,7 +263,7 @@ export class ProposalService {
   async voteOnProposal(
     daoId: string, 
     proposalId: string, 
-    vote: 'for' | 'against' | 'abstain',
+    vote: 'for' | 'against',
     transactionSignature?: string
   ): Promise<boolean> {
     try {
@@ -274,8 +273,7 @@ export class ProposalService {
       // Map our vote values to what the API expects
       const voteRequestVoteEnum = {
         'for': 'for',
-        'against': 'against',
-        'abstain': 'abstain'
+        'against': 'against'
       }[vote];
 
       // Create vote request object with the correct enum value
@@ -298,7 +296,7 @@ export class ProposalService {
     daoId: string, 
     podId: string,
     proposalId: string, 
-    vote: 'for' | 'against' | 'abstain'
+    vote: 'for' | 'against'
   ): Promise<boolean> {
     try {
       const apiClient = this.createAuthenticatedApiClient();
@@ -307,8 +305,7 @@ export class ProposalService {
       // Map our vote values to what the API expects
       const voteRequestVoteEnum = {
         'for': 'for',
-        'against': 'against',
-        'abstain': 'abstain'
+        'against': 'against'
       }[vote];
 
       // Create vote request object with the correct enum value
@@ -339,7 +336,6 @@ export class ProposalService {
         return {
           forVotes: proposal.forVotesCount || 0,
           againstVotes: proposal.againstVotesCount || 0,
-          abstainVotes: 0 // API doesn't support abstain votes
         };
       }
       

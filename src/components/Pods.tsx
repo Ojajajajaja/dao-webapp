@@ -11,7 +11,10 @@ import { POD } from '../core/modules/dao-api/models/POD';
 import { DiscordMessage } from '../core/modules/dao-api/models/DiscordMessage';
 import { Proposal } from '../core/modules/dao-api/models/Proposal';
 import { useEffectOnce } from '../hooks/useEffectOnce';
-
+import { useSolanaTransaction } from '../hooks/useSolanaTransaction';
+import { Connection } from '@solana/web3.js';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { SOLANA_RPC_ENDPOINT } from '../config/solana';
 
 const Pods = () => {
   const { daoId } = useParams<{ daoId: string }>();
@@ -26,6 +29,25 @@ const Pods = () => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isCreateProposalModalOpen, setIsCreateProposalModalOpen] = useState(false);
   const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
+  
+  // Get Solana wallet and transaction utilities
+  const wallet = useWallet();
+  const { 
+    sendTransaction, 
+    isLoading: isTransactionLoading, 
+    isSuccess: isTransactionSuccess,
+    isError: isTransactionError,
+    error: transactionError,
+    signature: transactionSignature,
+    publicKey,
+    connected
+  } = useSolanaTransaction();
+  
+  // Initialize Solana connection
+  useEffectOnce(() => {
+    // Initialize the Solana connection with our configured endpoint
+    proposalService.initializeSolanaConnection(SOLANA_RPC_ENDPOINT);
+  });
 
   // Fetch pods when component loads or daoId changes
   useEffectOnce(() => {
@@ -162,6 +184,121 @@ const Pods = () => {
           console.error('Error refreshing proposal data after vote:', err);
         }
       }
+    }
+  };
+
+  // Handler for successful proposal creation with blockchain transaction
+  const handleCreateProposalWithTransaction = async (
+    title: string,
+    description: string,
+    endDate: Date
+  ) => {
+    if (!daoId || !selectedPod?.podId || !publicKey || !wallet) {
+      console.error("Missing required data for proposal creation");
+      return null;
+    }
+    
+    try {
+      console.log(`Creating proposal transaction for DAO: ${daoId}, POD: ${selectedPod.podId}`);
+      
+      // Create the transaction
+      const result = await proposalService.createProposalTransaction(
+        daoId,
+        publicKey,
+        {
+          title: title,
+          description: description,
+          startDate: new Date(), // Start immediately
+          endDate: endDate,
+          actions: []
+        }
+      );
+      
+      if (!result) {
+        throw new Error('Failed to create proposal transaction');
+      }
+      
+      // Extract transaction
+      const { transaction } = result;
+      
+      // Send the transaction using Solana wallet adapter
+      const connection = new Connection(SOLANA_RPC_ENDPOINT);
+      const signature = await wallet.sendTransaction(transaction, connection);
+      
+      // Wait for confirmation
+      await connection.confirmTransaction(signature, 'confirmed');
+      
+      console.log('Transaction confirmed:', signature);
+      
+      // Create proposal via API
+      const newProposal = await proposalService.createProposalForPOD(
+        daoId,
+        selectedPod.podId,
+        {
+          title,
+          description,
+          endDate
+        }
+      );
+      
+      // Refresh proposal list
+      if (selectedPod && selectedPod.podId && selectedPod.name) {
+        fetchProposalsForPod(selectedPod.podId, selectedPod.name);
+      }
+      
+      return newProposal;
+    } catch (err) {
+      console.error('Error creating proposal transaction:', err);
+      throw err;
+    }
+  };
+
+  // Handler for voting on a proposal with blockchain transaction
+  const handleVoteWithTransaction = async (proposalId: string, vote: 'for' | 'against') => {
+    if (!daoId || !selectedPod?.podId || !publicKey || !wallet) {
+      console.error("Missing required data for voting");
+      return false;
+    }
+    
+    try {
+      console.log(`Creating vote transaction for proposal: ${proposalId}, vote: ${vote}`);
+      
+      // Create the vote transaction
+      const result = await proposalService.createVoteTransaction(
+        daoId,
+        proposalId,
+        publicKey,
+        vote
+      );
+      
+      if (!result) {
+        throw new Error('Failed to create vote transaction');
+      }
+      
+      // Extract transaction
+      const { transaction } = result;
+      
+      // Send the transaction using Solana wallet adapter
+      const connection = new Connection(SOLANA_RPC_ENDPOINT);
+      const signature = await wallet.sendTransaction(transaction, connection);
+      
+      // Wait for confirmation
+      await connection.confirmTransaction(signature, 'confirmed');
+      
+      console.log('Vote transaction confirmed:', signature);
+      
+      // Submit vote to API
+      await proposalService.voteOnPODProposal(
+        daoId,
+        selectedPod.podId,
+        proposalId,
+        vote
+      );
+      
+      return true;
+    } catch (err) {
+      console.error('Error voting on proposal:', err);
+      throw err;
     }
   };
 
@@ -385,6 +522,8 @@ const Pods = () => {
         daoId={daoId}
         podId={selectedPod?.podId}
         podName={selectedPod?.name}
+        createWithTransaction={handleCreateProposalWithTransaction}
+        wallet={wallet}
       />
 
       {selectedProposal && daoId && selectedPod && (
@@ -400,33 +539,17 @@ const Pods = () => {
             endTime: new Date(selectedProposal.endTime).toLocaleString(),
             votes: {
               for: selectedProposal.forVotesCount || 0,
-              against: selectedProposal.againstVotesCount || 0,
-              abstain: 0
+              against: selectedProposal.againstVotesCount || 0
             },
             actions: [],
             quorum: 1, // Default value
             minApproval: 50, // Default percentage
-            daoId: daoId
+            daoId: daoId || ''
           }}
           onClose={() => setSelectedProposal(null)}
           onVoteSubmitted={handleProposalVoted}
-          onVote={async (proposalId: string, vote: 'for' | 'against' | 'abstain') => {
-            try {
-              if (!selectedPod.podId) {
-                throw new Error('No POD ID available');
-              }
-              // Use the POD-specific voting method
-              await proposalService.voteOnPODProposal(
-                daoId, 
-                selectedPod.podId, 
-                proposalId, 
-                vote
-              );
-            } catch (err) {
-              console.error('Error voting on proposal:', err);
-              throw err;
-            }
-          }}
+          onVote={handleVoteWithTransaction}
+          wallet={wallet}
         />
       )}
     </div>
