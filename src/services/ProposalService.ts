@@ -291,6 +291,39 @@ export class ProposalService {
   }
 
   /**
+   * Vote on a proposal for a specific POD
+   * This calls the specific POD proposal voting endpoint
+   */
+  async voteOnPODProposal(
+    daoId: string, 
+    podId: string,
+    proposalId: string, 
+    vote: 'for' | 'against' | 'abstain'
+  ): Promise<boolean> {
+    try {
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return false;
+
+      // Map our vote values to what the API expects
+      const voteRequestVoteEnum = {
+        'for': 'for',
+        'against': 'against',
+        'abstain': 'abstain'
+      }[vote];
+
+      // Create vote request object with the correct enum value
+      const voteRequest = { vote: voteRequestVoteEnum };
+
+      // Use the API client to vote on the POD proposal 
+      await apiClient.proposalsApi.voteOnPODProposal(daoId, podId, proposalId, voteRequest as any);
+      return true;
+    } catch (error) {
+      console.error(`Error voting on POD proposal ${proposalId} in POD ${podId}, DAO ${daoId}:`, error);
+      return false;
+    }
+  }
+
+  /**
    * Get votes for a proposal
    */
   async getProposalVotes(daoId: string, proposalId: string): Promise<VoteResult | null> {
@@ -372,6 +405,24 @@ export class ProposalService {
     } catch (error) {
       console.error(`Error getting proposals for POD ${podId} in DAO ${daoId}:`, error);
       return [];
+    }
+  }
+
+  /**
+   * Get a proposal by ID for a specific POD
+   */
+  async getPodProposalById(daoId: string, podId: string, proposalId: string): Promise<ApiProposal | null> {
+    try {
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return null;
+
+      // Use the SDK to get a proposal by ID from a specific POD
+      const response = await apiClient.proposalsApi.getPODProposalById(daoId, podId, proposalId);
+      
+      return response || null;
+    } catch (error) {
+      console.error(`Error getting proposal ${proposalId} for POD ${podId} in DAO ${daoId}:`, error);
+      return null;
     }
   }
 }
