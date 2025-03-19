@@ -19,6 +19,7 @@ import { DiscordMessage } from '../models/DiscordMessage';
 import { DiscordMessagesResponse } from '../models/DiscordMessagesResponse';
 import { InputCreateDAO } from '../models/InputCreateDAO';
 import { InputCreatePOD } from '../models/InputCreatePOD';
+import { InputCreateProposal } from '../models/InputCreateProposal';
 import { InputCreateUser } from '../models/InputCreateUser';
 import { InputUpdateUser } from '../models/InputUpdateUser';
 import { LinkDiscordChannel } from '../models/LinkDiscordChannel';
@@ -34,6 +35,11 @@ import { PODSchemaResponse } from '../models/PODSchemaResponse';
 import { PODUpdate } from '../models/PODUpdate';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
+import { Proposal } from '../models/Proposal';
+import { ProposalSchemaResponse } from '../models/ProposalSchemaResponse';
+import { ProposalUpdate } from '../models/ProposalUpdate';
+import { ProposalVote } from '../models/ProposalVote';
+import { ProposalVoteResponse } from '../models/ProposalVoteResponse';
 import { SocialConnection } from '../models/SocialConnection';
 import { TelegramAuth } from '../models/TelegramAuth';
 import { Token } from '../models/Token';
@@ -46,6 +52,7 @@ import { Treasury } from '../models/Treasury';
 import { TreasuryUpdatePercentages } from '../models/TreasuryUpdatePercentages';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
+import { UserBasic1 } from '../models/UserBasic1';
 import { UserExistResponse } from '../models/UserExistResponse';
 import { UserInfoError } from '../models/UserInfoError';
 import { UserResponse } from '../models/UserResponse';
@@ -918,6 +925,279 @@ export class ObjectDiscordOauthApi {
      */
     public discordCallback(param: DiscordOauthApiDiscordCallbackRequest = {}, options?: ConfigurationOptions): Promise<void> {
         return this.api.discordCallback( options).toPromise();
+    }
+
+}
+
+import { ObservableProposalsApi } from "./ObservableAPI";
+import { ProposalsApiRequestFactory, ProposalsApiResponseProcessor} from "../apis/ProposalsApi";
+
+export interface ProposalsApiCreateProposalForDAORequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApicreateProposalForDAO
+     */
+    daoId: string
+    /**
+     * 
+     * @type InputCreateProposal
+     * @memberof ProposalsApicreateProposalForDAO
+     */
+    inputCreateProposal: InputCreateProposal
+}
+
+export interface ProposalsApiDeleteDAOProposalRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApideleteDAOProposal
+     */
+    daoId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApideleteDAOProposal
+     */
+    proposalId: string
+}
+
+export interface ProposalsApiGetActiveProposalsByDAORequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApigetActiveProposalsByDAO
+     */
+    daoId: string
+}
+
+export interface ProposalsApiGetDAOProposalByIdRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApigetDAOProposalById
+     */
+    daoId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApigetDAOProposalById
+     */
+    proposalId: string
+}
+
+export interface ProposalsApiGetProposalsByDAORequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApigetProposalsByDAO
+     */
+    daoId: string
+}
+
+export interface ProposalsApiRemoveVoteFromDAOProposalRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApiremoveVoteFromDAOProposal
+     */
+    daoId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApiremoveVoteFromDAOProposal
+     */
+    proposalId: string
+}
+
+export interface ProposalsApiUpdateDAOProposalRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApiupdateDAOProposal
+     */
+    daoId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApiupdateDAOProposal
+     */
+    proposalId: string
+    /**
+     * 
+     * @type ProposalUpdate
+     * @memberof ProposalsApiupdateDAOProposal
+     */
+    proposalUpdate: ProposalUpdate
+}
+
+export interface ProposalsApiVoteOnDAOProposalRequest {
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApivoteOnDAOProposal
+     */
+    daoId: string
+    /**
+     * 
+     * Defaults to: undefined
+     * @type string
+     * @memberof ProposalsApivoteOnDAOProposal
+     */
+    proposalId: string
+    /**
+     * 
+     * @type ProposalVote
+     * @memberof ProposalsApivoteOnDAOProposal
+     */
+    proposalVote: ProposalVote
+}
+
+export class ObjectProposalsApi {
+    private api: ObservableProposalsApi
+
+    public constructor(configuration: Configuration, requestFactory?: ProposalsApiRequestFactory, responseProcessor?: ProposalsApiResponseProcessor) {
+        this.api = new ObservableProposalsApi(configuration, requestFactory, responseProcessor);
+    }
+
+    /**
+     * Create a new proposal for this specific DAO
+     * @param param the request object
+     */
+    public createProposalForDAOWithHttpInfo(param: ProposalsApiCreateProposalForDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+        return this.api.createProposalForDAOWithHttpInfo(param.daoId, param.inputCreateProposal,  options).toPromise();
+    }
+
+    /**
+     * Create a new proposal for this specific DAO
+     * @param param the request object
+     */
+    public createProposalForDAO(param: ProposalsApiCreateProposalForDAORequest, options?: ConfigurationOptions): Promise<ProposalSchemaResponse> {
+        return this.api.createProposalForDAO(param.daoId, param.inputCreateProposal,  options).toPromise();
+    }
+
+    /**
+     * Delete a proposal for a DAO
+     * @param param the request object
+     */
+    public deleteDAOProposalWithHttpInfo(param: ProposalsApiDeleteDAOProposalRequest, options?: ConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+        return this.api.deleteDAOProposalWithHttpInfo(param.daoId, param.proposalId,  options).toPromise();
+    }
+
+    /**
+     * Delete a proposal for a DAO
+     * @param param the request object
+     */
+    public deleteDAOProposal(param: ProposalsApiDeleteDAOProposalRequest, options?: ConfigurationOptions): Promise<ProposalSchemaResponse> {
+        return this.api.deleteDAOProposal(param.daoId, param.proposalId,  options).toPromise();
+    }
+
+    /**
+     * Get all active proposals for a specific DAO
+     * @param param the request object
+     */
+    public getActiveProposalsByDAOWithHttpInfo(param: ProposalsApiGetActiveProposalsByDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<Array<Proposal>>> {
+        return this.api.getActiveProposalsByDAOWithHttpInfo(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Get all active proposals for a specific DAO
+     * @param param the request object
+     */
+    public getActiveProposalsByDAO(param: ProposalsApiGetActiveProposalsByDAORequest, options?: ConfigurationOptions): Promise<Array<Proposal>> {
+        return this.api.getActiveProposalsByDAO(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Get a specific proposal for a DAO
+     * @param param the request object
+     */
+    public getDAOProposalByIdWithHttpInfo(param: ProposalsApiGetDAOProposalByIdRequest, options?: ConfigurationOptions): Promise<HttpInfo<Proposal>> {
+        return this.api.getDAOProposalByIdWithHttpInfo(param.daoId, param.proposalId,  options).toPromise();
+    }
+
+    /**
+     * Get a specific proposal for a DAO
+     * @param param the request object
+     */
+    public getDAOProposalById(param: ProposalsApiGetDAOProposalByIdRequest, options?: ConfigurationOptions): Promise<Proposal> {
+        return this.api.getDAOProposalById(param.daoId, param.proposalId,  options).toPromise();
+    }
+
+    /**
+     * Get all proposals for a specific DAO
+     * @param param the request object
+     */
+    public getProposalsByDAOWithHttpInfo(param: ProposalsApiGetProposalsByDAORequest, options?: ConfigurationOptions): Promise<HttpInfo<Array<Proposal>>> {
+        return this.api.getProposalsByDAOWithHttpInfo(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Get all proposals for a specific DAO
+     * @param param the request object
+     */
+    public getProposalsByDAO(param: ProposalsApiGetProposalsByDAORequest, options?: ConfigurationOptions): Promise<Array<Proposal>> {
+        return this.api.getProposalsByDAO(param.daoId,  options).toPromise();
+    }
+
+    /**
+     * Remove vote from a proposal for a DAO
+     * @param param the request object
+     */
+    public removeVoteFromDAOProposalWithHttpInfo(param: ProposalsApiRemoveVoteFromDAOProposalRequest, options?: ConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+        return this.api.removeVoteFromDAOProposalWithHttpInfo(param.daoId, param.proposalId,  options).toPromise();
+    }
+
+    /**
+     * Remove vote from a proposal for a DAO
+     * @param param the request object
+     */
+    public removeVoteFromDAOProposal(param: ProposalsApiRemoveVoteFromDAOProposalRequest, options?: ConfigurationOptions): Promise<ProposalVoteResponse> {
+        return this.api.removeVoteFromDAOProposal(param.daoId, param.proposalId,  options).toPromise();
+    }
+
+    /**
+     * Update a proposal for a DAO
+     * @param param the request object
+     */
+    public updateDAOProposalWithHttpInfo(param: ProposalsApiUpdateDAOProposalRequest, options?: ConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+        return this.api.updateDAOProposalWithHttpInfo(param.daoId, param.proposalId, param.proposalUpdate,  options).toPromise();
+    }
+
+    /**
+     * Update a proposal for a DAO
+     * @param param the request object
+     */
+    public updateDAOProposal(param: ProposalsApiUpdateDAOProposalRequest, options?: ConfigurationOptions): Promise<ProposalSchemaResponse> {
+        return this.api.updateDAOProposal(param.daoId, param.proposalId, param.proposalUpdate,  options).toPromise();
+    }
+
+    /**
+     * Vote on a proposal for a DAO
+     * @param param the request object
+     */
+    public voteOnDAOProposalWithHttpInfo(param: ProposalsApiVoteOnDAOProposalRequest, options?: ConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+        return this.api.voteOnDAOProposalWithHttpInfo(param.daoId, param.proposalId, param.proposalVote,  options).toPromise();
+    }
+
+    /**
+     * Vote on a proposal for a DAO
+     * @param param the request object
+     */
+    public voteOnDAOProposal(param: ProposalsApiVoteOnDAOProposalRequest, options?: ConfigurationOptions): Promise<ProposalVoteResponse> {
+        return this.api.voteOnDAOProposal(param.daoId, param.proposalId, param.proposalVote,  options).toPromise();
     }
 
 }

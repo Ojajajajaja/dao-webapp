@@ -220,13 +220,6 @@ export class TwitterOauthApiResponseProcessor {
             ) as UserInfoError;
             throw new ApiException<UserInfoError>(response.httpStatusCode, "User info retrieval failed", body, response.headers);
         }
-        if (isCodeInRange("401", response.httpStatusCode)) {
-            const body: OAuthError = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "OAuthError", ""
-            ) as OAuthError;
-            throw new ApiException<OAuthError>(response.httpStatusCode, "Unauthorized", body, response.headers);
-        }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
