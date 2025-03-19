@@ -73,11 +73,18 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
     /**
      * Create a new proposal for this specific POD
+     * @param daoId 
      * @param podId 
      * @param inputCreateProposal 
      */
-    public async createProposalForPOD(podId: string, inputCreateProposal: InputCreateProposal, _options?: Configuration): Promise<RequestContext> {
+    public async createProposalForPOD(daoId: string, podId: string, inputCreateProposal: InputCreateProposal, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("ProposalsApi", "createProposalForPOD", "daoId");
+        }
+
 
         // verify required parameter 'podId' is not null or undefined
         if (podId === null || podId === undefined) {
@@ -92,7 +99,8 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
 
         // Path Params
-        const localVarPath = '/proposals/pod/{pod_id}/proposals'
+        const localVarPath = '/proposals/dao/{dao_id}/pod/{pod_id}/proposals'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
             .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)));
 
         // Make Request Context
@@ -161,11 +169,18 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
     /**
      * Delete a proposal for a POD
+     * @param daoId 
      * @param podId 
      * @param proposalId 
      */
-    public async deletePODProposal(podId: string, proposalId: string, _options?: Configuration): Promise<RequestContext> {
+    public async deletePODProposal(daoId: string, podId: string, proposalId: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("ProposalsApi", "deletePODProposal", "daoId");
+        }
+
 
         // verify required parameter 'podId' is not null or undefined
         if (podId === null || podId === undefined) {
@@ -180,7 +195,8 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
 
         // Path Params
-        const localVarPath = '/proposals/pod/{pod_id}/proposals/{proposal_id}'
+        const localVarPath = '/proposals/dao/{dao_id}/pod/{pod_id}/proposals/{proposal_id}'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
             .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)))
             .replace('{' + 'proposal_id' + '}', encodeURIComponent(String(proposalId)));
 
@@ -231,10 +247,17 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
     /**
      * Get all active proposals for a specific POD
+     * @param daoId 
      * @param podId 
      */
-    public async getActiveProposalsByPOD(podId: string, _options?: Configuration): Promise<RequestContext> {
+    public async getActiveProposalsByPOD(daoId: string, podId: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("ProposalsApi", "getActiveProposalsByPOD", "daoId");
+        }
+
 
         // verify required parameter 'podId' is not null or undefined
         if (podId === null || podId === undefined) {
@@ -243,7 +266,8 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
 
         // Path Params
-        const localVarPath = '/proposals/pod/{pod_id}/proposals/active'
+        const localVarPath = '/proposals/dao/{dao_id}/pod/{pod_id}/proposals/active'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
             .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)));
 
         // Make Request Context
@@ -301,11 +325,18 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
     /**
      * Get a specific proposal for a POD
+     * @param daoId 
      * @param podId 
      * @param proposalId 
      */
-    public async getPODProposalById(podId: string, proposalId: string, _options?: Configuration): Promise<RequestContext> {
+    public async getPODProposalById(daoId: string, podId: string, proposalId: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("ProposalsApi", "getPODProposalById", "daoId");
+        }
+
 
         // verify required parameter 'podId' is not null or undefined
         if (podId === null || podId === undefined) {
@@ -320,7 +351,8 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
 
         // Path Params
-        const localVarPath = '/proposals/pod/{pod_id}/proposals/{proposal_id}'
+        const localVarPath = '/proposals/dao/{dao_id}/pod/{pod_id}/proposals/{proposal_id}'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
             .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)))
             .replace('{' + 'proposal_id' + '}', encodeURIComponent(String(proposalId)));
 
@@ -340,11 +372,18 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
     /**
      * Get vote counts for a POD proposal
+     * @param daoId 
      * @param podId 
      * @param proposalId 
      */
-    public async getPODProposalVotes(podId: string, proposalId: string, _options?: Configuration): Promise<RequestContext> {
+    public async getPODProposalVotes(daoId: string, podId: string, proposalId: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("ProposalsApi", "getPODProposalVotes", "daoId");
+        }
+
 
         // verify required parameter 'podId' is not null or undefined
         if (podId === null || podId === undefined) {
@@ -359,7 +398,8 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
 
         // Path Params
-        const localVarPath = '/proposals/pod/{pod_id}/proposals/{proposal_id}/vote'
+        const localVarPath = '/proposals/dao/{dao_id}/pod/{pod_id}/proposals/{proposal_id}/vote'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
             .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)))
             .replace('{' + 'proposal_id' + '}', encodeURIComponent(String(proposalId)));
 
@@ -449,10 +489,17 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
     /**
      * Get all proposals for a specific POD
+     * @param daoId 
      * @param podId 
      */
-    public async getProposalsByPOD(podId: string, _options?: Configuration): Promise<RequestContext> {
+    public async getProposalsByPOD(daoId: string, podId: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("ProposalsApi", "getProposalsByPOD", "daoId");
+        }
+
 
         // verify required parameter 'podId' is not null or undefined
         if (podId === null || podId === undefined) {
@@ -461,7 +508,8 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
 
         // Path Params
-        const localVarPath = '/proposals/pod/{pod_id}/proposals'
+        const localVarPath = '/proposals/dao/{dao_id}/pod/{pod_id}/proposals'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
             .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)));
 
         // Make Request Context
@@ -519,11 +567,18 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
     /**
      * Remove a vote from a POD proposal
+     * @param daoId 
      * @param podId 
      * @param proposalId 
      */
-    public async removeVoteFromPODProposal(podId: string, proposalId: string, _options?: Configuration): Promise<RequestContext> {
+    public async removeVoteFromPODProposal(daoId: string, podId: string, proposalId: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("ProposalsApi", "removeVoteFromPODProposal", "daoId");
+        }
+
 
         // verify required parameter 'podId' is not null or undefined
         if (podId === null || podId === undefined) {
@@ -538,7 +593,8 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
 
         // Path Params
-        const localVarPath = '/proposals/pod/{pod_id}/proposals/{proposal_id}/vote'
+        const localVarPath = '/proposals/dao/{dao_id}/pod/{pod_id}/proposals/{proposal_id}/vote'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
             .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)))
             .replace('{' + 'proposal_id' + '}', encodeURIComponent(String(proposalId)));
 
@@ -615,12 +671,19 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
     /**
      * Update a proposal for a POD
+     * @param daoId 
      * @param podId 
      * @param proposalId 
      * @param proposalUpdate 
      */
-    public async updatePODProposal(podId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: Configuration): Promise<RequestContext> {
+    public async updatePODProposal(daoId: string, podId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("ProposalsApi", "updatePODProposal", "daoId");
+        }
+
 
         // verify required parameter 'podId' is not null or undefined
         if (podId === null || podId === undefined) {
@@ -641,7 +704,8 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
 
         // Path Params
-        const localVarPath = '/proposals/pod/{pod_id}/proposals/{proposal_id}'
+        const localVarPath = '/proposals/dao/{dao_id}/pod/{pod_id}/proposals/{proposal_id}'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
             .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)))
             .replace('{' + 'proposal_id' + '}', encodeURIComponent(String(proposalId)));
 
@@ -729,12 +793,19 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
     /**
      * Vote on a POD proposal
+     * @param daoId 
      * @param podId 
      * @param proposalId 
      * @param proposalVote 
      */
-    public async voteOnPODProposal(podId: string, proposalId: string, proposalVote: ProposalVote, _options?: Configuration): Promise<RequestContext> {
+    public async voteOnPODProposal(daoId: string, podId: string, proposalId: string, proposalVote: ProposalVote, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
+
+        // verify required parameter 'daoId' is not null or undefined
+        if (daoId === null || daoId === undefined) {
+            throw new RequiredError("ProposalsApi", "voteOnPODProposal", "daoId");
+        }
+
 
         // verify required parameter 'podId' is not null or undefined
         if (podId === null || podId === undefined) {
@@ -755,7 +826,8 @@ export class ProposalsApiRequestFactory extends BaseAPIRequestFactory {
 
 
         // Path Params
-        const localVarPath = '/proposals/pod/{pod_id}/proposals/{proposal_id}/vote'
+        const localVarPath = '/proposals/dao/{dao_id}/pod/{pod_id}/proposals/{proposal_id}/vote'
+            .replace('{' + 'dao_id' + '}', encodeURIComponent(String(daoId)))
             .replace('{' + 'pod_id' + '}', encodeURIComponent(String(podId)))
             .replace('{' + 'proposal_id' + '}', encodeURIComponent(String(proposalId)));
 

@@ -1912,10 +1912,11 @@ export class ObservableProposalsApi {
 
     /**
      * Create a new proposal for this specific POD
+     * @param daoId
      * @param podId
      * @param inputCreateProposal
      */
-    public createProposalForPODWithHttpInfo(podId: string, inputCreateProposal: InputCreateProposal, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalSchemaResponse>> {
+    public createProposalForPODWithHttpInfo(daoId: string, podId: string, inputCreateProposal: InputCreateProposal, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalSchemaResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -1946,7 +1947,7 @@ export class ObservableProposalsApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.createProposalForPOD(podId, inputCreateProposal, _config);
+        const requestContextPromise = this.requestFactory.createProposalForPOD(daoId, podId, inputCreateProposal, _config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -1965,11 +1966,12 @@ export class ObservableProposalsApi {
 
     /**
      * Create a new proposal for this specific POD
+     * @param daoId
      * @param podId
      * @param inputCreateProposal
      */
-    public createProposalForPOD(podId: string, inputCreateProposal: InputCreateProposal, _options?: ConfigurationOptions): Observable<ProposalSchemaResponse> {
-        return this.createProposalForPODWithHttpInfo(podId, inputCreateProposal, _options).pipe(map((apiResponse: HttpInfo<ProposalSchemaResponse>) => apiResponse.data));
+    public createProposalForPOD(daoId: string, podId: string, inputCreateProposal: InputCreateProposal, _options?: ConfigurationOptions): Observable<ProposalSchemaResponse> {
+        return this.createProposalForPODWithHttpInfo(daoId, podId, inputCreateProposal, _options).pipe(map((apiResponse: HttpInfo<ProposalSchemaResponse>) => apiResponse.data));
     }
 
     /**
@@ -2036,10 +2038,11 @@ export class ObservableProposalsApi {
 
     /**
      * Delete a proposal for a POD
+     * @param daoId
      * @param podId
      * @param proposalId
      */
-    public deletePODProposalWithHttpInfo(podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalSchemaResponse>> {
+    public deletePODProposalWithHttpInfo(daoId: string, podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalSchemaResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -2070,7 +2073,7 @@ export class ObservableProposalsApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.deletePODProposal(podId, proposalId, _config);
+        const requestContextPromise = this.requestFactory.deletePODProposal(daoId, podId, proposalId, _config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -2089,11 +2092,12 @@ export class ObservableProposalsApi {
 
     /**
      * Delete a proposal for a POD
+     * @param daoId
      * @param podId
      * @param proposalId
      */
-    public deletePODProposal(podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<ProposalSchemaResponse> {
-        return this.deletePODProposalWithHttpInfo(podId, proposalId, _options).pipe(map((apiResponse: HttpInfo<ProposalSchemaResponse>) => apiResponse.data));
+    public deletePODProposal(daoId: string, podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<ProposalSchemaResponse> {
+        return this.deletePODProposalWithHttpInfo(daoId, podId, proposalId, _options).pipe(map((apiResponse: HttpInfo<ProposalSchemaResponse>) => apiResponse.data));
     }
 
     /**
@@ -2158,9 +2162,10 @@ export class ObservableProposalsApi {
 
     /**
      * Get all active proposals for a specific POD
+     * @param daoId
      * @param podId
      */
-    public getActiveProposalsByPODWithHttpInfo(podId: string, _options?: ConfigurationOptions): Observable<HttpInfo<PodProposalListResponse>> {
+    public getActiveProposalsByPODWithHttpInfo(daoId: string, podId: string, _options?: ConfigurationOptions): Observable<HttpInfo<PodProposalListResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -2191,7 +2196,7 @@ export class ObservableProposalsApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.getActiveProposalsByPOD(podId, _config);
+        const requestContextPromise = this.requestFactory.getActiveProposalsByPOD(daoId, podId, _config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -2210,10 +2215,11 @@ export class ObservableProposalsApi {
 
     /**
      * Get all active proposals for a specific POD
+     * @param daoId
      * @param podId
      */
-    public getActiveProposalsByPOD(podId: string, _options?: ConfigurationOptions): Observable<PodProposalListResponse> {
-        return this.getActiveProposalsByPODWithHttpInfo(podId, _options).pipe(map((apiResponse: HttpInfo<PodProposalListResponse>) => apiResponse.data));
+    public getActiveProposalsByPOD(daoId: string, podId: string, _options?: ConfigurationOptions): Observable<PodProposalListResponse> {
+        return this.getActiveProposalsByPODWithHttpInfo(daoId, podId, _options).pipe(map((apiResponse: HttpInfo<PodProposalListResponse>) => apiResponse.data));
     }
 
     /**
@@ -2280,10 +2286,11 @@ export class ObservableProposalsApi {
 
     /**
      * Get a specific proposal for a POD
+     * @param daoId
      * @param podId
      * @param proposalId
      */
-    public getPODProposalByIdWithHttpInfo(podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<HttpInfo<Proposal>> {
+    public getPODProposalByIdWithHttpInfo(daoId: string, podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<HttpInfo<Proposal>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -2314,7 +2321,7 @@ export class ObservableProposalsApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.getPODProposalById(podId, proposalId, _config);
+        const requestContextPromise = this.requestFactory.getPODProposalById(daoId, podId, proposalId, _config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -2333,19 +2340,21 @@ export class ObservableProposalsApi {
 
     /**
      * Get a specific proposal for a POD
+     * @param daoId
      * @param podId
      * @param proposalId
      */
-    public getPODProposalById(podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<Proposal> {
-        return this.getPODProposalByIdWithHttpInfo(podId, proposalId, _options).pipe(map((apiResponse: HttpInfo<Proposal>) => apiResponse.data));
+    public getPODProposalById(daoId: string, podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<Proposal> {
+        return this.getPODProposalByIdWithHttpInfo(daoId, podId, proposalId, _options).pipe(map((apiResponse: HttpInfo<Proposal>) => apiResponse.data));
     }
 
     /**
      * Get vote counts for a POD proposal
+     * @param daoId
      * @param podId
      * @param proposalId
      */
-    public getPODProposalVotesWithHttpInfo(podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalVoteResponse>> {
+    public getPODProposalVotesWithHttpInfo(daoId: string, podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalVoteResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -2376,7 +2385,7 @@ export class ObservableProposalsApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.getPODProposalVotes(podId, proposalId, _config);
+        const requestContextPromise = this.requestFactory.getPODProposalVotes(daoId, podId, proposalId, _config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -2395,11 +2404,12 @@ export class ObservableProposalsApi {
 
     /**
      * Get vote counts for a POD proposal
+     * @param daoId
      * @param podId
      * @param proposalId
      */
-    public getPODProposalVotes(podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<ProposalVoteResponse> {
-        return this.getPODProposalVotesWithHttpInfo(podId, proposalId, _options).pipe(map((apiResponse: HttpInfo<ProposalVoteResponse>) => apiResponse.data));
+    public getPODProposalVotes(daoId: string, podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<ProposalVoteResponse> {
+        return this.getPODProposalVotesWithHttpInfo(daoId, podId, proposalId, _options).pipe(map((apiResponse: HttpInfo<ProposalVoteResponse>) => apiResponse.data));
     }
 
     /**
@@ -2526,9 +2536,10 @@ export class ObservableProposalsApi {
 
     /**
      * Get all proposals for a specific POD
+     * @param daoId
      * @param podId
      */
-    public getProposalsByPODWithHttpInfo(podId: string, _options?: ConfigurationOptions): Observable<HttpInfo<PodProposalListResponse>> {
+    public getProposalsByPODWithHttpInfo(daoId: string, podId: string, _options?: ConfigurationOptions): Observable<HttpInfo<PodProposalListResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -2559,7 +2570,7 @@ export class ObservableProposalsApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.getProposalsByPOD(podId, _config);
+        const requestContextPromise = this.requestFactory.getProposalsByPOD(daoId, podId, _config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -2578,10 +2589,11 @@ export class ObservableProposalsApi {
 
     /**
      * Get all proposals for a specific POD
+     * @param daoId
      * @param podId
      */
-    public getProposalsByPOD(podId: string, _options?: ConfigurationOptions): Observable<PodProposalListResponse> {
-        return this.getProposalsByPODWithHttpInfo(podId, _options).pipe(map((apiResponse: HttpInfo<PodProposalListResponse>) => apiResponse.data));
+    public getProposalsByPOD(daoId: string, podId: string, _options?: ConfigurationOptions): Observable<PodProposalListResponse> {
+        return this.getProposalsByPODWithHttpInfo(daoId, podId, _options).pipe(map((apiResponse: HttpInfo<PodProposalListResponse>) => apiResponse.data));
     }
 
     /**
@@ -2648,10 +2660,11 @@ export class ObservableProposalsApi {
 
     /**
      * Remove a vote from a POD proposal
+     * @param daoId
      * @param podId
      * @param proposalId
      */
-    public removeVoteFromPODProposalWithHttpInfo(podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalVoteResponse>> {
+    public removeVoteFromPODProposalWithHttpInfo(daoId: string, podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalVoteResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -2682,7 +2695,7 @@ export class ObservableProposalsApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.removeVoteFromPODProposal(podId, proposalId, _config);
+        const requestContextPromise = this.requestFactory.removeVoteFromPODProposal(daoId, podId, proposalId, _config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -2701,11 +2714,12 @@ export class ObservableProposalsApi {
 
     /**
      * Remove a vote from a POD proposal
+     * @param daoId
      * @param podId
      * @param proposalId
      */
-    public removeVoteFromPODProposal(podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<ProposalVoteResponse> {
-        return this.removeVoteFromPODProposalWithHttpInfo(podId, proposalId, _options).pipe(map((apiResponse: HttpInfo<ProposalVoteResponse>) => apiResponse.data));
+    public removeVoteFromPODProposal(daoId: string, podId: string, proposalId: string, _options?: ConfigurationOptions): Observable<ProposalVoteResponse> {
+        return this.removeVoteFromPODProposalWithHttpInfo(daoId, podId, proposalId, _options).pipe(map((apiResponse: HttpInfo<ProposalVoteResponse>) => apiResponse.data));
     }
 
     /**
@@ -2774,11 +2788,12 @@ export class ObservableProposalsApi {
 
     /**
      * Update a proposal for a POD
+     * @param daoId
      * @param podId
      * @param proposalId
      * @param proposalUpdate
      */
-    public updatePODProposalWithHttpInfo(podId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalSchemaResponse>> {
+    public updatePODProposalWithHttpInfo(daoId: string, podId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalSchemaResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -2809,7 +2824,7 @@ export class ObservableProposalsApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.updatePODProposal(podId, proposalId, proposalUpdate, _config);
+        const requestContextPromise = this.requestFactory.updatePODProposal(daoId, podId, proposalId, proposalUpdate, _config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -2828,12 +2843,13 @@ export class ObservableProposalsApi {
 
     /**
      * Update a proposal for a POD
+     * @param daoId
      * @param podId
      * @param proposalId
      * @param proposalUpdate
      */
-    public updatePODProposal(podId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: ConfigurationOptions): Observable<ProposalSchemaResponse> {
-        return this.updatePODProposalWithHttpInfo(podId, proposalId, proposalUpdate, _options).pipe(map((apiResponse: HttpInfo<ProposalSchemaResponse>) => apiResponse.data));
+    public updatePODProposal(daoId: string, podId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: ConfigurationOptions): Observable<ProposalSchemaResponse> {
+        return this.updatePODProposalWithHttpInfo(daoId, podId, proposalId, proposalUpdate, _options).pipe(map((apiResponse: HttpInfo<ProposalSchemaResponse>) => apiResponse.data));
     }
 
     /**
@@ -2902,11 +2918,12 @@ export class ObservableProposalsApi {
 
     /**
      * Vote on a POD proposal
+     * @param daoId
      * @param podId
      * @param proposalId
      * @param proposalVote
      */
-    public voteOnPODProposalWithHttpInfo(podId: string, proposalId: string, proposalVote: ProposalVote, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalVoteResponse>> {
+    public voteOnPODProposalWithHttpInfo(daoId: string, podId: string, proposalId: string, proposalVote: ProposalVote, _options?: ConfigurationOptions): Observable<HttpInfo<ProposalVoteResponse>> {
     let _config = this.configuration;
     let allMiddleware: Middleware[] = [];
     if (_options && _options.middleware){
@@ -2937,7 +2954,7 @@ export class ObservableProposalsApi {
 		};
 	}
 
-        const requestContextPromise = this.requestFactory.voteOnPODProposal(podId, proposalId, proposalVote, _config);
+        const requestContextPromise = this.requestFactory.voteOnPODProposal(daoId, podId, proposalId, proposalVote, _config);
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (const middleware of allMiddleware) {
@@ -2956,12 +2973,13 @@ export class ObservableProposalsApi {
 
     /**
      * Vote on a POD proposal
+     * @param daoId
      * @param podId
      * @param proposalId
      * @param proposalVote
      */
-    public voteOnPODProposal(podId: string, proposalId: string, proposalVote: ProposalVote, _options?: ConfigurationOptions): Observable<ProposalVoteResponse> {
-        return this.voteOnPODProposalWithHttpInfo(podId, proposalId, proposalVote, _options).pipe(map((apiResponse: HttpInfo<ProposalVoteResponse>) => apiResponse.data));
+    public voteOnPODProposal(daoId: string, podId: string, proposalId: string, proposalVote: ProposalVote, _options?: ConfigurationOptions): Observable<ProposalVoteResponse> {
+        return this.voteOnPODProposalWithHttpInfo(daoId, podId, proposalId, proposalVote, _options).pipe(map((apiResponse: HttpInfo<ProposalVoteResponse>) => apiResponse.data));
     }
 
 }

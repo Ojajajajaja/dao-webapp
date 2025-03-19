@@ -5,23 +5,23 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**createProposalForDAO**](ProposalsApi.md#createProposalForDAO) | **POST** /proposals/dao/{dao_id}/proposals | Create a new proposal for this specific DAO
-[**createProposalForPOD**](ProposalsApi.md#createProposalForPOD) | **POST** /proposals/pod/{pod_id}/proposals | Create a new proposal for this specific POD
+[**createProposalForPOD**](ProposalsApi.md#createProposalForPOD) | **POST** /proposals/dao/{dao_id}/pod/{pod_id}/proposals | Create a new proposal for this specific POD
 [**deleteDAOProposal**](ProposalsApi.md#deleteDAOProposal) | **DELETE** /proposals/dao/{dao_id}/proposals/{proposal_id} | Delete a proposal for a DAO
-[**deletePODProposal**](ProposalsApi.md#deletePODProposal) | **DELETE** /proposals/pod/{pod_id}/proposals/{proposal_id} | Delete a proposal for a POD
+[**deletePODProposal**](ProposalsApi.md#deletePODProposal) | **DELETE** /proposals/dao/{dao_id}/pod/{pod_id}/proposals/{proposal_id} | Delete a proposal for a POD
 [**getActiveProposalsByDAO**](ProposalsApi.md#getActiveProposalsByDAO) | **GET** /proposals/dao/{dao_id}/proposals/active | Get all active proposals for a specific DAO
-[**getActiveProposalsByPOD**](ProposalsApi.md#getActiveProposalsByPOD) | **GET** /proposals/pod/{pod_id}/proposals/active | Get all active proposals for a specific POD
+[**getActiveProposalsByPOD**](ProposalsApi.md#getActiveProposalsByPOD) | **GET** /proposals/dao/{dao_id}/pod/{pod_id}/proposals/active | Get all active proposals for a specific POD
 [**getDAOProposalById**](ProposalsApi.md#getDAOProposalById) | **GET** /proposals/dao/{dao_id}/proposals/{proposal_id} | Get a specific proposal for a DAO
-[**getPODProposalById**](ProposalsApi.md#getPODProposalById) | **GET** /proposals/pod/{pod_id}/proposals/{proposal_id} | Get a specific proposal for a POD
-[**getPODProposalVotes**](ProposalsApi.md#getPODProposalVotes) | **GET** /proposals/pod/{pod_id}/proposals/{proposal_id}/vote | Get vote counts for a POD proposal
+[**getPODProposalById**](ProposalsApi.md#getPODProposalById) | **GET** /proposals/dao/{dao_id}/pod/{pod_id}/proposals/{proposal_id} | Get a specific proposal for a POD
+[**getPODProposalVotes**](ProposalsApi.md#getPODProposalVotes) | **GET** /proposals/dao/{dao_id}/pod/{pod_id}/proposals/{proposal_id}/vote | Get vote counts for a POD proposal
 [**getProposalVotes**](ProposalsApi.md#getProposalVotes) | **GET** /proposals/dao/{dao_id}/proposals/{proposal_id}/vote | Get vote counts for a proposal
 [**getProposalsByDAO**](ProposalsApi.md#getProposalsByDAO) | **GET** /proposals/dao/{dao_id}/proposals | Get all proposals for a specific DAO
-[**getProposalsByPOD**](ProposalsApi.md#getProposalsByPOD) | **GET** /proposals/pod/{pod_id}/proposals | Get all proposals for a specific POD
+[**getProposalsByPOD**](ProposalsApi.md#getProposalsByPOD) | **GET** /proposals/dao/{dao_id}/pod/{pod_id}/proposals | Get all proposals for a specific POD
 [**removeVoteFromDAOProposal**](ProposalsApi.md#removeVoteFromDAOProposal) | **DELETE** /proposals/dao/{dao_id}/proposals/{proposal_id}/vote | Remove vote from a proposal for a DAO
-[**removeVoteFromPODProposal**](ProposalsApi.md#removeVoteFromPODProposal) | **DELETE** /proposals/pod/{pod_id}/proposals/{proposal_id}/vote | Remove a vote from a POD proposal
+[**removeVoteFromPODProposal**](ProposalsApi.md#removeVoteFromPODProposal) | **DELETE** /proposals/dao/{dao_id}/pod/{pod_id}/proposals/{proposal_id}/vote | Remove a vote from a POD proposal
 [**updateDAOProposal**](ProposalsApi.md#updateDAOProposal) | **PUT** /proposals/dao/{dao_id}/proposals/{proposal_id} | Update a proposal for a DAO
-[**updatePODProposal**](ProposalsApi.md#updatePODProposal) | **PUT** /proposals/pod/{pod_id}/proposals/{proposal_id} | Update a proposal for a POD
+[**updatePODProposal**](ProposalsApi.md#updatePODProposal) | **PUT** /proposals/dao/{dao_id}/pod/{pod_id}/proposals/{proposal_id} | Update a proposal for a POD
 [**voteOnDAOProposal**](ProposalsApi.md#voteOnDAOProposal) | **POST** /proposals/dao/{dao_id}/proposals/{proposal_id}/vote | Vote on a proposal for a DAO
-[**voteOnPODProposal**](ProposalsApi.md#voteOnPODProposal) | **POST** /proposals/pod/{pod_id}/proposals/{proposal_id}/vote | Vote on a POD proposal
+[**voteOnPODProposal**](ProposalsApi.md#voteOnPODProposal) | **POST** /proposals/dao/{dao_id}/pod/{pod_id}/proposals/{proposal_id}/vote | Vote on a POD proposal
 
 
 # **createProposalForDAO**
@@ -111,6 +111,8 @@ const apiInstance = new ProposalsApi(configuration);
 
 const request: ProposalsApiCreateProposalForPODRequest = {
   
+  daoId: "dao_id_example",
+  
   podId: "pod_id_example",
   
   inputCreateProposal: {
@@ -136,6 +138,7 @@ console.log('API called successfully. Returned data:', data);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **inputCreateProposal** | **InputCreateProposal**|  |
+ **daoId** | [**string**] |  | defaults to undefined
  **podId** | [**string**] |  | defaults to undefined
 
 
@@ -242,6 +245,8 @@ const apiInstance = new ProposalsApi(configuration);
 
 const request: ProposalsApiDeletePODProposalRequest = {
   
+  daoId: "dao_id_example",
+  
   podId: "pod_id_example",
   
   proposalId: "proposal_id_example",
@@ -256,6 +261,7 @@ console.log('API called successfully. Returned data:', data);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **daoId** | [**string**] |  | defaults to undefined
  **podId** | [**string**] |  | defaults to undefined
  **proposalId** | [**string**] |  | defaults to undefined
 
@@ -356,6 +362,8 @@ const apiInstance = new ProposalsApi(configuration);
 
 const request: ProposalsApiGetActiveProposalsByPODRequest = {
   
+  daoId: "dao_id_example",
+  
   podId: "pod_id_example",
 };
 
@@ -368,6 +376,7 @@ console.log('API called successfully. Returned data:', data);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **daoId** | [**string**] |  | defaults to undefined
  **podId** | [**string**] |  | defaults to undefined
 
 
@@ -468,6 +477,8 @@ const apiInstance = new ProposalsApi(configuration);
 
 const request: ProposalsApiGetPODProposalByIdRequest = {
   
+  daoId: "dao_id_example",
+  
   podId: "pod_id_example",
   
   proposalId: "proposal_id_example",
@@ -482,6 +493,7 @@ console.log('API called successfully. Returned data:', data);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **daoId** | [**string**] |  | defaults to undefined
  **podId** | [**string**] |  | defaults to undefined
  **proposalId** | [**string**] |  | defaults to undefined
 
@@ -526,6 +538,8 @@ const apiInstance = new ProposalsApi(configuration);
 
 const request: ProposalsApiGetPODProposalVotesRequest = {
   
+  daoId: "dao_id_example",
+  
   podId: "pod_id_example",
   
   proposalId: "proposal_id_example",
@@ -540,6 +554,7 @@ console.log('API called successfully. Returned data:', data);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **daoId** | [**string**] |  | defaults to undefined
  **podId** | [**string**] |  | defaults to undefined
  **proposalId** | [**string**] |  | defaults to undefined
 
@@ -698,6 +713,8 @@ const apiInstance = new ProposalsApi(configuration);
 
 const request: ProposalsApiGetProposalsByPODRequest = {
   
+  daoId: "dao_id_example",
+  
   podId: "pod_id_example",
 };
 
@@ -710,6 +727,7 @@ console.log('API called successfully. Returned data:', data);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **daoId** | [**string**] |  | defaults to undefined
  **podId** | [**string**] |  | defaults to undefined
 
 
@@ -811,6 +829,8 @@ const apiInstance = new ProposalsApi(configuration);
 
 const request: ProposalsApiRemoveVoteFromPODProposalRequest = {
   
+  daoId: "dao_id_example",
+  
   podId: "pod_id_example",
   
   proposalId: "proposal_id_example",
@@ -825,6 +845,7 @@ console.log('API called successfully. Returned data:', data);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **daoId** | [**string**] |  | defaults to undefined
  **podId** | [**string**] |  | defaults to undefined
  **proposalId** | [**string**] |  | defaults to undefined
 
@@ -943,6 +964,8 @@ const apiInstance = new ProposalsApi(configuration);
 
 const request: ProposalsApiUpdatePODProposalRequest = {
   
+  daoId: "dao_id_example",
+  
   podId: "pod_id_example",
   
   proposalId: "proposal_id_example",
@@ -969,6 +992,7 @@ console.log('API called successfully. Returned data:', data);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **proposalUpdate** | **ProposalUpdate**|  |
+ **daoId** | [**string**] |  | defaults to undefined
  **podId** | [**string**] |  | defaults to undefined
  **proposalId** | [**string**] |  | defaults to undefined
 
@@ -1082,6 +1106,8 @@ const apiInstance = new ProposalsApi(configuration);
 
 const request: ProposalsApiVoteOnPODProposalRequest = {
   
+  daoId: "dao_id_example",
+  
   podId: "pod_id_example",
   
   proposalId: "proposal_id_example",
@@ -1101,6 +1127,7 @@ console.log('API called successfully. Returned data:', data);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **proposalVote** | **ProposalVote**|  |
+ **daoId** | [**string**] |  | defaults to undefined
  **podId** | [**string**] |  | defaults to undefined
  **proposalId** | [**string**] |  | defaults to undefined
 

@@ -1389,10 +1389,11 @@ export class PromiseProposalsApi {
 
     /**
      * Create a new proposal for this specific POD
+     * @param daoId
      * @param podId
      * @param inputCreateProposal
      */
-    public createProposalForPODWithHttpInfo(podId: string, inputCreateProposal: InputCreateProposal, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+    public createProposalForPODWithHttpInfo(daoId: string, podId: string, inputCreateProposal: InputCreateProposal, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1405,16 +1406,17 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.createProposalForPODWithHttpInfo(podId, inputCreateProposal, observableOptions);
+        const result = this.api.createProposalForPODWithHttpInfo(daoId, podId, inputCreateProposal, observableOptions);
         return result.toPromise();
     }
 
     /**
      * Create a new proposal for this specific POD
+     * @param daoId
      * @param podId
      * @param inputCreateProposal
      */
-    public createProposalForPOD(podId: string, inputCreateProposal: InputCreateProposal, _options?: PromiseConfigurationOptions): Promise<ProposalSchemaResponse> {
+    public createProposalForPOD(daoId: string, podId: string, inputCreateProposal: InputCreateProposal, _options?: PromiseConfigurationOptions): Promise<ProposalSchemaResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1427,7 +1429,7 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.createProposalForPOD(podId, inputCreateProposal, observableOptions);
+        const result = this.api.createProposalForPOD(daoId, podId, inputCreateProposal, observableOptions);
         return result.toPromise();
     }
 
@@ -1477,10 +1479,11 @@ export class PromiseProposalsApi {
 
     /**
      * Delete a proposal for a POD
+     * @param daoId
      * @param podId
      * @param proposalId
      */
-    public deletePODProposalWithHttpInfo(podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+    public deletePODProposalWithHttpInfo(daoId: string, podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1493,16 +1496,17 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.deletePODProposalWithHttpInfo(podId, proposalId, observableOptions);
+        const result = this.api.deletePODProposalWithHttpInfo(daoId, podId, proposalId, observableOptions);
         return result.toPromise();
     }
 
     /**
      * Delete a proposal for a POD
+     * @param daoId
      * @param podId
      * @param proposalId
      */
-    public deletePODProposal(podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<ProposalSchemaResponse> {
+    public deletePODProposal(daoId: string, podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<ProposalSchemaResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1515,7 +1519,7 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.deletePODProposal(podId, proposalId, observableOptions);
+        const result = this.api.deletePODProposal(daoId, podId, proposalId, observableOptions);
         return result.toPromise();
     }
 
@@ -1563,9 +1567,10 @@ export class PromiseProposalsApi {
 
     /**
      * Get all active proposals for a specific POD
+     * @param daoId
      * @param podId
      */
-    public getActiveProposalsByPODWithHttpInfo(podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<PodProposalListResponse>> {
+    public getActiveProposalsByPODWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<PodProposalListResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1578,15 +1583,16 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.getActiveProposalsByPODWithHttpInfo(podId, observableOptions);
+        const result = this.api.getActiveProposalsByPODWithHttpInfo(daoId, podId, observableOptions);
         return result.toPromise();
     }
 
     /**
      * Get all active proposals for a specific POD
+     * @param daoId
      * @param podId
      */
-    public getActiveProposalsByPOD(podId: string, _options?: PromiseConfigurationOptions): Promise<PodProposalListResponse> {
+    public getActiveProposalsByPOD(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<PodProposalListResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1599,7 +1605,7 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.getActiveProposalsByPOD(podId, observableOptions);
+        const result = this.api.getActiveProposalsByPOD(daoId, podId, observableOptions);
         return result.toPromise();
     }
 
@@ -1649,10 +1655,11 @@ export class PromiseProposalsApi {
 
     /**
      * Get a specific proposal for a POD
+     * @param daoId
      * @param podId
      * @param proposalId
      */
-    public getPODProposalByIdWithHttpInfo(podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Proposal>> {
+    public getPODProposalByIdWithHttpInfo(daoId: string, podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Proposal>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1665,16 +1672,17 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.getPODProposalByIdWithHttpInfo(podId, proposalId, observableOptions);
+        const result = this.api.getPODProposalByIdWithHttpInfo(daoId, podId, proposalId, observableOptions);
         return result.toPromise();
     }
 
     /**
      * Get a specific proposal for a POD
+     * @param daoId
      * @param podId
      * @param proposalId
      */
-    public getPODProposalById(podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<Proposal> {
+    public getPODProposalById(daoId: string, podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<Proposal> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1687,16 +1695,17 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.getPODProposalById(podId, proposalId, observableOptions);
+        const result = this.api.getPODProposalById(daoId, podId, proposalId, observableOptions);
         return result.toPromise();
     }
 
     /**
      * Get vote counts for a POD proposal
+     * @param daoId
      * @param podId
      * @param proposalId
      */
-    public getPODProposalVotesWithHttpInfo(podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+    public getPODProposalVotesWithHttpInfo(daoId: string, podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1709,16 +1718,17 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.getPODProposalVotesWithHttpInfo(podId, proposalId, observableOptions);
+        const result = this.api.getPODProposalVotesWithHttpInfo(daoId, podId, proposalId, observableOptions);
         return result.toPromise();
     }
 
     /**
      * Get vote counts for a POD proposal
+     * @param daoId
      * @param podId
      * @param proposalId
      */
-    public getPODProposalVotes(podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<ProposalVoteResponse> {
+    public getPODProposalVotes(daoId: string, podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<ProposalVoteResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1731,7 +1741,7 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.getPODProposalVotes(podId, proposalId, observableOptions);
+        const result = this.api.getPODProposalVotes(daoId, podId, proposalId, observableOptions);
         return result.toPromise();
     }
 
@@ -1823,9 +1833,10 @@ export class PromiseProposalsApi {
 
     /**
      * Get all proposals for a specific POD
+     * @param daoId
      * @param podId
      */
-    public getProposalsByPODWithHttpInfo(podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<PodProposalListResponse>> {
+    public getProposalsByPODWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<PodProposalListResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1838,15 +1849,16 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.getProposalsByPODWithHttpInfo(podId, observableOptions);
+        const result = this.api.getProposalsByPODWithHttpInfo(daoId, podId, observableOptions);
         return result.toPromise();
     }
 
     /**
      * Get all proposals for a specific POD
+     * @param daoId
      * @param podId
      */
-    public getProposalsByPOD(podId: string, _options?: PromiseConfigurationOptions): Promise<PodProposalListResponse> {
+    public getProposalsByPOD(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<PodProposalListResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1859,7 +1871,7 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.getProposalsByPOD(podId, observableOptions);
+        const result = this.api.getProposalsByPOD(daoId, podId, observableOptions);
         return result.toPromise();
     }
 
@@ -1909,10 +1921,11 @@ export class PromiseProposalsApi {
 
     /**
      * Remove a vote from a POD proposal
+     * @param daoId
      * @param podId
      * @param proposalId
      */
-    public removeVoteFromPODProposalWithHttpInfo(podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+    public removeVoteFromPODProposalWithHttpInfo(daoId: string, podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1925,16 +1938,17 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.removeVoteFromPODProposalWithHttpInfo(podId, proposalId, observableOptions);
+        const result = this.api.removeVoteFromPODProposalWithHttpInfo(daoId, podId, proposalId, observableOptions);
         return result.toPromise();
     }
 
     /**
      * Remove a vote from a POD proposal
+     * @param daoId
      * @param podId
      * @param proposalId
      */
-    public removeVoteFromPODProposal(podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<ProposalVoteResponse> {
+    public removeVoteFromPODProposal(daoId: string, podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<ProposalVoteResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -1947,7 +1961,7 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.removeVoteFromPODProposal(podId, proposalId, observableOptions);
+        const result = this.api.removeVoteFromPODProposal(daoId, podId, proposalId, observableOptions);
         return result.toPromise();
     }
 
@@ -1999,11 +2013,12 @@ export class PromiseProposalsApi {
 
     /**
      * Update a proposal for a POD
+     * @param daoId
      * @param podId
      * @param proposalId
      * @param proposalUpdate
      */
-    public updatePODProposalWithHttpInfo(podId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+    public updatePODProposalWithHttpInfo(daoId: string, podId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -2016,17 +2031,18 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.updatePODProposalWithHttpInfo(podId, proposalId, proposalUpdate, observableOptions);
+        const result = this.api.updatePODProposalWithHttpInfo(daoId, podId, proposalId, proposalUpdate, observableOptions);
         return result.toPromise();
     }
 
     /**
      * Update a proposal for a POD
+     * @param daoId
      * @param podId
      * @param proposalId
      * @param proposalUpdate
      */
-    public updatePODProposal(podId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: PromiseConfigurationOptions): Promise<ProposalSchemaResponse> {
+    public updatePODProposal(daoId: string, podId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: PromiseConfigurationOptions): Promise<ProposalSchemaResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -2039,7 +2055,7 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.updatePODProposal(podId, proposalId, proposalUpdate, observableOptions);
+        const result = this.api.updatePODProposal(daoId, podId, proposalId, proposalUpdate, observableOptions);
         return result.toPromise();
     }
 
@@ -2091,11 +2107,12 @@ export class PromiseProposalsApi {
 
     /**
      * Vote on a POD proposal
+     * @param daoId
      * @param podId
      * @param proposalId
      * @param proposalVote
      */
-    public voteOnPODProposalWithHttpInfo(podId: string, proposalId: string, proposalVote: ProposalVote, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+    public voteOnPODProposalWithHttpInfo(daoId: string, podId: string, proposalId: string, proposalVote: ProposalVote, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -2108,17 +2125,18 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.voteOnPODProposalWithHttpInfo(podId, proposalId, proposalVote, observableOptions);
+        const result = this.api.voteOnPODProposalWithHttpInfo(daoId, podId, proposalId, proposalVote, observableOptions);
         return result.toPromise();
     }
 
     /**
      * Vote on a POD proposal
+     * @param daoId
      * @param podId
      * @param proposalId
      * @param proposalVote
      */
-    public voteOnPODProposal(podId: string, proposalId: string, proposalVote: ProposalVote, _options?: PromiseConfigurationOptions): Promise<ProposalVoteResponse> {
+    public voteOnPODProposal(daoId: string, podId: string, proposalId: string, proposalVote: ProposalVote, _options?: PromiseConfigurationOptions): Promise<ProposalVoteResponse> {
         let observableOptions: undefined | ConfigurationOptions
         if (_options){
 	    observableOptions = {
@@ -2131,7 +2149,7 @@ export class PromiseProposalsApi {
                 authMethods: _options.authMethods
 	    }
 	}
-        const result = this.api.voteOnPODProposal(podId, proposalId, proposalVote, observableOptions);
+        const result = this.api.voteOnPODProposal(daoId, podId, proposalId, proposalVote, observableOptions);
         return result.toPromise();
     }
 
