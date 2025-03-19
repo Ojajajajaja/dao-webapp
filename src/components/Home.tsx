@@ -375,7 +375,6 @@ const NetworkVisualization = ({ memberLocations }: { memberLocations: {[key: str
       if (distZoomIn < buttonSize/2) {
         const newZoom = Math.min(3, zoom + 0.2);
         setZoom(newZoom);
-        requestAnimationFrame(render);
         return;
       }
       
@@ -388,7 +387,6 @@ const NetworkVisualization = ({ memberLocations }: { memberLocations: {[key: str
       if (distZoomOut < buttonSize/2) {
         const newZoom = Math.max(0.5, zoom - 0.2);
         setZoom(newZoom);
-        requestAnimationFrame(render);
         return;
       }
       
@@ -403,23 +401,22 @@ const NetworkVisualization = ({ memberLocations }: { memberLocations: {[key: str
         setZoom(1);
         setOffset({ x: 0, y: 0 });
         // Force immediate render rather than waiting for state updates
-        setTimeout(() => {
-          // We use setTimeout to ensure state changes have been applied
-          if (canvasRef.current) {
-            ctx.save();
-            ctx.clearRect(0, 0, width, height);
-            
-            // Reset transformations
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            
-            // Set dark blue background
-            ctx.fillStyle = 'rgb(13, 15, 30)';
-            ctx.fillRect(0, 0, width, height);
-            
-            // Render with reset values
-            render();
-          }
-        }, 0);
+
+        // We use setTimeout to ensure state changes have been applied
+        if (canvasRef.current) {
+          ctx.save();
+          ctx.clearRect(0, 0, width, height);
+          
+          // Reset transformations
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          
+          // Set dark blue background
+          ctx.fillStyle = 'rgb(13, 15, 30)';
+          ctx.fillRect(0, 0, width, height);
+          
+          // Render with reset values
+          render();
+        }
         return;
       }
     };
