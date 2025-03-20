@@ -20,6 +20,7 @@ export class Proposal {
     'daoId': string;
     'podId'?: string | null;
     'createdBy': string;
+    'createdByUsername': string;
     'startTime': Date;
     'endTime': Date;
     'actions'?: { [key: string]: any; } | null;
@@ -68,6 +69,12 @@ export class Proposal {
         {
             "name": "createdBy",
             "baseName": "created_by",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "createdByUsername",
+            "baseName": "created_by_username",
             "type": "string",
             "format": ""
         },
