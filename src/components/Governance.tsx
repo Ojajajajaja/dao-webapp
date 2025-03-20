@@ -1107,7 +1107,6 @@ const Governance = () => {
                 <div className="flex justify-between items-center mb-2">
                   <div>
                     <h3 className="font-medium text-text">{proposal.name}</h3>
-                    <p className="text-sm text-surface-500">{proposal.id}</p>
                   </div>
                   <span className={`px-2 py-1 rounded-full text-xs ${
                     proposal.status === 'Active' ? 'bg-green-900 text-success' :
