@@ -644,7 +644,7 @@ const Pods = () => {
                         <p className="text-text opacity-80 text-sm mb-2">{proposal.description}</p>
                         <div className="flex justify-between items-center text-xs">
                           <span className="text-surface-500">
-                            By {proposal.createdBy || 'Unknown'} on {
+                            By {proposal.createdByUsername || 'Unknown'} on {
                               proposal.startTime instanceof Date 
                               ? proposal.startTime.toLocaleString() 
                               : new Date(proposal.startTime).toLocaleString()
@@ -719,7 +719,7 @@ const Pods = () => {
             name: selectedProposal.name || '',
             description: selectedProposal.description || '',
             status: selectedProposal.isActive ? 'active' : (selectedProposal.hasPassed ? 'passed' : 'rejected'),
-            creator: selectedProposal.createdBy || 'Unknown',
+            creator: selectedProposal.createdByUsername || 'Unknown',
             createdAt: new Date(selectedProposal.startTime).toLocaleString(),
             startTime: new Date(selectedProposal.startTime).toLocaleString(),
             endTime: new Date(selectedProposal.endTime).toLocaleString(),
