@@ -39,9 +39,10 @@ interface PopupProposalProps {
   onVoteSubmitted?: () => void;
   onVote?: (proposalId: string, vote: 'for' | 'against') => Promise<any>;
   wallet?: WalletContextState;
+  canVote?: boolean;
 }
 
-const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVoteSubmitted, onVote, wallet }) => {
+const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVoteSubmitted, onVote, wallet, canVote = true }) => {
   const [voteOption, setVoteOption] = useState<'for' | 'against' | null>(null);
   const [isVoting, setIsVoting] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
@@ -249,66 +250,83 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVote
         </div>
         
         <div className="p-4 border-t border-gray-600">
+          {error && (
+            <div className="mb-4 p-3 bg-red-900 text-error rounded-md flex items-start">
+              <AlertTriangle size={18} className="mr-2 flex-shrink-0 mt-0.5" />
+              <p>{error}</p>
+            </div>
+          )}
+          
           {hasVoted ? (
-            <div className="bg-blue-900 text-primary p-3 rounded-md flex items-center">
-              <Check size={18} className="mr-2" />
-              Your vote has been recorded. Thank you for participating!
+            <div className="mb-4 p-3 bg-green-900 text-success rounded-md flex items-start">
+              <Check size={18} className="mr-2 flex-shrink-0 mt-0.5" />
+              <p>Your vote has been recorded. Thank you for participating!</p>
             </div>
-          ) : localProposal.status.toLowerCase() !== 'active' ? (
-            <div className="bg-surface-200 p-3 rounded-md text-surface-500 flex items-center">
-              <AlertTriangle size={18} className="mr-2" />
-              Voting is not available for this proposal.
-            </div>
-          ) : (
+          ) : localProposal.status.toLowerCase() === 'active' ? (
             <>
-              <h3 className="text-lg font-medium text-text mb-3">Cast Your Vote</h3>
-              
-              {!wallet?.connected && (
-                <div className="bg-yellow-900 text-warning p-2 rounded-md mb-4 text-sm flex items-start">
-                  <AlertTriangle size={16} className="mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Please connect your wallet to vote on this proposal.</span>
+              {!canVote && (
+                <div className="mb-4 p-3 bg-yellow-900 text-warning rounded-md flex items-start">
+                  <AlertTriangle size={18} className="mr-2 flex-shrink-0 mt-0.5" />
+                  <p>You must be a member of this POD to vote on proposals. Please join the POD first.</p>
                 </div>
               )}
               
-              {error && (
-                <div className="bg-red-900 text-error p-2 rounded-md mb-4 text-sm">
-                  {error}
-                </div>
-              )}
-              
-              <div className="grid grid-cols-2 gap-3 mb-4">
+              <div className="flex flex-col md:flex-row gap-4">
                 <button
-                  onClick={() => setVoteOption('for')}
-                  className={`p-2 rounded-md flex items-center justify-center ${
+                  className={`flex-1 py-3 px-4 rounded-md flex items-center justify-center ${
                     voteOption === 'for' 
                       ? 'bg-primary text-white' 
                       : 'bg-surface-200 text-text hover:bg-surface-300'
-                  }`}
+                  } ${(!canVote || isVoting) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  onClick={() => canVote && !isVoting ? setVoteOption('for') : null}
+                  disabled={!canVote || isVoting}
                 >
-                  <span>For</span>
+                  <ThumbsUp size={18} className="mr-2" />
+                  Vote For
                 </button>
+                
                 <button
-                  onClick={() => setVoteOption('against')}
-                  className={`p-2 rounded-md flex items-center justify-center ${
+                  className={`flex-1 py-3 px-4 rounded-md flex items-center justify-center ${
                     voteOption === 'against' 
                       ? 'bg-error text-white' 
                       : 'bg-surface-200 text-text hover:bg-surface-300'
-                  }`}
+                  } ${(!canVote || isVoting) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  onClick={() => canVote && !isVoting ? setVoteOption('against') : null}
+                  disabled={!canVote || isVoting}
                 >
-                  <span>Against</span>
+                  <ThumbsDown size={18} className="mr-2" />
+                  Vote Against
                 </button>
               </div>
               
-              <div className="flex justify-end">
-                <button
-                  onClick={handleVote}
-                  disabled={!voteOption || isVoting || !wallet?.connected}
-                  className="px-4 py-2 bg-primary text-white rounded-md hover:opacity-90 disabled:opacity-70"
-                >
-                  {isVoting ? 'Submitting...' : 'Submit Vote'}
-                </button>
-              </div>
+              <button
+                className={`w-full mt-4 py-3 rounded-md flex items-center justify-center ${
+                  voteOption !== null && !isVoting && canVote
+                    ? 'bg-green-600 text-white hover:bg-green-700'
+                    : 'bg-surface-300 text-surface-500 cursor-not-allowed'
+                }`}
+                onClick={handleVote}
+                disabled={voteOption === null || isVoting || !canVote}
+              >
+                {isVoting ? (
+                  <>
+                    <span className="mr-2 animate-spin">⟳</span>
+                    Submitting Vote...
+                  </>
+                ) : (
+                  <>
+                    <Check size={18} className="mr-2" />
+                    Submit Vote
+                  </>
+                )}
+              </button>
             </>
+          ) : (
+            <div className="p-3 bg-surface-200 rounded-md">
+              <p className="text-text text-center">
+                Voting is {localProposal.status.toLowerCase() === 'pending' ? 'not yet open' : 'now closed'}.
+              </p>
+            </div>
           )}
         </div>
       </div>

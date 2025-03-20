@@ -664,9 +664,22 @@ const Pods = () => {
                   </div>
                 )}
                 
-                <button className="w-full mt-4 bg-primary text-text px-4 py-2 rounded-md text-sm" onClick={() => setIsCreateProposalModalOpen(true)}>
+                <button 
+                  className={`w-full mt-4 ${userIsMember 
+                    ? 'bg-primary text-text' 
+                    : 'bg-gray-400 text-gray-100 cursor-not-allowed'} 
+                    px-4 py-2 rounded-md text-sm`}
+                  onClick={() => userIsMember ? setIsCreateProposalModalOpen(true) : null}
+                  disabled={!userIsMember}
+                  title={!userIsMember ? "Join this POD to create proposals" : "Create a new proposal"}
+                >
                   Create Proposal
                 </button>
+                {!userIsMember && connected && (
+                  <p className="text-xs text-center mt-2 text-red-500">
+                    You must join this POD to create proposals
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -723,6 +736,7 @@ const Pods = () => {
           onVoteSubmitted={handleProposalVoted}
           onVote={handleVoteWithTransaction}
           wallet={wallet}
+          canVote={userIsMember}
         />
       )}
     </div>
