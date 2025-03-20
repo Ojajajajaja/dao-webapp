@@ -15,6 +15,7 @@ export * from '../models/DiscordMessage';
 export * from '../models/DiscordMessagesResponse';
 export * from '../models/InputCreateDAO';
 export * from '../models/InputCreatePOD';
+export * from '../models/InputCreateProposal';
 export * from '../models/InputCreateUser';
 export * from '../models/InputUpdateUser';
 export * from '../models/LinkDiscordChannel';
@@ -30,6 +31,12 @@ export * from '../models/PODSchemaResponse';
 export * from '../models/PODUpdate';
 export * from '../models/PaginationMetadata';
 export * from '../models/PagingError';
+export * from '../models/PodProposalListResponse';
+export * from '../models/Proposal';
+export * from '../models/ProposalSchemaResponse';
+export * from '../models/ProposalUpdate';
+export * from '../models/ProposalVote';
+export * from '../models/ProposalVoteResponse';
 export * from '../models/SocialConnection';
 export * from '../models/TelegramAuth';
 export * from '../models/Token';
@@ -42,6 +49,7 @@ export * from '../models/Treasury';
 export * from '../models/TreasuryUpdatePercentages';
 export * from '../models/User';
 export * from '../models/UserBasic';
+export * from '../models/UserBasic1';
 export * from '../models/UserExistResponse';
 export * from '../models/UserInfoError';
 export * from '../models/UserResponse';
@@ -64,6 +72,7 @@ import { DiscordMessage } from '../models/DiscordMessage';
 import { DiscordMessagesResponse } from '../models/DiscordMessagesResponse';
 import { InputCreateDAO } from '../models/InputCreateDAO';
 import { InputCreatePOD } from '../models/InputCreatePOD';
+import { InputCreateProposal } from '../models/InputCreateProposal';
 import { InputCreateUser } from '../models/InputCreateUser';
 import { InputUpdateUser } from '../models/InputUpdateUser';
 import { LinkDiscordChannel } from '../models/LinkDiscordChannel';
@@ -79,6 +88,12 @@ import { PODSchemaResponse } from '../models/PODSchemaResponse';
 import { PODUpdate } from '../models/PODUpdate';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
+import { PodProposalListResponse } from '../models/PodProposalListResponse';
+import { Proposal } from '../models/Proposal';
+import { ProposalSchemaResponse } from '../models/ProposalSchemaResponse';
+import { ProposalUpdate } from '../models/ProposalUpdate';
+import { ProposalVote, ProposalVoteVoteEnum   } from '../models/ProposalVote';
+import { ProposalVoteResponse , ProposalVoteResponseVoteStatusEnum      } from '../models/ProposalVoteResponse';
 import { SocialConnection } from '../models/SocialConnection';
 import { TelegramAuth } from '../models/TelegramAuth';
 import { Token } from '../models/Token';
@@ -91,6 +106,7 @@ import { Treasury } from '../models/Treasury';
 import { TreasuryUpdatePercentages } from '../models/TreasuryUpdatePercentages';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
+import { UserBasic1 } from '../models/UserBasic1';
 import { UserExistResponse } from '../models/UserExistResponse';
 import { UserInfoError } from '../models/UserInfoError';
 import { UserResponse } from '../models/UserResponse';
@@ -109,6 +125,8 @@ let primitives = [
                  ];
 
 let enumsMap: Set<string> = new Set<string>([
+    "ProposalVoteVoteEnum",
+    "ProposalVoteResponseVoteStatusEnum",
 ]);
 
 let typeMap: {[index: string]: any} = {
@@ -129,6 +147,7 @@ let typeMap: {[index: string]: any} = {
     "DiscordMessagesResponse": DiscordMessagesResponse,
     "InputCreateDAO": InputCreateDAO,
     "InputCreatePOD": InputCreatePOD,
+    "InputCreateProposal": InputCreateProposal,
     "InputCreateUser": InputCreateUser,
     "InputUpdateUser": InputUpdateUser,
     "LinkDiscordChannel": LinkDiscordChannel,
@@ -144,6 +163,12 @@ let typeMap: {[index: string]: any} = {
     "PODUpdate": PODUpdate,
     "PaginationMetadata": PaginationMetadata,
     "PagingError": PagingError,
+    "PodProposalListResponse": PodProposalListResponse,
+    "Proposal": Proposal,
+    "ProposalSchemaResponse": ProposalSchemaResponse,
+    "ProposalUpdate": ProposalUpdate,
+    "ProposalVote": ProposalVote,
+    "ProposalVoteResponse": ProposalVoteResponse,
     "SocialConnection": SocialConnection,
     "TelegramAuth": TelegramAuth,
     "Token": Token,
@@ -156,6 +181,7 @@ let typeMap: {[index: string]: any} = {
     "TreasuryUpdatePercentages": TreasuryUpdatePercentages,
     "User": User,
     "UserBasic": UserBasic,
+    "UserBasic1": UserBasic1,
     "UserExistResponse": UserExistResponse,
     "UserInfoError": UserInfoError,
     "UserResponse": UserResponse,

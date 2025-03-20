@@ -51,7 +51,7 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | Redirect to Twitter authorization page |  -  |
+**200** | Return Twitter authorization URL |  -  |
 **401** | Unauthorized |  -  |
 **0** | Default error response |  -  |
 
@@ -152,7 +152,6 @@ No authorization required
 **302** | Redirect to frontend with success or error status |  -  |
 **500** | Database error |  -  |
 **400** | User info retrieval failed |  -  |
-**401** | Unauthorized |  -  |
 **0** | Default error response |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)

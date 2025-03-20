@@ -15,6 +15,7 @@
     "@solana/wallet-adapter-react-ui": "^0.9.34",
     "@solana/wallet-adapter-wallets": "^0.19.23",
     "@solana/web3.js": "^1.87.6",
+    "borsh": "^2.0.0",
     "bs58": "^6.0.0",
     "chart.js": "^4.4.8",
     "date-fns": "^2.30.0",
@@ -23,6 +24,7 @@
     "react-chartjs-2": "^5.3.0",
     "react-colorful": "^5.6.1",
     "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.5.2",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.30.0",
     "zustand": "^4.4.7"

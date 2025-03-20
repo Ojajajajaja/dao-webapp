@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
-import { PieChart, Vote, Plus, X, Clock, Calendar, Wallet, UserMinus, ArrowUpRight, Check } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { PieChart, Plus, X, Check } from 'lucide-react';
 import PopupProposal from './PopupProposal';
 import { containers } from '../styles/theme';
+import { proposalService } from '../services/ProposalService';
+import { useEffectOnce } from '../hooks/useEffectOnce';
+import { useSolanaTransaction } from '../hooks/useSolanaTransaction';
+import { SOLANA_RPC_ENDPOINT } from '../config/solana';
+import { toast } from 'react-hot-toast';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { Connection } from '@solana/web3.js';
 
 interface Action {
   type: string;
@@ -24,17 +32,16 @@ interface ProposalForm {
 
 interface ProposalDetails {
   id: string;
-  title: string;
+  name: string;
   description: string;
   status: string;
   creator: string;
   createdAt: string;
-  startDate: string;
-  endDate: string;
+  startTime: string;
+  endTime: string;
   votes: {
     for: number;
     against: number;
-    abstain: number;
   };
   actions: {
     type: string;
@@ -45,9 +52,11 @@ interface ProposalDetails {
   }[];
   quorum: number;
   minApproval: number;
+  daoId: string;
 }
 
 const Governance = () => {
+  const { daoId } = useParams<{ daoId: string }>();
   const [showProposalForm, setShowProposalForm] = useState(false);
   const [proposalStep, setProposalStep] = useState(1);
   const [proposal, setProposal] = useState<ProposalForm>({
@@ -62,6 +71,111 @@ const Governance = () => {
     actions: []
   });
   const [selectedProposal, setSelectedProposal] = useState<ProposalDetails | null>(null);
+  const [proposals, setProposals] = useState<ProposalDetails[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Get Solana transaction utilities from our custom hook
+  const { 
+    sendTransaction, 
+    isLoading: isTransactionLoading, 
+    isSuccess: isTransactionSuccess,
+    isError: isTransactionError,
+    error: transactionError,
+    signature: transactionSignature,
+    publicKey,
+    connected
+  } = useSolanaTransaction();
+
+  const wallet = useWallet();
+  const connection = new Connection(SOLANA_RPC_ENDPOINT);
+
+  // Initialize Solana connection once on component mount
+  useEffectOnce(() => {
+    // Initialize the Solana connection with our configured endpoint
+    proposalService.initializeSolanaConnection(SOLANA_RPC_ENDPOINT);
+  });
+
+  // Fetch proposals when the component mounts
+  useEffectOnce(() => {
+    console.log("Governance component mounted with daoId:", daoId);
+    if (daoId) {
+      fetchProposals();
+    }
+  });
+
+  // Watch for transaction success/error to proceed with API updates
+  useEffectOnce(() => {
+    if (isTransactionSuccess && transactionSignature) {
+      // If we just completed a proposal creation transaction, continue with API call
+      handleCreateProposalAPI(transactionSignature);
+    }
+    
+    if (isTransactionError) {
+      setIsSubmitting(false);
+      alert(`Transaction failed: ${transactionError?.message || 'Unknown error'}`);
+    }
+  }, [isTransactionSuccess, isTransactionError, transactionSignature]);
+
+  const fetchProposals = async () => {
+    if (!daoId) {
+      console.error("No daoId available, cannot fetch proposals");
+      return;
+    }
+    
+    console.log(`Fetching proposals for DAO ${daoId}`);
+    setIsLoading(true);
+    try {
+      const fetchedProposals = await proposalService.getAllProposals(daoId);
+      console.log("Fetched proposals:", fetchedProposals);
+      
+      if (!fetchedProposals || fetchedProposals.length === 0) {
+        console.log("No proposals returned from API or empty array");
+        setProposals([]);
+        return;
+      }
+      
+      // Transform API proposals to our component's format
+      const transformedProposals = fetchedProposals.map(p => ({
+        id: p.proposalId || '',
+        name: p.name || '',
+        description: p.description || '',
+        status: p.isActive ? 'Active' : p.hasPassed ? 'Passed' : 'Rejected',
+        creator: p.createdBy || 'Unknown',
+        createdAt: formatDate(new Date()), // API doesn't provide created_at
+        startTime: formatDate(p.startTime instanceof Date ? p.startTime : new Date(p.startTime)),
+        endTime: formatDate(p.endTime instanceof Date ? p.endTime : new Date(p.endTime)),
+        votes: {
+          for: p.forVotesCount || 0,
+          against: p.againstVotesCount || 0,
+        },
+        actions: Object.values(p.actions || {}).map((action: any) => ({
+          type: action.type || '',
+          description: action.description || '',
+          walletAddress: action.wallet_address,
+          amount: action.amount,
+          token: action.token
+        })),
+        quorum: 1000, // Default values, should be retrieved from DAO settings
+        minApproval: 60,
+        daoId: p.daoId
+      }));
+      setProposals(transformedProposals);
+    } catch (error) {
+      console.error('Failed to fetch proposals:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const formatDate = (date?: Date | string) => {
+    if (!date) return 'N/A';
+    return new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -156,6 +270,359 @@ const Governance = () => {
 
   const getActionByType = (actionType: string) => {
     return proposal.actions.find(action => action.type === actionType);
+  };
+
+  // Step 1: Create and send the blockchain transaction
+  const handleCreateProposalTransaction = async () => {
+    if (!publicKey || !wallet) {
+      alert('Wallet not connected.');
+      return;
+    }
+    
+    if (!daoId) {
+      alert('DAO ID is missing.');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      console.log(`Starting proposal creation for DAO ID: ${daoId}`);
+      console.log(`Using wallet public key: ${publicKey.toString()}`);
+      
+      // Calculate start and end dates
+      let startDate = new Date();
+      if (proposal.startTime === 'custom' && proposal.customStartDate && proposal.customStartTime) {
+        startDate = new Date(`${proposal.customStartDate}T${proposal.customStartTime}`);
+      }
+      
+      // Calculate end date based on expiration time
+      const days = parseInt(proposal.expirationDays) || 0;
+      const hours = parseInt(proposal.expirationHours) || 0;
+      const minutes = parseInt(proposal.expirationMinutes) || 0;
+      
+      const endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + days);
+      endDate.setHours(endDate.getHours() + hours);
+      endDate.setMinutes(endDate.getMinutes() + minutes);
+      
+      // Make sure voting period is at least 5 minutes to avoid too short periods
+      const minVotingPeriod = 5 * 60 * 1000; // 5 minutes in milliseconds
+      if (endDate.getTime() - startDate.getTime() < minVotingPeriod) {
+        alert('Voting period must be at least 5 minutes long.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Format actions for the transaction (simplified for now)
+      const actions = proposal.actions.map(action => {
+        return {
+          type: action.type,
+          walletAddress: action.walletAddress,
+          amount: action.tokenAmount,
+          token: action.tokenSymbol
+        };
+      });
+      
+      console.log('Creating proposal transaction with data:', {
+        title: proposal.title,
+        description: proposal.description,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        votingPeriod: Math.floor((endDate.getTime() - startDate.getTime()) / 1000),
+        actions: actions.length ? actions : 'None'
+      });
+      
+      // Create the transaction
+      const result = await proposalService.createProposalTransaction(
+        daoId,
+        publicKey,
+        {
+          title: proposal.title,
+          description: proposal.description,
+          startDate,
+          endDate,
+          actions
+        }
+      );
+      
+      if (!result) {
+        throw new Error('Failed to create proposal transaction - null result returned');
+      }
+      
+      // Extract transaction and account from result
+      const { transaction, proposalAccount } = result;
+      
+      if (!transaction) {
+        throw new Error('Failed to create proposal transaction - transaction is null');
+      }
+      
+      // Log the transaction details for debugging
+      console.log('Transaction created successfully:', {
+        numInstructions: transaction.instructions.length,
+        proposalAccount: proposalAccount?.publicKey.toString(),
+        feePayer: transaction.feePayer?.toString(),
+      });
+      
+      console.log('Transaction created successfully, sending for signature...');
+      
+      // Send the transaction directly with wallet adapter
+      const signature = await wallet.sendTransaction(transaction, connection);
+      
+      // Wait for confirmation
+      const confirmation = await connection.confirmTransaction(signature, 'confirmed');
+      
+      if (confirmation.value.err) {
+        throw new Error(`Transaction failed: ${confirmation.value.err.toString()}`);
+      }
+      
+      console.log('Transaction signed and sent successfully! Signature:', signature);
+      
+      // Now call the API to update the database
+      await handleCreateProposalAPI(signature);
+      
+    } catch (error) {
+      console.error('Failed to create proposal transaction:', error);
+      alert(`Failed to create proposal transaction: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setIsSubmitting(false);
+    }
+  };
+
+  // Step 2: After blockchain transaction is confirmed, update the API
+  const handleCreateProposalAPI = async (signature: string) => {
+    if (!daoId) return;
+    
+    try {
+      // Calculate start and end dates (same as in handleCreateProposalTransaction)
+      let startDate = new Date();
+      if (proposal.startTime === 'custom' && proposal.customStartDate && proposal.customStartTime) {
+        startDate = new Date(`${proposal.customStartDate}T${proposal.customStartTime}`);
+      }
+      
+      const days = parseInt(proposal.expirationDays) || 0;
+      const hours = parseInt(proposal.expirationHours) || 0;
+      const minutes = parseInt(proposal.expirationMinutes) || 0;
+      
+      const endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + days);
+      endDate.setHours(endDate.getHours() + hours);
+      endDate.setMinutes(endDate.getMinutes() + minutes);
+      
+      // Format actions for the API
+      const actions = proposal.actions.map(action => {
+        let description = '';
+        
+        switch (action.type) {
+          case 'authorize':
+            description = `Authorize wallet ${action.walletAddress} to multisig`;
+            break;
+          case 'remove':
+            description = `Remove wallet ${action.walletAddress} from multisig`;
+            break;
+          case 'withdraw':
+            description = `Withdraw ${action.tokenAmount} ${action.tokenSymbol} to ${action.walletAddress}`;
+            break;
+        }
+        
+        return {
+          type: action.type,
+          description,
+          walletAddress: action.walletAddress,
+          amount: action.tokenAmount,
+          token: action.tokenSymbol
+        };
+      });
+      
+      // Create the proposal using the service, including the transaction signature
+      const newProposal = await proposalService.createProposal(daoId, {
+        title: proposal.title,
+        description: proposal.description,
+        startDate,
+        endDate,
+        actions,
+        transactionSignature: signature // Include the signature from the successful transaction
+      });
+      
+      if (newProposal) {
+        // Refresh the proposal list
+        await fetchProposals();
+        resetForm();
+      }
+    } catch (error) {
+      console.error('Failed to create proposal in API:', error);
+      alert('Blockchain transaction succeeded, but there was an error updating the database. Please contact support.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleViewProposal = async (proposalId: string) => {
+    if (!daoId) {
+      console.error("Cannot view proposal: daoId is undefined");
+      return;
+    }
+    
+    setIsLoading(true);
+    try {
+      const proposalDetails = await proposalService.getProposalById(daoId, proposalId);
+      
+      if (!proposalDetails) {
+        console.error("No proposal details returned from API");
+        setIsLoading(false);
+        return;
+      }
+      
+      // Get proposal votes
+      const votes = await proposalService.getProposalVotes(daoId, proposalId);;
+      
+      const transformedProposal: ProposalDetails = {
+        id: proposalDetails.proposalId || '',
+        name: proposalDetails.name || '',
+        description: proposalDetails.description || '',
+        status: proposalDetails.isActive ? 'Active' : proposalDetails.hasPassed ? 'Passed' : 'Rejected',
+        creator: proposalDetails.createdBy || 'Unknown',
+        createdAt: formatDate(new Date()), // API doesn't provide created_at
+        startTime: formatDate(proposalDetails.startTime instanceof Date ? proposalDetails.startTime : new Date(proposalDetails.startTime)),
+        endTime: formatDate(proposalDetails.endTime instanceof Date ? proposalDetails.endTime : new Date(proposalDetails.endTime)),
+        votes: {
+          for: votes?.forVotes || proposalDetails.forVotesCount || 0,
+          against: votes?.againstVotes || proposalDetails.againstVotesCount || 0
+        },
+        actions: Object.values(proposalDetails.actions || {}).map((action: any) => ({
+          type: action.type || '',
+          description: action.description || '',
+          walletAddress: action.wallet_address,
+          amount: action.amount,
+          token: action.token
+        })),
+        quorum: 1000, // Default value
+        minApproval: 60, // Default value
+        daoId: proposalDetails.daoId
+      };
+      
+      setSelectedProposal(transformedProposal);
+    } catch (error) {
+      console.error(`Failed to fetch proposal details for ${proposalId}:`, error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Step 1: Create and send transaction for voting
+  const handleVoteTransaction = async (proposalId: string, vote: 'for' | 'against') => {
+    if (!publicKey || !wallet) {
+      alert('Please connect your wallet first');
+      return;
+    }
+    
+    if (!daoId) {
+      alert('DAO ID is missing');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      
+      console.log(`Creating vote transaction for proposal: ${proposalId}, vote: ${vote}`);
+      
+      // Create the vote transaction
+      const result = await proposalService.createVoteTransaction(
+        daoId,
+        proposalId,
+        publicKey,
+        vote
+      );
+
+      if (!result) {
+        alert('Failed to create vote transaction');
+        return;
+      }
+      
+      // Extract transaction and vote account
+      const { transaction, voteAccount } = result;
+      
+      console.log('Vote transaction created successfully:', {
+        proposalId,
+        vote,
+        voteAccountPubkey: voteAccount.publicKey.toString()
+      });
+
+      // Send the transaction
+      const signature = await wallet.sendTransaction(transaction, connection);
+      
+      // Wait for confirmation
+      const confirmation = await connection.confirmTransaction(signature, 'confirmed');
+      
+      if (confirmation.value.err) {
+        throw new Error(`Transaction failed: ${confirmation.value.err.toString()}`);
+      }
+      
+      console.log("Vote transaction confirmed:", signature);
+      await proposalService.voteOnProposal(daoId, proposalId, vote, signature);
+      
+      // Refresh proposals after voting
+      fetchProposals();
+    } catch (error) {
+      console.error("Error voting on proposal:", error);
+      alert(`Failed to vote: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle vote submission and refresh the current proposal
+  const handleVoteSubmitted = async () => {
+    // First refresh all proposals in the background
+    fetchProposals();
+    
+    // Then refresh the currently selected proposal to update its vote counts
+    if (selectedProposal && daoId) {
+      await refreshSelectedProposal(selectedProposal.id);
+    }
+  };
+
+  // Refresh the currently selected proposal
+  const refreshSelectedProposal = async (proposalId: string) => {
+    if (!daoId) return;
+    
+    try {
+      const proposalDetails = await proposalService.getProposalById(daoId, proposalId);
+      
+      if (!proposalDetails) return;
+      
+      // Get updated vote information
+      const votes = await proposalService.getProposalVotes(daoId, proposalId);
+      
+      // Transform the proposal data using the same logic as in handleViewProposal
+      const transformedProposal: ProposalDetails = {
+        id: proposalDetails.proposalId || '',
+        name: proposalDetails.name || '',
+        description: proposalDetails.description || '',
+        status: proposalDetails.isActive ? 'Active' : proposalDetails.hasPassed ? 'Passed' : 'Rejected',
+        creator: proposalDetails.createdBy || 'Unknown',
+        createdAt: formatDate(new Date()),
+        startTime: formatDate(proposalDetails.startTime instanceof Date ? proposalDetails.startTime : new Date(proposalDetails.startTime)),
+        endTime: formatDate(proposalDetails.endTime instanceof Date ? proposalDetails.endTime : new Date(proposalDetails.endTime)),
+        votes: {
+          for: votes?.forVotes || proposalDetails.forVotesCount || 0,
+          against: votes?.againstVotes || proposalDetails.againstVotesCount || 0
+        },
+        actions: Object.values(proposalDetails.actions || {}).map((action: any) => ({
+          type: action.type || '',
+          description: action.description || '',
+          walletAddress: action.wallet_address,
+          amount: action.amount,
+          token: action.token
+        })),
+        quorum: 1000,
+        minApproval: 60,
+        daoId: proposalDetails.daoId
+      };
+      
+      setSelectedProposal(transformedProposal);
+    } catch (error) {
+      console.error(`Failed to refresh proposal ${proposalId} after vote:`, error);
+    }
   };
 
   const renderProposalForm = () => {
@@ -526,10 +993,11 @@ const Governance = () => {
                 Back
               </button>
               <button
-                onClick={resetForm}
+                onClick={handleCreateProposalTransaction}
+                disabled={isSubmitting}
                 className="px-4 py-2 rounded-md text-text bg-primary hover:bg-primary"
               >
-                Create Proposal
+                {isSubmitting ? 'Creating Proposal...' : 'Create Proposal'}
               </button>
             </div>
           </div>
@@ -537,88 +1005,6 @@ const Governance = () => {
       
       default:
         return null;
-    }
-  };
-
-  const proposalDetails: ProposalDetails[] = [
-    {
-      id: 'PROP-1234',
-      title: 'Increase Treasury Allocation for Marketing',
-      description: 'This proposal aims to increase the treasury allocation for marketing efforts from 10% to 15% of the total treasury. The additional funds will be used to expand our presence on social media platforms and sponsor relevant events in the crypto space.\n\nRationale:\n- Increased competition requires more marketing efforts\n- Recent community survey showed strong support for more marketing\n- Previous marketing campaigns have shown positive ROI',
-      status: 'Active',
-      creator: 'dao.member.eth',
-      createdAt: '2023-10-15',
-      startDate: '2023-10-16',
-      endDate: '2023-10-23',
-      votes: {
-        for: 650,
-        against: 350,
-        abstain: 120
-      },
-      actions: [
-        {
-          type: 'withdraw',
-          description: 'Withdraw 50,000 USDC from treasury to marketing multisig',
-          walletAddress: '0x1234...5678',
-          amount: '50,000',
-          token: 'USDC'
-        }
-      ],
-      quorum: 1000,
-      minApproval: 60
-    },
-    {
-      id: 'PROP-1233',
-      title: 'New Community Guidelines',
-      description: 'This proposal introduces updated community guidelines for all official communication channels. The new guidelines focus on promoting respectful discourse, preventing spam, and establishing clear moderation procedures.\n\nKey changes:\n- More specific rules about promotional content\n- Clearer escalation path for rule violations\n- New roles for community moderators',
-      status: 'Active',
-      creator: 'community.lead.eth',
-      createdAt: '2023-10-14',
-      startDate: '2023-10-15',
-      endDate: '2023-10-22',
-      votes: {
-        for: 820,
-        against: 180,
-        abstain: 50
-      },
-      actions: [
-        {
-          type: 'document',
-          description: 'Ratify new community guidelines document (IPFS: QmX...)',
-        }
-      ],
-      quorum: 800,
-      minApproval: 50
-    },
-    {
-      id: 'PROP-1232',
-      title: 'Reduce Quorum Requirements',
-      description: 'This proposal suggests reducing the quorum requirements for standard proposals from 20% to 15% of total voting power. The change aims to address the challenge of reaching quorum for routine proposals, while maintaining a high enough threshold to ensure proper governance.\n\nThe proposal does NOT change the quorum requirements for critical proposals (such as treasury changes above 100k USDC or protocol parameter changes).',
-      status: 'Active',
-      creator: 'governance.eth',
-      createdAt: '2023-10-13',
-      startDate: '2023-10-14',
-      endDate: '2023-10-28',
-      votes: {
-        for: 490,
-        against: 510,
-        abstain: 200
-      },
-      actions: [
-        {
-          type: 'parameter',
-          description: 'Update governance parameter: STANDARD_PROPOSAL_QUORUM from 20% to 15%',
-        }
-      ],
-      quorum: 1200,
-      minApproval: 66
-    }
-  ];
-  
-  const openProposalDetails = (proposalId: string) => {
-    const proposal = proposalDetails.find(p => p.id === proposalId);
-    if (proposal) {
-      setSelectedProposal(proposal);
     }
   };
   
@@ -686,14 +1072,16 @@ const Governance = () => {
       {selectedProposal && (
         <PopupProposal 
           proposal={selectedProposal} 
-          onClose={closeProposalDetails} 
+          onClose={closeProposalDetails}
+          onVoteSubmitted={handleVoteSubmitted}
+          onVote={handleVoteTransaction}
         />
       )}
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div className="bg-primary rounded-lg p-4 text-text">
           <h3 className="text-sm font-medium mb-2">Active Proposals</h3>
-          <p className="text-3xl font-bold">3</p>
+          <p className="text-3xl font-bold">{proposals.filter(p => p.status === 'Active').length}</p>
         </div>
         
         <div className="bg-primary rounded-lg p-4 text-text">
@@ -706,39 +1094,47 @@ const Governance = () => {
         <div className="p-4 border-b border-[#333333]">
           <h2 className="text-lg font-medium text-text">Active Proposals</h2>
         </div>
-        <div>
-          {[
-            { id: 'PROP-1234', title: 'Increase Treasury Allocation for Marketing', status: 'Active', votes: { for: 65, against: 35 } },
-            { id: 'PROP-1233', title: 'New Community Guidelines', status: 'Active', votes: { for: 82, against: 18 } },
-            { id: 'PROP-1232', title: 'Reduce Quorum Requirements', status: 'Active', votes: { for: 49, against: 51 } },
-          ].map((proposal, index) => (
-            <div 
-              key={proposal.id} 
-              className={`p-4 ${index !== 2 ? 'border-b border-[#333333]' : ''} hover:bg-surface-200 cursor-pointer`}
-              onClick={() => openProposalDetails(proposal.id)}
-            >
-              <div className="flex justify-between items-center mb-2">
-                <div>
-                  <h3 className="font-medium text-text">{proposal.title}</h3>
-                  <p className="text-sm text-surface-500">{proposal.id}</p>
+        {isLoading ? (
+          <div className="p-4 text-center text-surface-500">Loading proposals...</div>
+        ) : proposals.length > 0 ? (
+          <div>
+            {proposals.map((proposal, index) => (
+              <div 
+                key={proposal.id} 
+                className={`p-4 ${index !== proposals.length - 1 ? 'border-b border-[#333333]' : ''} hover:bg-surface-200 cursor-pointer`}
+                onClick={() => handleViewProposal(proposal.id)}
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <div>
+                    <h3 className="font-medium text-text">{proposal.name}</h3>
+                    <p className="text-sm text-surface-500">{proposal.id}</p>
+                  </div>
+                  <span className={`px-2 py-1 rounded-full text-xs ${
+                    proposal.status === 'Active' ? 'bg-green-900 text-success' :
+                    proposal.status === 'Pending' ? 'bg-yellow-900 text-warning' :
+                    proposal.status === 'Passed' ? 'bg-blue-900 text-primary' :
+                    proposal.status === 'Rejected' ? 'bg-red-900 text-error' :
+                    'bg-gray-900 text-text opacity-80'
+                  }`}>
+                    {proposal.status}
+                  </span>
                 </div>
-                <span className="px-2 py-1 bg-green-900 text-success rounded-full text-xs">
-                  {proposal.status}
-                </span>
+                <div className="w-full bg-surface-300 rounded-full h-2.5">
+                  <div 
+                    className="bg-primary h-2.5 rounded-full" 
+                    style={{ width: `${proposal.votes.for / (proposal.votes.for + proposal.votes.against) * 100 || 0}%` }}
+                  ></div>
+                </div>
+                <div className="flex justify-between text-xs mt-1">
+                  <span className="text-primary">{Math.round(proposal.votes.for / (proposal.votes.for + proposal.votes.against) * 100 || 0)}% For</span>
+                  <span className="text-surface-500">{Math.round(proposal.votes.against / (proposal.votes.for + proposal.votes.against) * 100 || 0)}% Against</span>
+                </div>
               </div>
-              <div className="w-full bg-surface-300 rounded-full h-2.5">
-                <div 
-                  className="bg-primary h-2.5 rounded-full" 
-                  style={{ width: `${proposal.votes.for}%` }}
-                ></div>
-              </div>
-              <div className="flex justify-between text-xs mt-1">
-                <span className="text-primary">{proposal.votes.for}% For</span>
-                <span className="text-surface-500">{proposal.votes.against}% Against</span>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="p-4 text-center text-surface-500">No proposals found. Create a new proposal to get started.</div>
+        )}
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -758,19 +1154,18 @@ const Governance = () => {
             <h2 className="text-lg font-medium text-text">Recent Governance Activity</h2>
           </div>
           <div>
-            {[
-              { event: 'Proposal #1221 accepted', time: '12 hours ago' },
-              { event: 'New voting period started', time: '1 day ago' },
-              { event: 'Quorum reached on Proposal #1220', time: '2 days ago' },
-              { event: 'Proposal #1219 rejected', time: '3 days ago' },
-            ].map((activity, index) => (
-              <div key={index} className={`p-4 ${index !== 3 ? 'border-b border-[#333333]' : ''} hover:bg-surface-200`}>
-                <div className="flex justify-between">
-                  <span className="text-text">{activity.event}</span>
-                  <span className="text-sm text-surface-500">{activity.time}</span>
+            {proposals.length > 0 ? (
+              proposals.slice(0, 4).map((proposal, index) => (
+                <div key={index} className={`p-4 ${index !== 3 ? 'border-b border-[#333333]' : ''} hover:bg-surface-200`}>
+                  <div className="flex justify-between">
+                    <span className="text-text">Proposal "{proposal.name}" created</span>
+                    <span className="text-sm text-surface-500">{proposal.createdAt}</span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div className="p-4 text-center text-surface-500">No recent activity</div>
+            )}
           </div>
         </div>
       </div>

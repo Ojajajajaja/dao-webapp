@@ -19,6 +19,7 @@ import { DiscordMessage } from '../models/DiscordMessage';
 import { DiscordMessagesResponse } from '../models/DiscordMessagesResponse';
 import { InputCreateDAO } from '../models/InputCreateDAO';
 import { InputCreatePOD } from '../models/InputCreatePOD';
+import { InputCreateProposal } from '../models/InputCreateProposal';
 import { InputCreateUser } from '../models/InputCreateUser';
 import { InputUpdateUser } from '../models/InputUpdateUser';
 import { LinkDiscordChannel } from '../models/LinkDiscordChannel';
@@ -34,6 +35,12 @@ import { PODSchemaResponse } from '../models/PODSchemaResponse';
 import { PODUpdate } from '../models/PODUpdate';
 import { PaginationMetadata } from '../models/PaginationMetadata';
 import { PagingError } from '../models/PagingError';
+import { PodProposalListResponse } from '../models/PodProposalListResponse';
+import { Proposal } from '../models/Proposal';
+import { ProposalSchemaResponse } from '../models/ProposalSchemaResponse';
+import { ProposalUpdate } from '../models/ProposalUpdate';
+import { ProposalVote } from '../models/ProposalVote';
+import { ProposalVoteResponse } from '../models/ProposalVoteResponse';
 import { SocialConnection } from '../models/SocialConnection';
 import { TelegramAuth } from '../models/TelegramAuth';
 import { Token } from '../models/Token';
@@ -46,6 +53,7 @@ import { Treasury } from '../models/Treasury';
 import { TreasuryUpdatePercentages } from '../models/TreasuryUpdatePercentages';
 import { User } from '../models/User';
 import { UserBasic } from '../models/UserBasic';
+import { UserBasic1 } from '../models/UserBasic1';
 import { UserExistResponse } from '../models/UserExistResponse';
 import { UserInfoError } from '../models/UserInfoError';
 import { UserResponse } from '../models/UserResponse';
@@ -1313,6 +1321,835 @@ export class PromiseDiscordOauthApi {
 	    }
 	}
         const result = this.api.discordCallback(observableOptions);
+        return result.toPromise();
+    }
+
+
+}
+
+
+
+import { ObservableProposalsApi } from './ObservableAPI';
+
+import { ProposalsApiRequestFactory, ProposalsApiResponseProcessor} from "../apis/ProposalsApi";
+export class PromiseProposalsApi {
+    private api: ObservableProposalsApi
+
+    public constructor(
+        configuration: Configuration,
+        requestFactory?: ProposalsApiRequestFactory,
+        responseProcessor?: ProposalsApiResponseProcessor
+    ) {
+        this.api = new ObservableProposalsApi(configuration, requestFactory, responseProcessor);
+    }
+
+    /**
+     * Create a new proposal for this specific DAO
+     * @param daoId
+     * @param inputCreateProposal
+     */
+    public createProposalForDAOWithHttpInfo(daoId: string, inputCreateProposal: InputCreateProposal, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.createProposalForDAOWithHttpInfo(daoId, inputCreateProposal, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Create a new proposal for this specific DAO
+     * @param daoId
+     * @param inputCreateProposal
+     */
+    public createProposalForDAO(daoId: string, inputCreateProposal: InputCreateProposal, _options?: PromiseConfigurationOptions): Promise<ProposalSchemaResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.createProposalForDAO(daoId, inputCreateProposal, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Create a new proposal for this specific POD
+     * @param daoId
+     * @param podId
+     * @param inputCreateProposal
+     */
+    public createProposalForPODWithHttpInfo(daoId: string, podId: string, inputCreateProposal: InputCreateProposal, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.createProposalForPODWithHttpInfo(daoId, podId, inputCreateProposal, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Create a new proposal for this specific POD
+     * @param daoId
+     * @param podId
+     * @param inputCreateProposal
+     */
+    public createProposalForPOD(daoId: string, podId: string, inputCreateProposal: InputCreateProposal, _options?: PromiseConfigurationOptions): Promise<ProposalSchemaResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.createProposalForPOD(daoId, podId, inputCreateProposal, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Delete a proposal for a DAO
+     * @param daoId
+     * @param proposalId
+     */
+    public deleteDAOProposalWithHttpInfo(daoId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.deleteDAOProposalWithHttpInfo(daoId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Delete a proposal for a DAO
+     * @param daoId
+     * @param proposalId
+     */
+    public deleteDAOProposal(daoId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<ProposalSchemaResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.deleteDAOProposal(daoId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Delete a proposal for a POD
+     * @param daoId
+     * @param podId
+     * @param proposalId
+     */
+    public deletePODProposalWithHttpInfo(daoId: string, podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.deletePODProposalWithHttpInfo(daoId, podId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Delete a proposal for a POD
+     * @param daoId
+     * @param podId
+     * @param proposalId
+     */
+    public deletePODProposal(daoId: string, podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<ProposalSchemaResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.deletePODProposal(daoId, podId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all active proposals for a specific DAO
+     * @param daoId
+     */
+    public getActiveProposalsByDAOWithHttpInfo(daoId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Array<Proposal>>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getActiveProposalsByDAOWithHttpInfo(daoId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all active proposals for a specific DAO
+     * @param daoId
+     */
+    public getActiveProposalsByDAO(daoId: string, _options?: PromiseConfigurationOptions): Promise<Array<Proposal>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getActiveProposalsByDAO(daoId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all active proposals for a specific POD
+     * @param daoId
+     * @param podId
+     */
+    public getActiveProposalsByPODWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<PodProposalListResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getActiveProposalsByPODWithHttpInfo(daoId, podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all active proposals for a specific POD
+     * @param daoId
+     * @param podId
+     */
+    public getActiveProposalsByPOD(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<PodProposalListResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getActiveProposalsByPOD(daoId, podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get a specific proposal for a DAO
+     * @param daoId
+     * @param proposalId
+     */
+    public getDAOProposalByIdWithHttpInfo(daoId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Proposal>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getDAOProposalByIdWithHttpInfo(daoId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get a specific proposal for a DAO
+     * @param daoId
+     * @param proposalId
+     */
+    public getDAOProposalById(daoId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<Proposal> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getDAOProposalById(daoId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get a specific proposal for a POD
+     * @param daoId
+     * @param podId
+     * @param proposalId
+     */
+    public getPODProposalByIdWithHttpInfo(daoId: string, podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Proposal>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getPODProposalByIdWithHttpInfo(daoId, podId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get a specific proposal for a POD
+     * @param daoId
+     * @param podId
+     * @param proposalId
+     */
+    public getPODProposalById(daoId: string, podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<Proposal> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getPODProposalById(daoId, podId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get vote counts for a POD proposal
+     * @param daoId
+     * @param podId
+     * @param proposalId
+     */
+    public getPODProposalVotesWithHttpInfo(daoId: string, podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getPODProposalVotesWithHttpInfo(daoId, podId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get vote counts for a POD proposal
+     * @param daoId
+     * @param podId
+     * @param proposalId
+     */
+    public getPODProposalVotes(daoId: string, podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<ProposalVoteResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getPODProposalVotes(daoId, podId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get vote counts for a proposal
+     * @param daoId
+     * @param proposalId
+     */
+    public getProposalVotesWithHttpInfo(daoId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getProposalVotesWithHttpInfo(daoId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get vote counts for a proposal
+     * @param daoId
+     * @param proposalId
+     */
+    public getProposalVotes(daoId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<ProposalVoteResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getProposalVotes(daoId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all proposals for a specific DAO
+     * @param daoId
+     */
+    public getProposalsByDAOWithHttpInfo(daoId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<Array<Proposal>>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getProposalsByDAOWithHttpInfo(daoId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all proposals for a specific DAO
+     * @param daoId
+     */
+    public getProposalsByDAO(daoId: string, _options?: PromiseConfigurationOptions): Promise<Array<Proposal>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getProposalsByDAO(daoId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all proposals for a specific POD
+     * @param daoId
+     * @param podId
+     */
+    public getProposalsByPODWithHttpInfo(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<PodProposalListResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getProposalsByPODWithHttpInfo(daoId, podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Get all proposals for a specific POD
+     * @param daoId
+     * @param podId
+     */
+    public getProposalsByPOD(daoId: string, podId: string, _options?: PromiseConfigurationOptions): Promise<PodProposalListResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.getProposalsByPOD(daoId, podId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Remove vote from a proposal for a DAO
+     * @param daoId
+     * @param proposalId
+     */
+    public removeVoteFromDAOProposalWithHttpInfo(daoId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.removeVoteFromDAOProposalWithHttpInfo(daoId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Remove vote from a proposal for a DAO
+     * @param daoId
+     * @param proposalId
+     */
+    public removeVoteFromDAOProposal(daoId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<ProposalVoteResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.removeVoteFromDAOProposal(daoId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Remove a vote from a POD proposal
+     * @param daoId
+     * @param podId
+     * @param proposalId
+     */
+    public removeVoteFromPODProposalWithHttpInfo(daoId: string, podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.removeVoteFromPODProposalWithHttpInfo(daoId, podId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Remove a vote from a POD proposal
+     * @param daoId
+     * @param podId
+     * @param proposalId
+     */
+    public removeVoteFromPODProposal(daoId: string, podId: string, proposalId: string, _options?: PromiseConfigurationOptions): Promise<ProposalVoteResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.removeVoteFromPODProposal(daoId, podId, proposalId, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Update a proposal for a DAO
+     * @param daoId
+     * @param proposalId
+     * @param proposalUpdate
+     */
+    public updateDAOProposalWithHttpInfo(daoId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.updateDAOProposalWithHttpInfo(daoId, proposalId, proposalUpdate, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Update a proposal for a DAO
+     * @param daoId
+     * @param proposalId
+     * @param proposalUpdate
+     */
+    public updateDAOProposal(daoId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: PromiseConfigurationOptions): Promise<ProposalSchemaResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.updateDAOProposal(daoId, proposalId, proposalUpdate, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Update a proposal for a POD
+     * @param daoId
+     * @param podId
+     * @param proposalId
+     * @param proposalUpdate
+     */
+    public updatePODProposalWithHttpInfo(daoId: string, podId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalSchemaResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.updatePODProposalWithHttpInfo(daoId, podId, proposalId, proposalUpdate, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Update a proposal for a POD
+     * @param daoId
+     * @param podId
+     * @param proposalId
+     * @param proposalUpdate
+     */
+    public updatePODProposal(daoId: string, podId: string, proposalId: string, proposalUpdate: ProposalUpdate, _options?: PromiseConfigurationOptions): Promise<ProposalSchemaResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.updatePODProposal(daoId, podId, proposalId, proposalUpdate, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Vote on a proposal for a DAO
+     * @param daoId
+     * @param proposalId
+     * @param proposalVote
+     */
+    public voteOnDAOProposalWithHttpInfo(daoId: string, proposalId: string, proposalVote: ProposalVote, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.voteOnDAOProposalWithHttpInfo(daoId, proposalId, proposalVote, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Vote on a proposal for a DAO
+     * @param daoId
+     * @param proposalId
+     * @param proposalVote
+     */
+    public voteOnDAOProposal(daoId: string, proposalId: string, proposalVote: ProposalVote, _options?: PromiseConfigurationOptions): Promise<ProposalVoteResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.voteOnDAOProposal(daoId, proposalId, proposalVote, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Vote on a POD proposal
+     * @param daoId
+     * @param podId
+     * @param proposalId
+     * @param proposalVote
+     */
+    public voteOnPODProposalWithHttpInfo(daoId: string, podId: string, proposalId: string, proposalVote: ProposalVote, _options?: PromiseConfigurationOptions): Promise<HttpInfo<ProposalVoteResponse>> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.voteOnPODProposalWithHttpInfo(daoId, podId, proposalId, proposalVote, observableOptions);
+        return result.toPromise();
+    }
+
+    /**
+     * Vote on a POD proposal
+     * @param daoId
+     * @param podId
+     * @param proposalId
+     * @param proposalVote
+     */
+    public voteOnPODProposal(daoId: string, podId: string, proposalId: string, proposalVote: ProposalVote, _options?: PromiseConfigurationOptions): Promise<ProposalVoteResponse> {
+        let observableOptions: undefined | ConfigurationOptions
+        if (_options){
+	    observableOptions = {
+                baseServer: _options.baseServer,
+                httpApi: _options.httpApi,
+                middleware: _options.middleware?.map(
+                    m => new PromiseMiddlewareWrapper(m)
+		),
+		middlewareMergeStrategy: _options.middlewareMergeStrategy,
+                authMethods: _options.authMethods
+	    }
+	}
+        const result = this.api.voteOnPODProposal(daoId, podId, proposalId, proposalVote, observableOptions);
         return result.toPromise();
     }
 

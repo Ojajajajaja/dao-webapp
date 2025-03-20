@@ -3,6 +3,7 @@
 AuthApi.md
 DaosApi.md
 DiscordOauthApi.md
+ProposalsApi.md
 README.md
 SocialConnectionsApi.md
 TelegramAuthApi.md
@@ -12,6 +13,7 @@ UsersApi.md
 apis/AuthApi.ts
 apis/DaosApi.ts
 apis/DiscordOauthApi.ts
+apis/ProposalsApi.ts
 apis/SocialConnectionsApi.ts
 apis/TelegramAuthApi.ts
 apis/TreasuryApi.ts
@@ -43,6 +45,7 @@ models/DiscordMessage.ts
 models/DiscordMessagesResponse.ts
 models/InputCreateDAO.ts
 models/InputCreatePOD.ts
+models/InputCreateProposal.ts
 models/InputCreateUser.ts
 models/InputUpdateUser.ts
 models/LinkDiscordChannel.ts
@@ -59,6 +62,12 @@ models/PODSchemaResponse.ts
 models/PODUpdate.ts
 models/PaginationMetadata.ts
 models/PagingError.ts
+models/PodProposalListResponse.ts
+models/Proposal.ts
+models/ProposalSchemaResponse.ts
+models/ProposalUpdate.ts
+models/ProposalVote.ts
+models/ProposalVoteResponse.ts
 models/SocialConnection.ts
 models/TelegramAuth.ts
 models/Token.ts
@@ -71,6 +80,7 @@ models/Treasury.ts
 models/TreasuryUpdatePercentages.ts
 models/User.ts
 models/UserBasic.ts
+models/UserBasic1.ts
 models/UserExistResponse.ts
 models/UserInfoError.ts
 models/UserResponse.ts
