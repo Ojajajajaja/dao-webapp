@@ -33,7 +33,7 @@ const Pods = () => {
   const [membershipLoading, setMembershipLoading] = useState<boolean>(false);
   
   // Get Solana wallet and transaction utilities
-  const wallet = useWallet();
+  const walletState = useWallet();
   const { 
     sendTransaction, 
     isLoading: isTransactionLoading, 
@@ -334,7 +334,7 @@ const Pods = () => {
     description: string,
     endDate: Date
   ) => {
-    if (!daoId || !selectedPod?.podId || !publicKey || !wallet) {
+    if (!daoId || !selectedPod?.podId || !publicKey || !walletState) {
       console.error("Missing required data for proposal creation");
       return null;
     }
@@ -364,7 +364,7 @@ const Pods = () => {
       
       // Send the transaction using Solana wallet adapter
       const connection = new Connection(SOLANA_RPC_ENDPOINT);
-      const signature = await wallet.sendTransaction(transaction, connection);
+      const signature = await walletState.sendTransaction(transaction, connection);
       
       // Wait for confirmation
       await connection.confirmTransaction(signature, 'confirmed');
@@ -396,9 +396,15 @@ const Pods = () => {
 
   // Handler for voting on a proposal with blockchain transaction
   const handleVoteWithTransaction = async (proposalId: string, vote: 'for' | 'against') => {
-    if (!daoId || !selectedPod?.podId || !publicKey || !wallet) {
+    if (!daoId || !selectedPod?.podId || !publicKey || !walletState) {
       console.error("Missing required data for voting");
       return false;
+    }
+
+      // Check if wallet is connected
+    if (!walletState || !walletState.connected) {
+      setError('Wallet not connected. Please connect your wallet to vote.');
+      return;
     }
     
     try {
@@ -421,7 +427,7 @@ const Pods = () => {
       
       // Send the transaction using Solana wallet adapter
       const connection = new Connection(SOLANA_RPC_ENDPOINT);
-      const signature = await wallet.sendTransaction(transaction, connection);
+      const signature = await walletState.sendTransaction(transaction, connection);
       
       // Wait for confirmation
       await connection.confirmTransaction(signature, 'confirmed');
@@ -709,7 +715,7 @@ const Pods = () => {
         podId={selectedPod?.podId}
         podName={selectedPod?.name}
         createWithTransaction={handleCreateProposalWithTransaction}
-        wallet={wallet}
+        wallet={walletState}
       />
 
       {selectedProposal && daoId && selectedPod && (
@@ -735,7 +741,7 @@ const Pods = () => {
           onClose={() => setSelectedProposal(null)}
           onVoteSubmitted={handleProposalVoted}
           onVote={handleVoteWithTransaction}
-          wallet={wallet}
+          wallet={walletState}
           canVote={userIsMember}
         />
       )}
