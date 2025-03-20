@@ -1149,6 +1149,8 @@ const Governance = () => {
           onClose={closeProposalDetails}
           onVoteSubmitted={handleVoteSubmitted}
           onVote={handleVoteTransaction}
+          canVote={userIsDaoMember}
+          wallet={wallet}
         />
       )}
       

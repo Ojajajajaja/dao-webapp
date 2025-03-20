@@ -249,87 +249,86 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVote
               </div>
             </div>
           </div>
-        </div>
-        
-        <div className="p-4 border-t border-gray-600">
-          {error && (
-            <div className="mb-4 p-3 bg-red-900 text-error rounded-md flex items-start">
-              <AlertTriangle size={18} className="mr-2 flex-shrink-0 mt-0.5" />
-              <p>{error}</p>
-            </div>
-          )}
           
-          {hasVoted ? (
-            <div className="mb-4 p-3 bg-green-900 text-success rounded-md flex items-start">
-              <Check size={18} className="mr-2 flex-shrink-0 mt-0.5" />
-              <p>Your vote has been recorded. Thank you for participating!</p>
-            </div>
-          ) : localProposal.status.toLowerCase() === 'active' ? (
-            <>
+          <div className="mb-6">
+            <h3 className="text-lg font-medium text-text mb-2">Vote</h3>
+            <div className="bg-surface-200 p-4 rounded-md">
               {!canVote && (
-                <div className="mb-4 p-3 bg-yellow-900 text-warning rounded-md flex items-start">
-                  <AlertTriangle size={18} className="mr-2 flex-shrink-0 mt-0.5" />
-                  <p>You must be a member of this POD to vote on proposals. Please join the POD first.</p>
+                <div className="bg-red-900/20 border border-red-900/30 rounded-md p-3 mb-4">
+                  <div className="flex items-start mb-2">
+                    <AlertTriangle size={16} className="text-yellow-400 mr-2 mt-0.5 flex-shrink-0" />
+                    <p className="text-sm text-text">You must be a member of this DAO to vote on proposals.</p>
+                  </div>
+                  <div className="mt-2 text-center">
+                    <p className="text-xs text-surface-400 mb-2">Please join the DAO to participate in governance</p>
+                    <button 
+                      onClick={() => window.location.href = `/daos/${localProposal.daoId}`}
+                      className="px-3 py-1.5 bg-primary text-white text-sm rounded-md hover:bg-opacity-90"
+                    >
+                      Go to DAO page to join
+                    </button>
+                  </div>
                 </div>
               )}
               
-              <div className="flex flex-col md:flex-row gap-4">
-                <button
-                  className={`flex-1 py-3 px-4 rounded-md flex items-center justify-center ${
-                    voteOption === 'for' 
-                      ? 'bg-primary text-white' 
-                      : 'bg-surface-200 text-text hover:bg-surface-300'
-                  } ${(!canVote || isVoting) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  onClick={() => canVote && !isVoting ? setVoteOption('for') : null}
-                  disabled={!canVote || isVoting}
-                >
-                  <ThumbsUp size={18} className="mr-2" />
-                  Vote For
-                </button>
-                
-                <button
-                  className={`flex-1 py-3 px-4 rounded-md flex items-center justify-center ${
-                    voteOption === 'against' 
-                      ? 'bg-error text-white' 
-                      : 'bg-surface-200 text-text hover:bg-surface-300'
-                  } ${(!canVote || isVoting) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  onClick={() => canVote && !isVoting ? setVoteOption('against') : null}
-                  disabled={!canVote || isVoting}
-                >
-                  <ThumbsDown size={18} className="mr-2" />
-                  Vote Against
-                </button>
-              </div>
+              {error && (
+                <div className="bg-red-900/20 border border-red-900/30 rounded-md p-3 mb-4 flex items-start">
+                  <AlertTriangle size={16} className="text-error mr-2 mt-0.5 flex-shrink-0" />
+                  <p className="text-sm text-text">{error}</p>
+                </div>
+              )}
               
-              <button
-                className={`w-full mt-4 py-3 rounded-md flex items-center justify-center ${
-                  voteOption !== null && !isVoting && canVote
-                    ? 'bg-green-600 text-white hover:bg-green-700'
-                    : 'bg-surface-300 text-surface-500 cursor-not-allowed'
-                }`}
-                onClick={handleVote}
-                disabled={voteOption === null || isVoting || !canVote}
-              >
-                {isVoting ? (
-                  <>
-                    <span className="mr-2 animate-spin">⟳</span>
-                    Submitting Vote...
-                  </>
-                ) : (
-                  <>
-                    <Check size={18} className="mr-2" />
-                    Submit Vote
-                  </>
-                )}
-              </button>
-            </>
-          ) : (
-            <div className="p-3 bg-surface-200 rounded-md">
-              <p className="text-text text-center">
-                Voting is {localProposal.status.toLowerCase() === 'pending' ? 'not yet open' : 'now closed'}.
-              </p>
+              {!hasVoted ? (
+                <>
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <button
+                      onClick={() => canVote && setVoteOption('for')}
+                      disabled={isVoting || !canVote}
+                      className={`p-3 rounded-md flex flex-col items-center justify-center transition-all
+                        ${voteOption === 'for' 
+                          ? 'bg-primary bg-opacity-20 border-2 border-primary' 
+                          : 'bg-surface-300 border-2 border-transparent hover:border-primary hover:border-opacity-50'}
+                        ${(isVoting || !canVote) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      <ThumbsUp size={24} className={`mb-2 ${voteOption === 'for' ? 'text-primary' : 'text-text'}`} />
+                      <span className={`font-medium ${voteOption === 'for' ? 'text-primary' : 'text-text'}`}>Vote For</span>
+                    </button>
+                    
+                    <button
+                      onClick={() => canVote && setVoteOption('against')}
+                      disabled={isVoting || !canVote}
+                      className={`p-3 rounded-md flex flex-col items-center justify-center transition-all
+                        ${voteOption === 'against' 
+                          ? 'bg-error bg-opacity-20 border-2 border-error' 
+                          : 'bg-surface-300 border-2 border-transparent hover:border-error hover:border-opacity-50'}
+                        ${(isVoting || !canVote) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      <ThumbsDown size={24} className={`mb-2 ${voteOption === 'against' ? 'text-error' : 'text-text'}`} />
+                      <span className={`font-medium ${voteOption === 'against' ? 'text-error' : 'text-text'}`}>Vote Against</span>
+                    </button>
+                  </div>
+                  
+                  <button
+                    onClick={handleVote}
+                    disabled={!voteOption || isVoting || !canVote}
+                    className={`w-full p-3 rounded-md font-medium transition-all
+                      ${voteOption === 'for' ? 'bg-primary text-white' : 
+                        voteOption === 'against' ? 'bg-error text-white' : 
+                        'bg-surface-300 text-text'}
+                      ${!voteOption || isVoting || !canVote ? 'opacity-50 cursor-not-allowed' : 'hover:bg-opacity-90'}`}
+                  >
+                    {isVoting ? 'Submitting Vote...' : `Submit ${voteOption ? (voteOption === 'for' ? 'For' : 'Against') : ''} Vote`}
+                  </button>
+                </>
+              ) : (
+                <div className="text-center py-4">
+                  <Check size={48} className="text-success mx-auto mb-2" />
+                  <h4 className="text-lg font-medium text-text">Your vote has been submitted!</h4>
+                  <p className="text-surface-500 mt-1">Thank you for participating in this proposal.</p>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
