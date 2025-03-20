@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Users, MessageSquare, Calendar, ExternalLink, Layers, ArrowUpRight, X, Check, PlusCircle, RefreshCw, Edit } from 'lucide-react';
+import { useState } from 'react';
+import { Plus, Users, MessageSquare, Calendar, ExternalLink, Layers, ArrowUpRight, X, Check, PlusCircle, RefreshCw, Edit, LogIn, LogOut } from 'lucide-react';
 import CreatePodModal from './CreatePodModal';
 import UpdatePodModal from './UpdatePodModal';
 import CreateProposalModal from './CreateProposalModal';
@@ -29,6 +29,8 @@ const Pods = () => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isCreateProposalModalOpen, setIsCreateProposalModalOpen] = useState(false);
   const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
+  const [userIsMember, setUserIsMember] = useState<boolean>(false);
+  const [membershipLoading, setMembershipLoading] = useState<boolean>(false);
   
   // Get Solana wallet and transaction utilities
   const wallet = useWallet();
@@ -71,6 +73,22 @@ const Pods = () => {
       // Set the first pod as selected if there are pods and no selection yet
       if (podsData.length > 0 && !selectedPod) {
         setSelectedPod(podsData[0]);
+        
+        // Check membership for the initially selected pod
+        if (publicKey && podsData[0].podId) {
+          checkPodMembership(podsData[0].podId);
+        }
+      } else if (podsData.length > 0 && selectedPod) {
+        // Find the current pod in the updated list
+        const updatedPod = podsData.find(pod => pod.podId === selectedPod.podId);
+        if (updatedPod) {
+          setSelectedPod(updatedPod);
+          
+          // Re-check membership with fresh data
+          if (publicKey && updatedPod.podId) {
+            checkPodMembership(updatedPod.podId);
+          }
+        }
       }
       
       setLoading(false);
@@ -95,6 +113,124 @@ const Pods = () => {
     }
   };
 
+  // Check if the current user is a member of the selected pod
+  const checkPodMembership = async (podId: string) => {
+    if (!daoId || !podId || !publicKey) return;
+    
+    try {
+      setMembershipLoading(true);
+      // Call the DAO-API SDK to check membership
+      const members = await podsService.getPodMembers(daoId, podId);
+      console.log('POD members:', members);
+      console.log('Current user publicKey:', publicKey.toString());
+      
+      // Check all possible formats of the public key
+      const publicKeyStr = publicKey.toString();
+      const isMember = members.some((member: any) => {
+        // Check if userId matches exactly
+        if (member.userId === publicKeyStr) return true;
+        
+        // Check if userId is the user's wallet address
+        if (member.walletAddress && member.walletAddress === publicKeyStr) return true;
+        
+        // Check if userId is base58 encoded public key
+        if (member.userId && publicKeyStr.includes(member.userId)) return true;
+        if (member.userId && member.userId.includes(publicKeyStr)) return true;
+        
+        return false;
+      });
+      
+      console.log('User is member:', isMember);
+      setUserIsMember(isMember);
+      setMembershipLoading(false);
+    } catch (err) {
+      console.error('Error checking pod membership:', err);
+      setUserIsMember(false);
+      setMembershipLoading(false);
+    }
+  };
+  
+  // Join a pod
+  const handleJoinPod = async () => {
+    if (!daoId || !selectedPod?.podId || !publicKey) {
+      console.error("Missing required data for joining pod");
+      return;
+    }
+    
+    try {
+      setMembershipLoading(true);
+      // Call the DAO-API SDK to join the pod
+      const result = await podsService.addMemberToPod(daoId, selectedPod.podId);
+      if (result) {
+        console.log('Successfully joined pod:', selectedPod.name);
+        setUserIsMember(true);
+        // Refresh pod data to get updated membership info
+        fetchPods();
+      } else {
+        console.error('Failed to join pod');
+        // Re-check membership to be sure
+        checkPodMembership(selectedPod.podId);
+      }
+      setMembershipLoading(false);
+    } catch (err) {
+      console.error('Error joining pod:', err);
+      setMembershipLoading(false);
+      // Re-check membership to be sure
+      checkPodMembership(selectedPod.podId);
+    }
+  };
+  
+  // Leave a pod
+  const handleLeavePod = async () => {
+    if (!daoId || !selectedPod?.podId || !publicKey) {
+      console.error("Missing required data for leaving pod");
+      return;
+    }
+    
+    try {
+      setMembershipLoading(true);
+      
+      // Get the current user's ID from the members list
+      const members = await podsService.getPodMembers(daoId, selectedPod.podId);
+      const publicKeyStr = publicKey.toString();
+      const currentMember = members.find((member: any) => {
+        // Check different possible formats
+        if (member.userId === publicKeyStr) return true;
+        if (member.walletAddress && member.walletAddress === publicKeyStr) return true;
+        if (member.userId && publicKeyStr.includes(member.userId)) return true;
+        if (member.userId && member.userId.includes(publicKeyStr)) return true;
+        return false;
+      });
+      
+      if (!currentMember || !currentMember.userId) {
+        console.error("Could not find current user's ID in the POD members list");
+        setMembershipLoading(false);
+        return;
+      }
+      
+      console.log("Found user ID for removal:", currentMember.userId);
+      
+      // Call the DAO-API SDK to leave the pod with the correct user ID
+      const result = await podsService.removeMemberFromPod(daoId, selectedPod.podId, currentMember.userId);
+      if (result) {
+        console.log('Successfully left pod:', selectedPod.name);
+        setUserIsMember(false);
+        // Refresh pod data to get updated membership info
+        fetchPods();
+      } else {
+        console.error('Failed to leave pod');
+        // Re-check membership to be sure
+        checkPodMembership(selectedPod.podId);
+      }
+      setMembershipLoading(false);
+    } catch (err) {
+      console.error('Error leaving pod:', err);
+      setMembershipLoading(false);
+      // Re-check membership to be sure
+      checkPodMembership(selectedPod.podId);
+    }
+  };
+
   // Fetch feed messages when selected pod changes
   useEffectOnce(() => {
     if (selectedPod && selectedPod.podId && daoId) {
@@ -106,11 +242,16 @@ const Pods = () => {
       } else {
         setFilteredProposals([]);
       }
+      
+      // Check if the user is a member of this pod
+      if (publicKey) {
+        checkPodMembership(selectedPod.podId);
+      }
     } else {
       setFeedMessages([]);
       setFilteredProposals([]);
     }
-  }, [selectedPod, daoId]);
+  }, [selectedPod, daoId, publicKey]);
 
   // Fetch feed messages from the API
   const fetchFeedMessages = async (daoId: string, podId: string) => {
@@ -321,6 +462,32 @@ const Pods = () => {
         </div>
         
         <div className="flex space-x-2">
+          {selectedPod && connected && (
+            <>
+              {membershipLoading ? (
+                <button className="bg-surface-200 text-text px-4 py-2 rounded-full text-sm flex items-center opacity-70 cursor-not-allowed">
+                  <RefreshCw size={16} className="mr-1 animate-spin" />
+                  Loading...
+                </button>
+              ) : userIsMember ? (
+                <button 
+                  className="bg-red-500 text-white px-4 py-2 rounded-full text-sm flex items-center hover:bg-red-600"
+                  onClick={handleLeavePod}
+                >
+                  <LogOut size={16} className="mr-1" />
+                  Leave this POD
+                </button>
+              ) : (
+                <button 
+                  className="bg-green-500 text-white px-4 py-2 rounded-full text-sm flex items-center hover:bg-green-600"
+                  onClick={handleJoinPod}
+                >
+                  <LogIn size={16} className="mr-1" />
+                  Join this POD
+                </button>
+              )}
+            </>
+          )}
           {selectedPod && (
             <button 
               className="bg-surface-200 text-text px-4 py-2 rounded-full text-sm flex items-center"
@@ -372,7 +539,13 @@ const Pods = () => {
                     ? 'bg-primary text-text' 
                     : 'bg-surface-200 text-text hover:bg-surface-300'
                 }`}
-                onClick={() => setSelectedPod(pod)}
+                onClick={() => {
+                  setSelectedPod(pod);
+                  // Check membership immediately when selecting a pod
+                  if (publicKey && pod.podId) {
+                    checkPodMembership(pod.podId);
+                  }
+                }}
               >
                 {pod.name}
               </button>

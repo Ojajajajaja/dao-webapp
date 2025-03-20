@@ -184,13 +184,13 @@ export class PodsService {
   /**
    * Add a member to a pod
    */
-  async addMemberToPod(daoId: string, podId: string): Promise<POD | null> {
+  async addMemberToPod(daoId: string, podId: string): Promise<string | null> {
     try {
       const apiClient = this.createAuthenticatedApiClient();
       if (!apiClient) return null;
 
       const response = await apiClient.addMemberToPOD(daoId, podId);
-      return response || null;
+      return response.action || null;
     } catch (error) {
       console.error(`Error adding member to pod ${podId} in DAO ${daoId}:`, error);
       return null;
@@ -200,7 +200,7 @@ export class PodsService {
   /**
    * Remove a member from a pod
    */
-  async removeMemberFromPod(daoId: string, podId: string, userId: string): Promise<POD | null> {
+  async removeMemberFromPod(daoId: string, podId: string, userId: string): Promise<string | null> {
     try {
       const apiClient = this.createAuthenticatedApiClient();
       if (!apiClient) return null;
@@ -209,7 +209,7 @@ export class PodsService {
       membership.userId = userId;
     
       const response = await apiClient.removeMemberFromPOD(daoId, podId, membership);
-      return response || null;
+      return response.action || null;
     } catch (error) {
       console.error(`Error removing member from pod ${podId} in DAO ${daoId}:`, error);
       return null;
@@ -219,13 +219,13 @@ export class PodsService {
   /**
    * Delete a pod
    */
-  async deletePod(daoId: string, podId: string): Promise<POD | null> {
+  async deletePod(daoId: string, podId: string): Promise<string | null> {
     try {
       const apiClient = this.createAuthenticatedApiClient();
       if (!apiClient) return null;
 
       const response = await apiClient.deletePOD(daoId, podId);
-      return response || null;
+      return response.action || null;
     } catch (error) {
       console.error(`Error deleting pod ${podId} in DAO ${daoId}:`, error);
       return null;
@@ -253,7 +253,60 @@ export class PodsService {
   }
 
   /**
-   * Get Discord feed messages for a POD
+   * Check if a user is a member of a POD
+   */
+  async checkUserPodMembership(daoId: string, podId: string, userId: string): Promise<boolean> {
+    try {
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return false;
+
+      // Get all members of the POD
+      const members = await this.getPodMembers(daoId, podId);
+      
+      // Check if the user is in the members list
+      return members.some((member: any) => member.userId === userId);
+    } catch (error) {
+      console.error(`Error checking membership for user ${userId} in pod ${podId}:`, error);
+      return false;
+    }
+  }
+
+  /**
+   * Join a POD (add current user as a member)
+   */
+  async joinPod(daoId: string, podId: string, userId: string): Promise<boolean> {
+    try {
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return false;
+
+      // Add the current user to the POD
+      await this.addMemberToPod(daoId, podId);
+      return true;
+    } catch (error) {
+      console.error(`Error joining pod ${podId} in DAO ${daoId}:`, error);
+      return false;
+    }
+  }
+
+  /**
+   * Leave a POD (remove current user from members)
+   */
+  async leavePod(daoId: string, podId: string, userId: string): Promise<boolean> {
+    try {
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return false;
+
+      // Remove the user from the POD
+      await this.removeMemberFromPod(daoId, podId, userId);
+      return true;
+    } catch (error) {
+      console.error(`Error leaving pod ${podId} in DAO ${daoId}:`, error);
+      return false;
+    }
+  }
+
+  /**
+   * Get the feed of messages for a POD
    */
   async getPodFeed(daoId: string, podId: string): Promise<DiscordMessage[]> {
     try {
