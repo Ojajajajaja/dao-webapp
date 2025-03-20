@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { PieChart, Plus, X, Check } from 'lucide-react';
+import { PieChart, Plus, X, Check, AlertCircle } from 'lucide-react';
 import PopupProposal from './PopupProposal';
 import { containers } from '../styles/theme';
 import { proposalService } from '../services/ProposalService';
@@ -10,6 +10,8 @@ import { SOLANA_RPC_ENDPOINT } from '../config/solana';
 import { toast } from 'react-hot-toast';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection } from '@solana/web3.js';
+import { daosService } from '../services/DaosService';
+import { userService } from '../services/UserService';
 
 interface Action {
   type: string;
@@ -74,6 +76,9 @@ const Governance = () => {
   const [proposals, setProposals] = useState<ProposalDetails[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userIsDaoMember, setUserIsDaoMember] = useState<boolean>(false);
+  const [membershipLoading, setMembershipLoading] = useState<boolean>(false);
+  const [showMembershipTooltip, setShowMembershipTooltip] = useState<boolean>(false);
   
   // Get Solana transaction utilities from our custom hook
   const { 
@@ -103,6 +108,47 @@ const Governance = () => {
       fetchProposals();
     }
   });
+
+  // Check if the current user is a member of the DAO
+  const checkDaoMembership = async () => {
+    if (!daoId || !publicKey) return;
+    
+    try {
+      setMembershipLoading(true);
+      
+      // Get the current user's ID
+      const currentUser = await userService.getCurrentUser();
+      if (!currentUser || !currentUser.userId) {
+        console.error("Could not find current user's ID");
+        setUserIsDaoMember(false);
+        setMembershipLoading(false);
+        return;
+      }
+      
+      // Call the DAO-API SDK to check membership
+      const members = await daosService.getDaoMembers(daoId);
+      console.log('DAO members:', members);
+      console.log('Current user ID:', currentUser.userId);
+      
+      // Check if the user is a member by userId
+      const isMember = members.some((member: any) => member.userId === currentUser.userId);
+      
+      console.log('User is DAO member:', isMember);
+      setUserIsDaoMember(isMember);
+      setMembershipLoading(false);
+    } catch (err) {
+      console.error('Error checking DAO membership:', err);
+      setUserIsDaoMember(false);
+      setMembershipLoading(false);
+    }
+  };
+
+  // Check membership when component loads or when relevant data changes
+  useEffect(() => {
+    if (daoId && publicKey && connected) {
+      checkDaoMembership();
+    }
+  }, [daoId, publicKey, connected]);
 
   // Watch for transaction success/error to proceed with API updates
   useEffectOnce(() => {
@@ -1015,13 +1061,41 @@ const Governance = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <button 
-          onClick={() => setShowProposalForm(true)}
-          className="flex items-center bg-primary hover:bg-primary text-text px-4 py-2 rounded-md"
-        >
-          <Plus size={16} className="mr-2" />
-          New Proposal
-        </button>
+        <div className="relative">
+          <button 
+            onClick={() => userIsDaoMember ? setShowProposalForm(true) : setShowMembershipTooltip(true)}
+            onMouseEnter={() => !userIsDaoMember && setShowMembershipTooltip(true)}
+            onMouseLeave={() => setShowMembershipTooltip(false)}
+            className={`flex items-center text-text px-4 py-2 rounded-md ${
+              userIsDaoMember 
+                ? "bg-primary hover:bg-primary" 
+                : "bg-gray-600 opacity-60 cursor-not-allowed"
+            }`}
+            disabled={!userIsDaoMember}
+            aria-disabled={!userIsDaoMember}
+          >
+            <Plus size={16} className="mr-2" />
+            New Proposal
+          </button>
+          
+          {/* Membership tooltip - only shown on hover */}
+          {(showMembershipTooltip && !userIsDaoMember && connected) && (
+            <div className="absolute top-full left-0 mt-10 p-2 bg-surface-400 border border-gray-700 text-white text-xs rounded-md shadow-lg z-10 w-60">
+              <div className="flex items-start">
+                <AlertCircle size={14} className="text-yellow-400 mr-1 flex-shrink-0 mt-0.5" />
+                <p>You must be a member of this DAO to create proposals.</p>
+              </div>
+            </div>
+          )}
+          
+          {/* Permanent notice to join DAO if not a member */}
+          {(!userIsDaoMember && connected) && (
+            <div className="mt-2 text-xs text-yellow-300 flex items-center">
+              <AlertCircle size={12} className="mr-1" />
+              <span>Please join this DAO to create new proposals</span>
+            </div>
+          )}
+        </div>
       </div>
       
       {showProposalForm && (

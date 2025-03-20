@@ -174,34 +174,13 @@ export class DaosService {
   /**
    * Add a member to a DAO
    */
-  async addMemberToDao(daoId: string, userId: string): Promise<DAO | null> {
+  async addMemberToDao(daoId: string, userId: string): Promise<string | null> {
     try {
-      const token = walletAuthService.getAccessToken();
-      if (!token) {
-        console.error('No authentication token available');
-        return null;
-      }
+      const apiClient = this.createAuthenticatedApiClient();
+      if (!apiClient) return null;
 
-      const membership = new DAOMembership();
-      membership.userId = userId;
-
-      // Use fetch instead of the API client to avoid type issues
-      const response = await fetch(`${this.apiEndpoint}/daos/${daoId}/members`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify(membership)
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to add member: ${response.status} ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      return data || null;
+      const response = await apiClient.addMemberToDAO(daoId);
+      return response.action || null;
     } catch (error) {
       console.error(`Error adding member to DAO ${daoId}:`, error);
       return null;

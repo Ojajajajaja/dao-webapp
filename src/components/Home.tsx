@@ -5,7 +5,9 @@ import {
   Users,
   Activity,
   Loader,
-  RefreshCw
+  RefreshCw,
+  LogIn,
+  LogOut
 } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { treasuryService } from '../services/TreasuryService';
@@ -27,6 +29,8 @@ import {
   Title
 } from 'chart.js';
 import { useEffectOnce } from '../hooks/useEffectOnce';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { useSolanaTransaction } from '../hooks/useSolanaTransaction';
 
 // Register Chart.js components
 ChartJS.register(
@@ -509,6 +513,11 @@ const Dashboard = () => {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [userIsDaoMember, setUserIsDaoMember] = useState<boolean>(false);
+  const [membershipLoading, setMembershipLoading] = useState<boolean>(false);
+  
+  const { publicKey, connected } = useWallet();
+  const { sendTransaction } = useSolanaTransaction();
 
   // Function to fetch treasury data
   const fetchTreasuryData = async (showRefreshIndicator = true) => {
@@ -695,6 +704,132 @@ const Dashboard = () => {
     }
   };
 
+  // Check if the current user is a member of the DAO
+  const checkDaoMembership = async () => {
+    if (!daoId || !publicKey) return;
+    
+    try {
+      setMembershipLoading(true);
+      
+      // Get the current user's ID
+      const currentUser = await userService.getCurrentUser();
+      if (!currentUser || !currentUser.userId) {
+        console.error("Could not find current user's ID");
+        setUserIsDaoMember(false);
+        setMembershipLoading(false);
+        return;
+      }
+      
+      // Call the DAO-API SDK to check membership
+      const members = await daosService.getDaoMembers(daoId);
+      console.log('DAO members:', members);
+      console.log('Current user ID:', currentUser.userId);
+      
+      // Check if the user is a member by userId
+      const isMember = members.some((member: any) => member.userId === currentUser.userId);
+      
+      console.log('User is DAO member:', isMember);
+      setUserIsDaoMember(isMember);
+      setMembershipLoading(false);
+    } catch (err) {
+      console.error('Error checking DAO membership:', err);
+      setUserIsDaoMember(false);
+      setMembershipLoading(false);
+    }
+  };
+
+  // Join a DAO
+  const handleJoinDao = async () => {
+    if (!daoId || !publicKey) {
+      console.error("Missing required data for joining DAO");
+      return;
+    }
+    
+    try {
+      setMembershipLoading(true);
+      
+      // Get the user ID - this should be retrieved from the user service
+      // rather than using the public key directly
+      const currentUser = await userService.getCurrentUser();
+      
+      if (!currentUser || !currentUser.userId) {
+        console.error("Could not find current user's ID");
+        setMembershipLoading(false);
+        return;
+      }
+      
+      console.log("Found user ID for adding to DAO:", currentUser.userId);
+      
+      // Call the DAO-API SDK to join the DAO with the correct user ID
+      const result = await daosService.addMemberToDao(daoId, currentUser.userId);
+      if (result) {
+        console.log('Successfully joined DAO');
+        setUserIsDaoMember(true);
+        // Refresh member data
+        fetchMemberData();
+      } else {
+        console.error('Failed to join DAO');
+        // Re-check membership to be sure
+        checkDaoMembership();
+      }
+      setMembershipLoading(false);
+    } catch (err) {
+      console.error('Error joining DAO:', err);
+      setMembershipLoading(false);
+      // Re-check membership to be sure
+      checkDaoMembership();
+    }
+  };
+  
+  // Leave a DAO
+  const handleLeaveDao = async () => {
+    if (!daoId || !publicKey) {
+      console.error("Missing required data for leaving DAO");
+      return;
+    }
+    
+    try {
+      setMembershipLoading(true);
+      
+      // Get the current user's ID directly from the user service
+      const currentUser = await userService.getCurrentUser();
+      
+      if (!currentUser || !currentUser.userId) {
+        console.error("Could not find current user's ID");
+        setMembershipLoading(false);
+        return;
+      }
+      
+      console.log("Found user ID for removal:", currentUser.userId);
+      
+      // Call the DAO-API SDK to leave the DAO with the correct user ID
+      const result = await daosService.removeMemberFromDao(daoId, currentUser.userId);
+      if (result) {
+        console.log('Successfully left DAO');
+        setUserIsDaoMember(false);
+        // Refresh member data
+        fetchMemberData();
+      } else {
+        console.error('Failed to leave DAO');
+        // Re-check membership to be sure
+        checkDaoMembership();
+      }
+      setMembershipLoading(false);
+    } catch (err) {
+      console.error('Error leaving DAO:', err);
+      setMembershipLoading(false);
+      // Re-check membership to be sure
+      checkDaoMembership();
+    }
+  };
+
+  // Check membership when component loads or when relevant data changes
+  useEffect(() => {
+    if (daoId && publicKey && connected) {
+      checkDaoMembership();
+    }
+  }, [daoId, publicKey, connected]);
+
   // Set up initial data load
   useEffectOnce(() => {
     fetchTreasuryData();
@@ -710,7 +845,7 @@ const Dashboard = () => {
         clearInterval(timerRef.current);
       }
     };
-  }, [daoId]);
+  });
 
   // Prepare data for the pie chart
   const tokenChartData: ChartData<'pie'> = {
@@ -920,6 +1055,33 @@ const Dashboard = () => {
                   <NetworkVisualization memberLocations={memberLocations} />
                 )}
               </div>
+              
+              {connected && (
+                <div className="mt-4 flex justify-center">
+                  {membershipLoading ? (
+                    <button className="bg-surface-200 text-text px-4 py-2 rounded-full text-sm flex items-center opacity-70 cursor-not-allowed">
+                      <RefreshCw size={16} className="mr-1 animate-spin" />
+                      Loading...
+                    </button>
+                  ) : userIsDaoMember ? (
+                    <button 
+                      className="bg-red-500 text-white px-4 py-2 rounded-full text-sm flex items-center hover:bg-red-600"
+                      onClick={handleLeaveDao}
+                    >
+                      <LogOut size={16} className="mr-1" />
+                      Leave this DAO
+                    </button>
+                  ) : (
+                    <button 
+                      className="bg-green-500 text-white px-4 py-2 rounded-full text-sm flex items-center hover:bg-green-600"
+                      onClick={handleJoinDao}
+                    >
+                      <LogIn size={16} className="mr-1" />
+                      Join this DAO
+                    </button>
+                  )}
+                </div>
+              )}
             </>
           )}
         </div>
