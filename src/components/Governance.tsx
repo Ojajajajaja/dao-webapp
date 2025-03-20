@@ -141,7 +141,7 @@ const Governance = () => {
         name: p.name || '',
         description: p.description || '',
         status: p.isActive ? 'Active' : p.hasPassed ? 'Passed' : 'Rejected',
-        creator: p.createdBy || 'Unknown',
+        creator: p.createdByUsername || 'Unknown',
         createdAt: formatDate(new Date()), // API doesn't provide created_at
         startTime: formatDate(p.startTime instanceof Date ? p.startTime : new Date(p.startTime)),
         endTime: formatDate(p.endTime instanceof Date ? p.endTime : new Date(p.endTime)),
@@ -480,7 +480,7 @@ const Governance = () => {
         name: proposalDetails.name || '',
         description: proposalDetails.description || '',
         status: proposalDetails.isActive ? 'Active' : proposalDetails.hasPassed ? 'Passed' : 'Rejected',
-        creator: proposalDetails.createdBy || 'Unknown',
+        creator: proposalDetails.createdByUsername || 'Unknown',
         createdAt: formatDate(new Date()), // API doesn't provide created_at
         startTime: formatDate(proposalDetails.startTime instanceof Date ? proposalDetails.startTime : new Date(proposalDetails.startTime)),
         endTime: formatDate(proposalDetails.endTime instanceof Date ? proposalDetails.endTime : new Date(proposalDetails.endTime)),
@@ -599,7 +599,7 @@ const Governance = () => {
         name: proposalDetails.name || '',
         description: proposalDetails.description || '',
         status: proposalDetails.isActive ? 'Active' : proposalDetails.hasPassed ? 'Passed' : 'Rejected',
-        creator: proposalDetails.createdBy || 'Unknown',
+        creator: proposalDetails.createdByUsername || 'Unknown',
         createdAt: formatDate(new Date()),
         startTime: formatDate(proposalDetails.startTime instanceof Date ? proposalDetails.startTime : new Date(proposalDetails.startTime)),
         endTime: formatDate(proposalDetails.endTime instanceof Date ? proposalDetails.endTime : new Date(proposalDetails.endTime)),
