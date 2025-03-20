@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, Check, AlertTriangle, ThumbsUp, ThumbsDown, Users, Calendar, Clock, Minus, Wallet, UserMinus, ArrowUpRight } from 'lucide-react';
 import { proposalService } from '../services/ProposalService';
 import { useEffectOnce } from '../hooks/useEffectOnce';
-import { WalletContextState } from '@solana/wallet-adapter-react';
+import { useWallet, WalletContextState } from '@solana/wallet-adapter-react';
 
 interface ProposalVotes {
   for: number;
@@ -49,6 +49,8 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVote
   const [error, setError] = useState<string | null>(null);
   const [localProposal, setLocalProposal] = useState<ProposalDetails>(proposal);
 
+  const walletState = useWallet();
+
   // Update local state when the parent provides a new proposal
   useEffectOnce(() => {
     setLocalProposal(proposal);
@@ -62,7 +64,7 @@ const PopupProposal: React.FC<PopupProposalProps> = ({ proposal, onClose, onVote
     }
     
     // Check if wallet is connected
-    if (!wallet || !wallet.connected) {
+    if (!walletState || !walletState.connected) {
       setError('Wallet not connected. Please connect your wallet to vote.');
       return;
     }
