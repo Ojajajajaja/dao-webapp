@@ -12,11 +12,11 @@ const UserProfile: React.FC = () => {
   const [formData, setFormData] = useState({
     userId: '',
     username: '',
-    email: '',
+    email: null as string | null,
     memberName: '',
-    discordUsername: '',
-    twitterUsername: '',
-    telegramUsername: ''
+    discordUsername: null as string | null,
+    twitterUsername: null as string | null,
+    telegramUsername: null as string | null
   });
 
   // Load user data when component mounts
@@ -25,11 +25,11 @@ const UserProfile: React.FC = () => {
       setFormData({
         userId: userInfo.userId || '',
         username: userInfo.username || '',
-        email: userInfo.email || '',
+        email: userInfo.email !== undefined ? userInfo.email : null,
         memberName: userInfo.memberName || '',
-        discordUsername: userInfo.discordUsername || '',
-        twitterUsername: userInfo.twitterUsername || '',
-        telegramUsername: userInfo.telegramUsername || ''
+        discordUsername: userInfo.discordUsername !== undefined ? userInfo.discordUsername : null,
+        twitterUsername: userInfo.twitterUsername !== undefined ? userInfo.twitterUsername : null,
+        telegramUsername: userInfo.telegramUsername !== undefined ? userInfo.telegramUsername : null
       });
     }
   }, [userInfo]);
@@ -60,11 +60,11 @@ const UserProfile: React.FC = () => {
       // Update user profile using the UserService
       const result = await userService.updateUser(userId, {
         username: formData.username,
-        email: formData.email,
+        email: formData.email || undefined,
         memberName: formData.memberName,
-        discordUsername: formData.discordUsername,
-        twitterUsername: formData.twitterUsername,
-        telegramUsername: formData.telegramUsername
+        discordUsername: formData.discordUsername || undefined,
+        twitterUsername: formData.twitterUsername || undefined,
+        telegramUsername: formData.telegramUsername || undefined
       });
 
       if (result) {
@@ -155,7 +155,7 @@ const UserProfile: React.FC = () => {
                 type="email"
                 id="email"
                 name="email"
-                value={formData.email}
+                value={formData.email || ''}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-surface-300 rounded-md bg-surface-100 text-text focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="Email address"
